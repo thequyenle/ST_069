@@ -2,4 +2,27 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <!-- Primary Colors -->
+    <color name="primary">#2196F3</color>
+    <color name="primary_dark">#1976D2</color>
+    <color name="accent">#42A5F5</color>
+
+    <!-- Language Selection -->
+    <color name="language_selected_bg">#E3F2FD</color>
+    <color name="language_selected_border">#2196F3</color>
+    <color name="language_unselected_bg">#FFFFFF</color>
+    <color name="language_unselected_border">#E0E0E0</color>
+
+    <!-- Background Colors -->
+    <color name="background_light">#F5F5F5</color>
+    <color name="background_white">#FFFFFF</color>
+
+    <!-- Text Colors -->
+    <color name="text_primary">#000000</color>
+    <color name="text_secondary">#666666</color>
+    <color name="text_hint">#9E9E9E</color>
+
+    <!-- Splash Background -->
+    <color name="splash_gradient_start">#1E3A5F</color>
+    <color name="splash_gradient_end">#42A5F5</color>
 </resources>

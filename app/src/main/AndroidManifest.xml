@@ -1,6 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+    <!-- Permissions -->
+    <!-- System Alert Window - for overlay fake calls -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" /> <!-- Notifications -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" /> <!-- Exact Alarms - for scheduled calls -->
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission
+        android:name="android.permission.USE_EXACT_ALARM"
+        tools:ignore="UnusedAttribute" /> <!-- Audio Recording -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" /> <!-- Vibration -->
+    <uses-permission android:name="android.permission.VIBRATE" /> <!-- Foreground Service -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" /> <!-- Wake Lock -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- Boot Completed - to restart alarms after reboot -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" /> <!-- Storage - for saving audio files -->
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" /> <!-- Battery Optimization -->
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
 
     <application
         android:allowBackup="true"
@@ -13,12 +33,25 @@
         android:theme="@style/Theme.ST069_FakeCallPhonePrank"
         tools:targetApi="31">
         <activity
+            android:name=".LanguageActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PermissionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".IntroActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SplashActivity"
+            android:exported="true" />
+
+        <category android:name="android.intent.category.LAUNCHER" />
+
+        <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
     </application>
