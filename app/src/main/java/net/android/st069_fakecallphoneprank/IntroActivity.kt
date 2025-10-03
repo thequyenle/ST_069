@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
-import net.android.st069_fakecallphoneprank.adapter.IntroAdapter
+import net.android.st069_fakecallphoneprank.IntroAdapter
 import net.android.st069_fakecallphoneprank.IntroPage
 import net.android.st069_fakecallphoneprank.databinding.ActivityIntroBinding
 import com.google.android.material.tabs.TabLayoutMediator
@@ -21,22 +21,19 @@ class IntroActivity : AppCompatActivity() {
         binding = ActivityIntroBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Intro pages data
+        // Intro pages data - only title, no description
         introPages = listOf(
             IntroPage(
                 R.drawable.intro_slide1,
-                getString(R.string.intro1_title),
-                getString(R.string.intro1_description)
+                getString(R.string.intro1_title)
             ),
             IntroPage(
                 R.drawable.intro_slide2,
-                getString(R.string.intro2_title),
-                getString(R.string.intro2_description)
+                getString(R.string.intro2_title)
             ),
             IntroPage(
                 R.drawable.intro_slide3,
-                getString(R.string.intro3_title),
-                getString(R.string.intro3_description)
+                getString(R.string.intro3_title)
             )
         )
 

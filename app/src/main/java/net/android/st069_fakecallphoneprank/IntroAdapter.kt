@@ -32,7 +32,7 @@ class IntroAdapter(
         fun bind(page: IntroPage) {
             binding.ivIntro.setImageResource(page.imageRes)
             binding.tvTitle.text = page.title
-            binding.tvDescription.text = page.description
+            // No description - removed
         }
     }
 }

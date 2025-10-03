@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">ST069_FakeCallPhonePrank</string>
+    <string name="intro1_title">Easily create fake calls</string>
+    <string name="intro2_title">Make call with any Celebrity</string>
+    <string name="intro3_title">Provides multiple call templates</string>
+    <string name="next">Next</string>
+
+
 </resources>
