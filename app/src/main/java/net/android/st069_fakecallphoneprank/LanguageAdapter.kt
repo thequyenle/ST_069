@@ -45,12 +45,16 @@ class LanguageAdapter(
             binding.tvLanguage.text = item.name
             binding.ivFlag.setImageResource(item.flagResId)
 
+
             // Set check/uncheck icon based on selection state
             val checkIcon = if (item.isSelected) {
                 R.drawable.ic_language_checked  // Blue checkmark icon
             } else {
                 R.drawable.ic_language_unchecked  // Empty circle icon
             }
+
+            binding.radioButton.setImageResource(checkIcon)
+
             // Set selection state for background drawable
             binding.layoutLanguageItem.isSelected = item.isSelected
 

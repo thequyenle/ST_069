@@ -42,7 +42,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <!-- Radio Button (Circle) -->
-        <ImageButton
+        <ImageView
             android:id="@+id/radioButton"
             android:layout_width="20dp"
             android:layout_height="20dp"
