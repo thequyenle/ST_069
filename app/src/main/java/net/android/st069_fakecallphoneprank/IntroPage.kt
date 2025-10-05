@@ -6,5 +6,4 @@ import androidx.annotation.StringRes
 data class IntroPage(
     @DrawableRes val imageRes: Int,
     val title: String,
-    val description: String
 )
