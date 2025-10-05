@@ -7,4 +7,161 @@
     android:layout_height="match_parent"
     tools:context=".PermissionActivity">
 
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="85dp"
+        android:background="#A6D4FF"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="11dp"
+            android:fontFamily="@font/roboto"
+            android:text="@string/permission"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/imgPermission"
+        android:layout_width="255dp"
+        android:layout_height="170dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/img_permission"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="109dp"
+        />
+    <TextView
+        android:id="@+id/tvDescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="29dp"
+        android:fontFamily="@font/roboto"
+        android:text="@string/permission_description"
+        android:textColor="#4F4F4F"
+        android:textSize="12.75sp"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imgPermission"/>
+
+    <LinearLayout
+        android:id="@+id/layoutStorage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="388dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginHorizontal="16dp"
+        >
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14.57dp"
+            android:text="@string/storage"
+            android:layout_weight="1"
+            android:textColor="#2F2F2F"
+            android:textSize="14sp"
+            android:fontFamily="@font/roboto"
+            android:layout_gravity="center_vertical"
+            />
+        <ImageView
+            android:id="@+id/imgStorage"
+            android:layout_width="51dp"
+            android:layout_height="29dp"
+            android:layout_marginEnd="20dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_switch_on"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutCameraRecorder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="7.42dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layoutStorage"
+        android:layout_marginHorizontal="16dp"
+
+        >
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14.57dp"
+            android:text="@string/camera_amp_recorder"
+            android:layout_weight="1"
+            android:textColor="#2F2F2F"
+            android:textSize="14sp"
+            android:fontFamily="@font/roboto"
+            android:layout_gravity="center_vertical"
+            />
+        <ImageView
+            android:id="@+id/imgCameraRecorder"
+            android:layout_width="51dp"
+            android:layout_height="29dp"
+            android:layout_marginEnd="20dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_switch_off"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutScreenPermission"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="7.42dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layoutCameraRecorder"
+        android:layout_marginHorizontal="16dp"
+
+        >
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14.57dp"
+            android:text="@string/Screen_Premissions"
+            android:layout_weight="1"
+            android:textColor="#2F2F2F"
+            android:textSize="14sp"
+            android:fontFamily="@font/roboto"
+            android:layout_gravity="center_vertical"
+            />
+        <ImageView
+            android:id="@+id/imgScreenPermission"
+            android:layout_width="51dp"
+            android:layout_height="29dp"
+            android:layout_marginEnd="20dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_switch_off"
+            />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/btnContinue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/continue_"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layoutScreenPermission"
+        android:layout_marginTop="25.6dp"
+        android:textColor="#0B89FF"
+        android:fontFamily="@font/sfprodisplaymedium"/>
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

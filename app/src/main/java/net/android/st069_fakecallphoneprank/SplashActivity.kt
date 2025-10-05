@@ -22,9 +22,7 @@ class SplashActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // Load animation
-        val fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in)
-        binding.ivLogo.startAnimation(fadeIn)
-        binding.tvAppName.startAnimation(fadeIn)
+
 
         // Check onboarding status
         val prefs = getSharedPreferences("fakecall_prefs", MODE_PRIVATE)

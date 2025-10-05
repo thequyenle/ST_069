@@ -51,18 +51,16 @@ class LanguageAdapter(
             } else {
                 R.drawable.ic_language_unchecked  // Empty circle icon
             }
-            binding.ivCheckStatus.setImageResource(checkIcon)
-
             // Set selection state for background drawable
             binding.layoutLanguageItem.isSelected = item.isSelected
 
             // Optional: Change card background color
             if (item.isSelected) {
-                binding.cardLanguage.setCardBackgroundColor(
+                binding.cardView.setCardBackgroundColor(
                     binding.root.context.getColor(R.color.language_selected_bg)
                 )
             } else {
-                binding.cardLanguage.setCardBackgroundColor(
+                binding.cardView.setCardBackgroundColor(
                     binding.root.context.getColor(android.R.color.white)
                 )
             }

@@ -36,7 +36,7 @@ class LanguageActivity : AppCompatActivity() {
             LanguageItem("Spanish", R.drawable.flag_spanish, false, "es"),
             LanguageItem("French", R.drawable.flag_french, false, "fr"),
             LanguageItem("Hindi", R.drawable.flag_hindi, false, "hi"),
-            LanguageItem("Portuguese", R.drawable.flag_portuguese, false, "pt"),
+            LanguageItem("Portuguese", R.drawable.flag_portugeese, false, "pt"),
             LanguageItem("German", R.drawable.flag_german, false, "de"),
             LanguageItem("Indonesian", R.drawable.flag_indonesian, false, "id")
         )

@@ -3,9 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="16dp">
+    android:layout_marginBottom="16dp"
+    android:id="@+id/cardView"
+    >
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutLanguageItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/frame_language_uncheck">

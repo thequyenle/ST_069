@@ -36,15 +36,15 @@ class PermissionActivity : AppCompatActivity() {
         setupPermissionItems()
 
         // Button listeners
-        binding.btnStorageToggle.setOnClickListener {
+        binding.imgStorage.setOnClickListener {
             toggleStoragePermission()
         }
 
-        binding.btnCameraToggle.setOnClickListener {
+        binding.imgCameraRecorder.setOnClickListener {
             toggleCameraPermission()
         }
 
-        binding.btnScreenToggle.setOnClickListener {
+        binding.imgScreenPermission.setOnClickListener {
             toggleScreenPermission()
         }
 
@@ -60,9 +60,9 @@ class PermissionActivity : AppCompatActivity() {
     private fun setupPermissionItems() {
         // Show/hide permission items based on Android version
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            binding.layoutCameraPermission.visibility = View.VISIBLE
+            binding.layoutCameraRecorder.visibility = View.VISIBLE
         } else {
-            binding.layoutCameraPermission.visibility = View.GONE
+            binding.layoutCameraRecorder.visibility = View.GONE
         }
     }
 
@@ -196,16 +196,16 @@ class PermissionActivity : AppCompatActivity() {
         isExactAlarmGranted = true // For now, assume granted
 
         // Update toggle button images
-        binding.btnStorageToggle.setImageResource(
-            if (isOverlayGranted) R.drawable.ic_toggle_on else R.drawable.ic_toggle_off
+        binding.imgStorage.setImageResource(
+            if (isOverlayGranted) R.drawable.ic_switch_on else R.drawable.ic_switch_off
         )
 
-        binding.btnCameraToggle.setImageResource(
-            if (isNotificationGranted) R.drawable.ic_toggle_on else R.drawable.ic_toggle_off
+        binding.imgCameraRecorder.setImageResource(
+            if (isNotificationGranted) R.drawable.ic_switch_on else R.drawable.ic_switch_off
         )
 
-        binding.btnScreenToggle.setImageResource(
-            if (isExactAlarmGranted) R.drawable.ic_toggle_on else R.drawable.ic_toggle_off
+        binding.imgScreenPermission.setImageResource(
+            if (isExactAlarmGranted) R.drawable.ic_switch_on else R.drawable.ic_switch_off
         )
     }
 

@@ -9,7 +9,6 @@ import androidx.viewpager2.widget.ViewPager2
 import net.android.st069_fakecallphoneprank.IntroAdapter
 import net.android.st069_fakecallphoneprank.IntroPage
 import net.android.st069_fakecallphoneprank.databinding.ActivityIntroBinding
-import com.google.android.material.tabs.TabLayoutMediator
 
 class IntroActivity : AppCompatActivity() {
 
@@ -38,21 +37,16 @@ class IntroActivity : AppCompatActivity() {
         )
 
         // Setup ViewPager2
-        binding.viewPager.adapter = IntroAdapter(introPages)
+        val adapter = IntroAdapter(introPages)
+        binding.viewPager.adapter = adapter
 
-        // Setup dots indicator
-        TabLayoutMediator(binding.dotsIndicator, binding.viewPager) { _, _ ->
-            // Nothing to do here, just attach
-        }.attach()
+        // Attach dots indicator (assuming DotsIndicator library)
+        binding.dotsIndicator.setViewPager2(binding.viewPager)
 
         // Update button text based on current page
         binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
-                if (position == introPages.size - 1) {
-                    binding.btnNext.text = getString(R.string.get_started)
-                } else {
-                    binding.btnNext.text = getString(R.string.next)
-                }
+                binding.btnNext.text = getString(R.string.next)
             }
         })
 
@@ -73,16 +67,10 @@ class IntroActivity : AppCompatActivity() {
             }
         }
 
-        // Skip button
-        binding.btnSkip.setOnClickListener {
-            getSharedPreferences("fakecall_prefs", MODE_PRIVATE)
-                .edit()
-                .putBoolean("intro_done", true)
-                .apply()
-
-            startActivity(Intent(this, PermissionActivity::class.java))
-            finish()
-        }
+        // Skip button (if you have it in your layout)
+        // binding.btnSkip.setOnClickListener {
+        //     // Handle skip action if needed
+        // }
     }
 
     override fun onResume() {

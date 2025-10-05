@@ -7,6 +7,12 @@
     <string name="language">Language</string>
     <string name="splash_disclaimer">This action may contain advertising</string>
     <string name="easily_create_fake_calls">Easily create fake calls</string>
+    <string name="permission">Permission</string>
+    <string name="permission_description">Fake call - Prank phone calls\nrequires permission to use location</string>
+    <string name="storage">Storage</string>
+    <string name="camera_amp_recorder"><![CDATA[Camera & Recorder]]></string>
+    <string name="Screen_Premissions">Screen Premissions</string>
+    <string name="continue_">Continue</string>
 
 
 </resources>
