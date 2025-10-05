@@ -19,18 +19,21 @@ class IntroActivity : AppCompatActivity() {
         binding = ActivityIntroBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Intro pages data
+
+        // Intro pages data - using full screen background images
         introPages = listOf(
-            IntroPage(R.drawable.intro_slide1, getString(R.string.intro1_title)),
-            IntroPage(R.drawable.intro_slide2, getString(R.string.intro2_title)),
-            IntroPage(R.drawable.intro_slide3, getString(R.string.intro3_title))
+            IntroPage(R.drawable.bg_intro1, getString(R.string.intro1_title)),
+            IntroPage(R.drawable.bg_intro2, getString(R.string.intro2_title)),
+            IntroPage(R.drawable.bg_intro3, getString(R.string.intro3_title))
+
         )
 
         // Setup ViewPager2
         setupViewPager()
 
         // Attach dots indicator
-        binding.dotsIndicator.setViewPager2(binding.viewPager)
+
+       // binding.dotsIndicator.setViewPager2(binding.viewPager)
 
         // Update button text based on current page
         binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
