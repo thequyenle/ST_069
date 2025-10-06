@@ -161,16 +161,31 @@ class AddFakeCallActivity : AppCompatActivity() {
             .show()
     }
 
-    private fun showVoiceSelectionDialog() {
-        val options = arrayOf("Default", "Mom", "My love", "Cattry", "Male police voice")
+    private val voicePickerLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            result.data?.let { data ->
+                selectedVoice = data.getStringExtra("SELECTED_VOICE")
+                val voiceFilePath = data.getStringExtra("VOICE_FILE_PATH")
 
-        android.app.AlertDialog.Builder(this)
-            .setTitle("Choose Voice")
-            .setItems(options) { _, which ->
-                selectedVoice = options[which]
-                Toast.makeText(this, "Selected: ${options[which]}", Toast.LENGTH_SHORT).show()
+                if (voiceFilePath != null) {
+                    selectedVoice = voiceFilePath
+                }
+
+                Toast.makeText(
+                    this,
+                    "Selected voice: ${selectedVoice ?: "Default"}",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
-            .show()
+        }
+    }
+
+    private fun showVoiceSelectionDialog() {
+        val intent = Intent(this, ChooseVoiceActivity::class.java)
+        intent.putExtra("CURRENT_VOICE", selectedVoice)
+        voicePickerLauncher.launch(intent)
     }
 
     private fun showDeviceSelectionDialog() {

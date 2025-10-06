@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rootLayout"
+    android:layout_width="278dp"
+    android:layout_height="309dp"
+    android:background="@drawable/bg_recording_area_start">
+
+    <!-- Recording Timer (Initially hidden) -->
+    <TextView
+        android:id="@+id/tvRecordingTimer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00:00"
+        android:textSize="28sp"
+        android:fontFamily="@font/roboto"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        android:visibility="gone"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toTopOf="@id/btnStopRecord"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Play Button (Initial State) -->
+    <ImageView
+        android:id="@+id/btnPlayRecord"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:src="@drawable/ic_start_voice"
+        android:layout_marginBottom="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Stop Button (When recording) -->
+    <ImageView
+        android:id="@+id/btnStopRecord"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:src="@drawable/ic_running_voice"
+        android:visibility="gone"
+        android:layout_marginBottom="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
