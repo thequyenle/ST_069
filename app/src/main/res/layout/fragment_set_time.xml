@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SetTime">
@@ -41,188 +40,203 @@
         android:id="@+id/tvDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/choose_how_long_to_keep_your_call_screen_visible"
-        app:layout_constraintTop_toBottomOf="@id/layoutTitle"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="24dp"
         android:layout_marginHorizontal="20dp"
-        android:textSize="14sp"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/roboto"
+        android:text="@string/choose_how_long_to_keep_your_call_screen_visible"
         android:textColor="#2B2B2B"
-        android:fontFamily="@font/roboto"/>
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layoutTitle" />
 
     <ImageView
         android:id="@+id/ivNow"
         android:layout_width="133dp"
         android:layout_height="40dp"
-        android:scaleType="centerCrop"
+        android:layout_marginStart="22dp"
         android:layout_marginTop="24dp"
-        app:layout_constraintTop_toBottomOf="@id/tvDescription"
-        app:layout_constraintStart_toStartOf="parent"
+        android:scaleType="centerCrop"
         android:src="@drawable/bg_enable"
-        android:layout_marginStart="22dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvDescription" />
+
     <TextView
         android:id="@+id/tvNow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@id/ivNow"
-        app:layout_constraintEnd_toEndOf="@id/ivNow"
-        app:layout_constraintTop_toTopOf="@id/ivNow"
-        android:text="Now"
-        android:textSize="14sp"
         android:fontFamily="@font/roboto"
+        android:text="Now"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="@id/ivNow"/>
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@id/ivNow"
+        app:layout_constraintEnd_toEndOf="@id/ivNow"
+        app:layout_constraintStart_toStartOf="@id/ivNow"
+        app:layout_constraintTop_toTopOf="@id/ivNow" />
 
     <ImageView
         android:id="@+id/iv15s"
         android:layout_width="133dp"
         android:layout_height="40dp"
-        android:scaleType="centerCrop"
         android:layout_marginTop="24dp"
-        app:layout_constraintTop_toBottomOf="@id/tvDescription"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="22dp"
+        android:scaleType="centerCrop"
         android:src="@drawable/bg_disable"
-        android:layout_marginEnd="22dp"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvDescription" />
+
     <TextView
         android:id="@+id/tv15s"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@id/iv15s"
-        app:layout_constraintEnd_toEndOf="@id/iv15s"
-        app:layout_constraintTop_toTopOf="@id/iv15s"
-        android:text="@string/_15_second"
-        android:textSize="14sp"
         android:fontFamily="@font/roboto"
+        android:text="@string/_15_second"
         android:textColor="#2F2F2F"
-        app:layout_constraintBottom_toBottomOf="@id/iv15s"/>
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@id/iv15s"
+        app:layout_constraintEnd_toEndOf="@id/iv15s"
+        app:layout_constraintStart_toStartOf="@id/iv15s"
+        app:layout_constraintTop_toTopOf="@id/iv15s" />
 
     <ImageView
         android:id="@+id/iv30s"
         android:layout_width="133dp"
         android:layout_height="40dp"
-        android:scaleType="centerCrop"
+        android:layout_marginStart="22dp"
         android:layout_marginTop="24dp"
-        app:layout_constraintTop_toBottomOf="@id/iv15s"
-        app:layout_constraintStart_toStartOf="parent"
+        android:scaleType="centerCrop"
         android:src="@drawable/bg_disable"
-        android:layout_marginStart="22dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv15s" />
+
     <TextView
         android:id="@+id/tv30s"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@id/iv30s"
-        app:layout_constraintEnd_toEndOf="@id/iv30s"
-        app:layout_constraintTop_toTopOf="@id/iv30s"
+        android:fontFamily="@font/roboto"
         android:text="@string/_30_second"
         android:textSize="14sp"
-        android:fontFamily="@font/roboto"
-        app:layout_constraintBottom_toBottomOf="@id/iv30s"/>
+        app:layout_constraintBottom_toBottomOf="@id/iv30s"
+        app:layout_constraintEnd_toEndOf="@id/iv30s"
+        app:layout_constraintStart_toStartOf="@id/iv30s"
+        app:layout_constraintTop_toTopOf="@id/iv30s" />
 
     <ImageView
         android:id="@+id/iv1m"
         android:layout_width="133dp"
         android:layout_height="40dp"
-        android:scaleType="centerCrop"
         android:layout_marginTop="24dp"
-        app:layout_constraintTop_toBottomOf="@id/iv15s"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="22dp"
+        android:scaleType="centerCrop"
         android:src="@drawable/bg_disable"
-        android:layout_marginEnd="22dp"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv15s" />
+
     <TextView
         android:id="@+id/tv1m"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@id/iv1m"
-        app:layout_constraintEnd_toEndOf="@id/iv1m"
-        app:layout_constraintTop_toTopOf="@id/iv1m"
+        android:fontFamily="@font/roboto"
         android:text="@string/_1_minute"
         android:textSize="14sp"
-        android:fontFamily="@font/roboto"
-        app:layout_constraintBottom_toBottomOf="@id/iv1m"/>
+        app:layout_constraintBottom_toBottomOf="@id/iv1m"
+        app:layout_constraintEnd_toEndOf="@id/iv1m"
+        app:layout_constraintStart_toStartOf="@id/iv1m"
+        app:layout_constraintTop_toTopOf="@id/iv1m" />
 
     <ImageView
         android:id="@+id/iv5m"
         android:layout_width="133dp"
         android:layout_height="40dp"
-        android:scaleType="centerCrop"
+        android:layout_marginStart="22dp"
         android:layout_marginTop="24dp"
-        app:layout_constraintTop_toBottomOf="@id/iv1m"
-        app:layout_constraintStart_toStartOf="parent"
+        android:scaleType="centerCrop"
         android:src="@drawable/bg_disable"
-        android:layout_marginStart="22dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv1m" />
+
     <TextView
         android:id="@+id/tv5m"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@id/iv5m"
-        app:layout_constraintEnd_toEndOf="@id/iv5m"
-        app:layout_constraintTop_toTopOf="@id/iv5m"
+        android:fontFamily="@font/roboto"
         android:text="@string/_5_minute"
         android:textSize="14sp"
-        android:fontFamily="@font/roboto"
-        app:layout_constraintBottom_toBottomOf="@id/iv5m"/>
+        app:layout_constraintBottom_toBottomOf="@id/iv5m"
+        app:layout_constraintEnd_toEndOf="@id/iv5m"
+        app:layout_constraintStart_toStartOf="@id/iv5m"
+        app:layout_constraintTop_toTopOf="@id/iv5m" />
 
     <ImageView
         android:id="@+id/iv10m"
         android:layout_width="133dp"
         android:layout_height="40dp"
-        android:scaleType="centerCrop"
         android:layout_marginTop="24dp"
-        app:layout_constraintTop_toBottomOf="@id/iv1m"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="22dp"
+        android:scaleType="centerCrop"
         android:src="@drawable/bg_disable"
-        android:layout_marginEnd="22dp"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv1m" />
+
     <TextView
         android:id="@+id/tv10m"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@id/iv10m"
-        app:layout_constraintEnd_toEndOf="@id/iv10m"
-        app:layout_constraintTop_toTopOf="@id/iv10m"
+        android:fontFamily="@font/roboto"
         android:text="@string/_10_minute"
         android:textSize="14sp"
-        android:fontFamily="@font/roboto"
-        app:layout_constraintBottom_toBottomOf="@id/iv10m"/>
+        app:layout_constraintBottom_toBottomOf="@id/iv10m"
+        app:layout_constraintEnd_toEndOf="@id/iv10m"
+        app:layout_constraintStart_toStartOf="@id/iv10m"
+        app:layout_constraintTop_toTopOf="@id/iv10m" />
 
-    <ImageView
-        android:id="@+id/ivAddTime"
-        android:layout_width="137dp"
-        android:layout_height="44dp"
-        android:scaleType="centerCrop"
-        android:layout_marginTop="24dp"
-        app:layout_constraintTop_toBottomOf="@id/iv5m"
-        app:layout_constraintStart_toStartOf="parent"
-        android:src="@drawable/ic_addtime"
-        android:layout_marginStart="19dp"/>
-    <TextView
-        android:id="@+id/tvAddTime"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@id/ivAddTime"
-        app:layout_constraintTop_toTopOf="@id/ivAddTime"
-        android:text="@string/add_time"
-        android:textSize="14sp"
-        android:layout_marginStart="20dp"
-        android:fontFamily="@font/roboto"
-        app:layout_constraintBottom_toBottomOf="@id/ivAddTime"/>
+        android:id="@+id/layoutAddTime"
+        app:layout_constraintTop_toBottomOf="@id/iv5m"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="24dp"
+        >
 
+        <ImageView
+            android:id="@+id/ivAddTime"
+            android:layout_width="138dp"
+            android:layout_height="45dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_addtime"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+
+             />
+
+        <TextView
+            android:id="@+id/tvAddTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:fontFamily="@font/roboto"
+            android:text="@string/add_time"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@id/ivAddTime"
+            app:layout_constraintStart_toStartOf="@id/ivAddTime"
+            app:layout_constraintTop_toTopOf="@id/ivAddTime" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
         android:id="@+id/tvSave"
         android:layout_width="match_parent"
         android:layout_height="44dp"
         android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="56dp"
+        android:background="@drawable/bg_rounded_save_talktime"
+        android:gravity="center"
         android:text="@string/save_talk_time"
         android:textColor="@color/white"
-        android:gravity="center"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ivAddTime"
-        android:layout_marginTop="56dp"
-        android:background="@drawable/bg_rounded_save_talktime"/>
-
-
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layoutAddTime" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

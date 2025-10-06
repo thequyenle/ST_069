@@ -94,13 +94,11 @@ class SetTime : Fragment() {
         }
 
         // Add Time - Show NumberPicker Dialog
-        binding.ivAddTime.setOnClickListener {
+        binding.layoutAddTime.setOnClickListener {
             showTimePickerDialog()
         }
 
-        binding.tvAddTime.setOnClickListener {
-            showTimePickerDialog()
-        }
+
     }
 
     private fun showTimePickerDialog() {
