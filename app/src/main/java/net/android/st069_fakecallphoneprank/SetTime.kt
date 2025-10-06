@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
@@ -23,6 +24,13 @@ class SetTime : Fragment() {
             currentSetTime = it.getInt("CURRENT_SET_TIME", 0)
         }
         selectedSetTime = currentSetTime
+
+        // Handle back button press
+        requireActivity().onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                saveAndReturn()
+            }
+        })
     }
 
     override fun onCreateView(
@@ -42,12 +50,17 @@ class SetTime : Fragment() {
     }
 
     private fun setupClickListeners() {
-        // Back button - find the ImageView with back arrow in layoutTitle
+        // Back button
         binding.layoutTitle.setOnClickListener {
             saveAndReturn()
         }
 
-        // 15 seconds (using first button - you can adjust based on your layout)
+        // Save button (find the TextView in the layout)
+        view?.findViewById<View>(R.id.tvSave)?.setOnClickListener {
+            saveAndReturn()
+        }
+
+        // 15 seconds
         binding.iv15s.setOnClickListener {
             selectTime(15)
         }
@@ -121,7 +134,7 @@ class SetTime : Fragment() {
     }
 
     private fun saveAndReturn() {
-        // Send result back to AddFakeCall fragment
+        // Send result back to Activity or Fragment
         setFragmentResult("SET_TIME_RESULT", bundleOf("SET_TIME" to selectedSetTime))
 
         // Pop back stack

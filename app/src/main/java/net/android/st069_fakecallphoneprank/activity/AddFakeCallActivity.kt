@@ -52,6 +52,15 @@ class AddFakeCallActivity : AppCompatActivity() {
 
         setupClickListeners()
         updateButtonStates()
+
+        // Handle fragment back stack changes
+        supportFragmentManager.addOnBackStackChangedListener {
+            if (supportFragmentManager.backStackEntryCount == 0) {
+                // No fragments in back stack - show content layout
+                binding.contentLayout.visibility = View.VISIBLE
+                binding.fragmentContainer.visibility = View.GONE
+            }
+        }
     }
 
     private fun setupClickListeners() {
@@ -180,29 +189,92 @@ class AddFakeCallActivity : AppCompatActivity() {
     }
 
     private fun showSetTimeDialog() {
-        val options = arrayOf("Now", "15 seconds", "30 seconds", "1 minute", "5 minutes", "10 minutes")
-        val values = arrayOf(0, 15, 30, 60, 300, 600)
+        // Hide content layout and show Fragment Container
+        binding.contentLayout.visibility = View.GONE
+        binding.fragmentContainer.visibility = View.VISIBLE
 
-        android.app.AlertDialog.Builder(this)
-            .setTitle("Set Time")
-            .setItems(options) { _, which ->
-                selectedSetTime = values[which]
-                Toast.makeText(this, "Set time: ${options[which]}", Toast.LENGTH_SHORT).show()
+        // Create SetTime fragment with current value
+        val setTimeFragment = net.android.st069_fakecallphoneprank.SetTime().apply {
+            arguments = Bundle().apply {
+                putInt("CURRENT_SET_TIME", selectedSetTime)
             }
-            .show()
+        }
+
+        // Show fragment
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainer, setTimeFragment)
+            .addToBackStack("SetTime")
+            .commit()
+
+        // Listen for result
+        supportFragmentManager.setFragmentResultListener("SET_TIME_RESULT", this) { _, bundle ->
+            selectedSetTime = bundle.getInt("SET_TIME", 0)
+            updateSetTimeDisplay()
+
+            // Hide fragment and show content layout
+            binding.fragmentContainer.visibility = View.GONE
+            binding.contentLayout.visibility = View.VISIBLE
+
+            // Remove fragment
+            supportFragmentManager.popBackStack()
+        }
     }
 
     private fun showTalkTimeDialog() {
-        val options = arrayOf("15 seconds", "30 seconds", "1 minute", "5 minutes", "10 minutes")
-        val values = arrayOf(15, 30, 60, 300, 600)
+        // Hide content layout and show Fragment Container
+        binding.contentLayout.visibility = View.GONE
+        binding.fragmentContainer.visibility = View.VISIBLE
 
-        android.app.AlertDialog.Builder(this)
-            .setTitle("Talk Time")
-            .setItems(options) { _, which ->
-                selectedTalkTime = values[which]
-                Toast.makeText(this, "Talk time: ${options[which]}", Toast.LENGTH_SHORT).show()
+        // Create TalkTime fragment with current value
+        val talkTimeFragment = net.android.st069_fakecallphoneprank.TalkTime().apply {
+            arguments = Bundle().apply {
+                putInt("CURRENT_TALK_TIME", selectedTalkTime)
             }
-            .show()
+        }
+
+        // Show fragment
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainer, talkTimeFragment)
+            .addToBackStack("TalkTime")
+            .commit()
+
+        // Listen for result
+        supportFragmentManager.setFragmentResultListener("TALK_TIME_RESULT", this) { _, bundle ->
+            selectedTalkTime = bundle.getInt("TALK_TIME", 15)
+            updateTalkTimeDisplay()
+
+            // Hide fragment and show content layout
+            binding.fragmentContainer.visibility = View.GONE
+            binding.contentLayout.visibility = View.VISIBLE
+
+            // Remove fragment
+            supportFragmentManager.popBackStack()
+        }
+    }
+
+    private fun updateSetTimeDisplay() {
+        val timeText = when (selectedSetTime) {
+            0 -> "Now"
+            15 -> "15 seconds"
+            30 -> "30 seconds"
+            60 -> "1 minute"
+            300 -> "5 minutes"
+            600 -> "10 minutes"
+            else -> "${selectedSetTime}s"
+        }
+        Toast.makeText(this, "Set time: $timeText", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun updateTalkTimeDisplay() {
+        val timeText = when (selectedTalkTime) {
+            15 -> "15 seconds"
+            30 -> "30 seconds"
+            60 -> "1 minute"
+            300 -> "5 minutes"
+            600 -> "10 minutes"
+            else -> "${selectedTalkTime}s"
+        }
+        Toast.makeText(this, "Talk time: $timeText", Toast.LENGTH_SHORT).show()
     }
 
     private fun validateInputs(): Boolean {

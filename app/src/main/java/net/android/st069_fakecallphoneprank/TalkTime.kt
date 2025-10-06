@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
@@ -23,6 +24,13 @@ class TalkTime : Fragment() {
             currentTalkTime = it.getInt("CURRENT_TALK_TIME", 15)
         }
         selectedTalkTime = currentTalkTime
+
+        // Handle back button press
+        requireActivity().onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                saveAndReturn()
+            }
+        })
     }
 
     override fun onCreateView(
@@ -44,6 +52,11 @@ class TalkTime : Fragment() {
     private fun setupClickListeners() {
         // Back button
         binding.layoutTitle.setOnClickListener {
+            saveAndReturn()
+        }
+
+        // Save button (find the TextView in the layout)
+        view?.findViewById<View>(R.id.tvSave)?.setOnClickListener {
             saveAndReturn()
         }
 
@@ -121,7 +134,7 @@ class TalkTime : Fragment() {
     }
 
     private fun saveAndReturn() {
-        // Send result back to AddFakeCall fragment
+        // Send result back to Activity or Fragment
         setFragmentResult("TALK_TIME_RESULT", bundleOf("TALK_TIME" to selectedTalkTime))
 
         // Pop back stack
