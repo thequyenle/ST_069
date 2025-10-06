@@ -34,6 +34,11 @@
     <string name="_5_minute">5 min</string>
     <string name="_10_minute">10 min</string>
     <string name="save_talk_time">Save</string>
+    <string name="_15_second">15 second</string>
+    <string name="add_time">Add time</string>
+    <string name="min">Min</string>
+    <string name="hour">Hour</string>
+    <string name="done">Done</string>
 
 
 </resources>

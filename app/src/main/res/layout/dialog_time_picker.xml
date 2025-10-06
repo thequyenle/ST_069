@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="166dp"
+    android:layout_height="222dp"
+    android:background="@drawable/bg_rounded_corners_white"
+    android:padding="20dp">
+
+
+    <TextView
+        android:layout_width="102dp"
+        android:layout_height="43dp"
+        android:background="@drawable/bg_rounded_corners_white"
+        app:layout_constraintBottom_toBottomOf="@id/tvMinValue"
+        app:layout_constraintEnd_toEndOf="@id/tvMinValue"
+        app:layout_constraintStart_toStartOf="@id/tvHourValue"
+        app:layout_constraintTop_toTopOf="@id/tvMinValue"
+        app:layout_constraintVertical_bias="0.428" />
+
+    <TextView
+        android:id="@+id/tvHourValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@id/hourPicker"
+        app:layout_constraintEnd_toEndOf="@id/guideline"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="12dp"/>
+    <TextView
+        android:id="@+id/tvMinValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:text="00"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@id/minutePicker"
+        app:layout_constraintStart_toStartOf="@id/guideline"
+        android:layout_marginStart="15dp"
+        android:layout_marginBottom="12dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=":"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@id/tvHourValue"
+        app:layout_constraintEnd_toStartOf="@id/tvMinValue"
+        app:layout_constraintTop_toTopOf="@id/tvMinValue"
+        app:layout_constraintBottom_toBottomOf="@id/tvMinValue"/>
+
+    <TextView
+        android:id="@+id/tvHourLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto"
+        android:text="@string/hour"
+        android:textColor="#0B89FF"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toStartOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Min Label -->
+    <TextView
+        android:id="@+id/tvMinLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto"
+        android:text="@string/min"
+        android:textColor="#0B89FF"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Hour Picker -->
+    <com.shawnlin.numberpicker.NumberPicker
+        android:id="@+id/hourPicker"
+        android:layout_width="49dp"
+        android:layout_height="80dp"
+        app:layout_constraintBottom_toTopOf="@id/btnDone"
+        app:layout_constraintEnd_toStartOf="@id/guideline"
+        app:np_dividerColor="@android:color/transparent"
+        app:np_itemSpacing="-2dp"
+        app:np_max="23"
+        app:np_min="0"
+        app:np_selectedTextColor="#2F2F2F"
+        app:np_selectedTextSize="16sp"
+        app:np_textColor="#2B2B2B"
+        app:np_textSize="16sp"
+        app:np_value="0"
+        app:np_wrapSelectorWheel="true" />
+
+
+    <!-- Minute Picker -->
+    <com.shawnlin.numberpicker.NumberPicker
+        android:id="@+id/minutePicker"
+        android:layout_width="49dp"
+        android:layout_height="80dp"
+        app:layout_constraintBottom_toTopOf="@id/btnDone"
+        app:layout_constraintStart_toEndOf="@id/guideline"
+        app:np_dividerColor="@android:color/transparent"
+        app:np_itemSpacing="-2dp"
+        app:np_max="59"
+        app:np_min="0"
+        app:np_selectedTextColor="#2F2F2F"
+        app:np_selectedTextSize="16sp"
+        app:np_textColor="#2B2B2B"
+        app:np_textSize="16sp"
+        app:np_value="0"
+        app:np_wrapSelectorWheel="true" />
+
+    <!-- Done Button -->
+    <TextView
+        android:id="@+id/btnDone"
+        android:layout_width="102dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/bg_rounded_save_talktime"
+        android:fontFamily="@font/roboto"
+        android:gravity="center"
+        android:text="@string/done"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

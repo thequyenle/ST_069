@@ -190,6 +190,7 @@ class AddFakeCallActivity : AppCompatActivity() {
 
     private fun showSetTimeDialog() {
         // Hide content layout and show Fragment Container
+        binding.layoutTitle.visibility = View.GONE      // ✅ This fixes double header!
         binding.contentLayout.visibility = View.GONE
         binding.fragmentContainer.visibility = View.VISIBLE
 
@@ -213,6 +214,7 @@ class AddFakeCallActivity : AppCompatActivity() {
 
             // Hide fragment and show content layout
             binding.fragmentContainer.visibility = View.GONE
+            binding.layoutTitle.visibility = View.VISIBLE
             binding.contentLayout.visibility = View.VISIBLE
 
             // Remove fragment
@@ -223,6 +225,8 @@ class AddFakeCallActivity : AppCompatActivity() {
     private fun showTalkTimeDialog() {
         // Hide content layout and show Fragment Container
         binding.contentLayout.visibility = View.GONE
+        binding.layoutTitle.visibility = View.GONE      // ✅ This fixes double header!
+
         binding.fragmentContainer.visibility = View.VISIBLE
 
         // Create TalkTime fragment with current value
