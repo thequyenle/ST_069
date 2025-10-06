@@ -2,9 +2,238 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.AddFakeCallActivity">
+    tools:context=".AddFakeCall">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutTitle"
+        android:layout_width="match_parent"
+        android:layout_height="89dp"
+        android:background="@drawable/bg_title_addfakecall"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="@font/roboto"
+            android:text="@string/add_fake_call"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:layout_width="11dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="23dp"
+            android:src="@drawable/ic_arrowback_addfakecall"
+            app:layout_constraintBottom_toBottomOf="@id/tvTitle"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:layout_width="21dp"
+            android:layout_height="18dp"
+            android:layout_marginEnd="20dp"
+            android:src="@drawable/ic_history"
+            app:layout_constraintBottom_toBottomOf="@id/tvTitle"
+            app:layout_constraintEnd_toEndOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layoutTitle">
+
+        <ImageView
+            android:id="@+id/ivAddAvatar"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/ic_addavatar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+        <ImageView
+            android:id="@+id/ivAddName"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:scaleType="fitXY"
+            app:layout_constraintTop_toBottomOf="@id/ivAddAvatar"
+            android:src="@drawable/img_addname"
+            android:layout_marginTop="28dp"/>
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/ivAddName"
+            app:layout_constraintBottom_toBottomOf="@id/ivAddName"
+            app:layout_constraintStart_toStartOf="@id/ivAddName"
+            android:text="@string/name"
+            android:fontFamily="@font/roboto"
+            android:textColor="#A0A0A0"
+            android:textSize="16sp"
+            android:layout_marginStart="29dp"/>
+
+        <ImageView
+            android:id="@+id/ivAddPhone"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:scaleType="fitXY"
+            app:layout_constraintTop_toBottomOf="@id/ivAddName"
+            android:src="@drawable/img_addphone"
+            android:layout_marginTop="28dp"/>
+        <TextView
+            android:id="@+id/tvPhone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/ivAddPhone"
+            app:layout_constraintBottom_toBottomOf="@id/ivAddPhone"
+            app:layout_constraintStart_toStartOf="@id/ivAddPhone"
+            android:text="@string/phone_number"
+            android:fontFamily="@font/roboto"
+            android:textColor="#A0A0A0"
+            android:textSize="16sp"
+            android:layout_marginStart="29dp"/>
+
+        <ImageView
+            android:id="@+id/ivChooseVoice"
+            android:layout_width="146dp"
+            android:layout_height="64dp"
+            app:layout_constraintTop_toBottomOf="@id/ivAddPhone"
+            app:layout_constraintStart_toStartOf="parent"
+            android:src="@drawable/img_choosevoice"
+            android:layout_marginTop="20dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/ivChooseVoice"
+            app:layout_constraintEnd_toEndOf="@id/ivChooseVoice"
+            app:layout_constraintBottom_toBottomOf="@id/ivChooseVoice"
+            android:text="@string/choose_voice"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="@font/roboto"
+            android:textColor="#2F2F2F"
+            android:textSize="14sp"
+            android:gravity="center"/>
+
+
+        <ImageView
+            android:id="@+id/ivSelectDevice"
+            android:layout_width="146dp"
+            android:layout_height="64dp"
+            app:layout_constraintTop_toBottomOf="@id/ivAddPhone"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:src="@drawable/img_selectdevice"
+            android:layout_marginTop="20dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/ivSelectDevice"
+            app:layout_constraintEnd_toEndOf="@id/ivSelectDevice"
+            app:layout_constraintBottom_toBottomOf="@id/ivSelectDevice"
+            android:text="@string/select_device"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="@font/roboto"
+            android:textColor="#2F2F2F"
+            android:textSize="14sp"
+            android:gravity="center"/>
+
+        <ImageView
+            android:id="@+id/ivSetTime"
+            android:layout_width="146dp"
+            android:layout_height="64dp"
+            app:layout_constraintTop_toBottomOf="@id/ivChooseVoice"
+            app:layout_constraintStart_toStartOf="parent"
+            android:src="@drawable/img_settime"
+            android:layout_marginTop="20dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/ivSetTime"
+            app:layout_constraintEnd_toEndOf="@id/ivSetTime"
+            app:layout_constraintBottom_toBottomOf="@id/ivSetTime"
+            android:text="@string/set_time"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="@font/roboto"
+            android:textColor="#2F2F2F"
+            android:textSize="14sp"
+            android:gravity="center"/>
+
+        <ImageView
+            android:id="@+id/ivTalkTime"
+            android:layout_width="146dp"
+            android:layout_height="64dp"
+            app:layout_constraintTop_toBottomOf="@id/ivSelectDevice"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:src="@drawable/img_talktime"
+            android:layout_marginTop="20dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/ivTalkTime"
+            app:layout_constraintEnd_toEndOf="@id/ivTalkTime"
+            app:layout_constraintBottom_toBottomOf="@id/ivTalkTime"
+            android:text="@string/talk_time"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="@font/roboto"
+            android:textColor="#2F2F2F"
+            android:textSize="14sp"
+            android:gravity="center"/>
+
+        <ImageView
+            android:id="@+id/ivPreview"
+            android:layout_width="77dp"
+            android:layout_height="39dp"
+            android:src="@drawable/btn_preview_disable"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="17dp"
+            app:layout_constraintTop_toBottomOf="@id/ivSetTime"
+            app:layout_constraintStart_toStartOf="parent"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/ivPreview"
+            app:layout_constraintTop_toTopOf="@id/ivPreview"
+            app:layout_constraintEnd_toEndOf="@id/ivPreview"
+            app:layout_constraintBottom_toBottomOf="@id/ivPreview"
+            android:text="@string/preview"
+            android:textSize="16sp"
+            android:textColor="@color/white"/>
+
+
+        <ImageView
+            android:id="@+id/ivApply"
+            android:layout_width="77dp"
+            android:layout_height="39dp"
+            android:src="@drawable/btn_apply_disable"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="17dp"
+            app:layout_constraintTop_toBottomOf="@id/ivTalkTime"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/ivApply"
+            app:layout_constraintTop_toTopOf="@id/ivApply"
+            app:layout_constraintEnd_toEndOf="@id/ivApply"
+            app:layout_constraintBottom_toBottomOf="@id/ivApply"
+            android:text="@string/apply"
+            android:textSize="16sp"
+            android:textColor="@color/white"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

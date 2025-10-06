@@ -102,7 +102,7 @@
             android:textColor="#A0A0A0"
             android:textSize="16sp"
             android:layout_marginStart="29dp"/>
-        
+
         <ImageView
             android:id="@+id/ivChooseVoice"
             android:layout_width="146dp"

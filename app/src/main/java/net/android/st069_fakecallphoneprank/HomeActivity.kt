@@ -7,6 +7,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import net.android.st069_fakecallphoneprank.activity.AddFakeCallActivity
 import net.android.st069_fakecallphoneprank.activity.AvailableCallsActivity
 import net.android.st069_fakecallphoneprank.activity.MoreActivity
 import net.android.st069_fakecallphoneprank.databinding.ActivityHomeBinding
@@ -52,14 +53,14 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun setupClickListeners() {
-        // Add Fake Call button - Open AddFakeCall Fragment
+        // Add Fake Call button - Launch AddFakeCallActivity
         binding.ivAddCall.setOnClickListener {
-            openAddFakeCallFragment()
+            val intent = Intent(this, AddFakeCallActivity::class.java)
+            startActivity(intent)
         }
 
         // Available Fake Call button - Navigate to list activity
         binding.ivAvaibleCall.setOnClickListener {
-            // You can create a fragment for this too, or use the activity I created
             val intent = Intent(this, AvailableCallsActivity::class.java)
             startActivity(intent)
         }
@@ -68,23 +69,6 @@ class HomeActivity : AppCompatActivity() {
         binding.ivMore.setOnClickListener {
             val intent = Intent(this, MoreActivity::class.java)
             startActivity(intent)
-        }
-    }
-
-    private fun openAddFakeCallFragment() {
-        // Replace the entire screen with AddFakeCall fragment
-        supportFragmentManager.beginTransaction()
-            .replace(android.R.id.content, AddFakeCall())
-            .addToBackStack("AddFakeCall")
-            .commit()
-    }
-
-    override fun onBackPressed() {
-        // If there are fragments in back stack, pop them
-        if (supportFragmentManager.backStackEntryCount > 0) {
-            supportFragmentManager.popBackStack()
-        } else {
-            super.onBackPressed()
         }
     }
 }
