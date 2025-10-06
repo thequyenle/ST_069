@@ -13,6 +13,27 @@
     <string name="camera_amp_recorder"><![CDATA[Camera & Recorder]]></string>
     <string name="Screen_Premissions">Screen Premissions</string>
     <string name="continue_">Continue</string>
+    <string name="addfakecallstring">Provides fun fake calls available to entertain and joke with friends and relatives</string>
+    <string name="available_fake_call">Available Fake Call</string>
+    <string name="more_fake_call">More</string>
+    <string name="more_fake_call_string">Some other suggested options: Change language,\n Rate Us,...</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="add_fake_call">Add Fake Call</string>
+    <string name="name">Name</string>
+    <string name="phone_number">Phone Numeber</string>
+    <string name="choose_voice">Choose Voice</string>
+    <string name="select_device">Select Device</string>
+    <string name="set_time">Set Time</string>
+    <string name="talk_time">Talk Time</string>
+    <string name="preview">Preview</string>
+    <string name="apply">Apply</string>
+    <string name="choose_how_long_to_keep_your_call_screen_visible">Choose how long to keep your call screen visible</string>
+    <string name="_30_second">30 second</string>
+    <string name="_1_minute">1 min</string>
+    <string name="_5_minute">5 min</string>
+    <string name="_10_minute">10 min</string>
+    <string name="save_talk_time">Save</string>
 
 
 </resources>

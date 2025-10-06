@@ -1,9 +1,8 @@
-package net.android.st069_fakecallphoneprank
+package net.android.st069_fakecallphoneprank.intro
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import net.android.st069_fakecallphoneprank.IntroPage
 import net.android.st069_fakecallphoneprank.databinding.ItemIntroPageBinding
 
 class IntroAdapter(

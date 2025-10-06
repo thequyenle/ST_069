@@ -36,16 +36,16 @@
             android:name=".HomeActivity"
             android:exported="false" />
         <activity
-            android:name=".LanguageActivity"
+            android:name=".activity.LanguageActivity"
             android:exported="false" />
         <activity
-            android:name=".PermissionActivity"
+            android:name=".activity.PermissionActivity"
             android:exported="false" />
         <activity
-            android:name=".IntroActivity"
+            android:name=".intro.IntroActivity"
             android:exported="false" />
         <activity
-            android:name=".SplashActivity"
+            android:name=".activity.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -54,7 +54,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.MainActivity"
             android:exported="false"></activity>
     </application>
 

@@ -1,7 +1,7 @@
-package net.android.st069_fakecallphoneprank
+package net.android.st069_fakecallphoneprank.intro
 
 import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
+
 // Intro Page
 data class IntroPage(
     @DrawableRes val imageRes: Int,

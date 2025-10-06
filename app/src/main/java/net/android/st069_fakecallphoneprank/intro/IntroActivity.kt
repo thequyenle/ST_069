@@ -1,4 +1,4 @@
-package net.android.st069_fakecallphoneprank
+package net.android.st069_fakecallphoneprank.intro
 
 import android.app.Activity
 import android.content.Intent
@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
+import net.android.st069_fakecallphoneprank.activity.PermissionActivity
+import net.android.st069_fakecallphoneprank.R
 import net.android.st069_fakecallphoneprank.databinding.ActivityIntroBinding
 import kotlin.math.abs
 

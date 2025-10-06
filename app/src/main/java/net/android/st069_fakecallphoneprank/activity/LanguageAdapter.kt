@@ -1,10 +1,9 @@
-package net.android.st069_fakecallphoneprank
+package net.android.st069_fakecallphoneprank.activity
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import net.android.st069_fakecallphoneprank.R
-import net.android.st069_fakecallphoneprank.LanguageItem
 import net.android.st069_fakecallphoneprank.databinding.ItemLanguageBinding
 
 class LanguageAdapter(

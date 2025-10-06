@@ -1,4 +1,4 @@
-package net.android.st069_fakecallphoneprank
+package net.android.st069_fakecallphoneprank.activity
 
 import android.app.Activity
 import android.content.Intent
@@ -6,9 +6,10 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
-import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
+import net.android.st069_fakecallphoneprank.HomeActivity
 import net.android.st069_fakecallphoneprank.databinding.ActivitySplashBinding
+import net.android.st069_fakecallphoneprank.intro.IntroActivity
 
 class SplashActivity : AppCompatActivity() {
 

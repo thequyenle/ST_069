@@ -1,4 +1,4 @@
-package net.android.st069_fakecallphoneprank
+package net.android.st069_fakecallphoneprank.activity
 
 import android.Manifest
 import android.app.Activity
@@ -13,6 +13,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import net.android.st069_fakecallphoneprank.HomeActivity
+import net.android.st069_fakecallphoneprank.R
 import net.android.st069_fakecallphoneprank.databinding.ActivityPermissionBinding
 
 class PermissionActivity : AppCompatActivity() {

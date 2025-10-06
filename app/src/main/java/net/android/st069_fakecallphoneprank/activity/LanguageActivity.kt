@@ -1,4 +1,4 @@
-package net.android.st069_fakecallphoneprank
+package net.android.st069_fakecallphoneprank.activity
 
 import android.app.Activity
 import android.content.Context
@@ -10,9 +10,10 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import net.android.st069_fakecallphoneprank.LanguageAdapter
-import net.android.st069_fakecallphoneprank.LanguageItem
+import net.android.st069_fakecallphoneprank.HomeActivity
+import net.android.st069_fakecallphoneprank.R
 import net.android.st069_fakecallphoneprank.databinding.ActivityLanguageBinding
+import net.android.st069_fakecallphoneprank.intro.IntroActivity
 import net.android.st069_fakecallphoneprank.utils.LocaleHelper
 
 class LanguageActivity : AppCompatActivity() {

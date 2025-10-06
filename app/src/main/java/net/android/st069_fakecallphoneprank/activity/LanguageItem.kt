@@ -1,7 +1,6 @@
-package net.android.st069_fakecallphoneprank
+package net.android.st069_fakecallphoneprank.activity
 
 import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 
 // Language Item
 data class LanguageItem(
