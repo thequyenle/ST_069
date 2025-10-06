@@ -1,11 +1,14 @@
 package net.android.st069_fakecallphoneprank
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import net.android.st069_fakecallphoneprank.activity.AvailableCallsActivity
+import net.android.st069_fakecallphoneprank.activity.MoreActivity
 import net.android.st069_fakecallphoneprank.databinding.ActivityHomeBinding
 import net.android.st069_fakecallphoneprank.viewmodel.FakeCallViewModel
 
@@ -34,55 +37,54 @@ class HomeActivity : AppCompatActivity() {
     private fun setupObservers() {
         // Observe all fake calls
         viewModel.allFakeCalls.observe(this) { fakeCalls ->
-            // Update UI with fake calls list
-            // You can create a RecyclerView adapter to display this
             println("Total fake calls: ${fakeCalls.size}")
         }
 
         // Observe active calls count
         viewModel.activeCallsCount.observe(this) { count ->
-            // Update UI to show active calls count
             println("Active calls: $count")
         }
 
         // Observe upcoming calls
         viewModel.upcomingCalls.observe(this) { upcomingCalls ->
-            // Update UI with upcoming scheduled calls
             println("Upcoming calls: ${upcomingCalls.size}")
         }
     }
 
     private fun setupClickListeners() {
-        // Add Fake Call button
+        // Add Fake Call button - Open AddFakeCall Fragment
         binding.ivAddCall.setOnClickListener {
-            // Navigate to AddFakeCall fragment
-            // TODO: Implement navigation
+            openAddFakeCallFragment()
         }
 
-        // Available Fake Call button
+        // Available Fake Call button - Navigate to list activity
         binding.ivAvaibleCall.setOnClickListener {
-            // Navigate to list of saved fake calls
-            // TODO: Implement navigation
+            // You can create a fragment for this too, or use the activity I created
+            val intent = Intent(this, AvailableCallsActivity::class.java)
+            startActivity(intent)
         }
 
-        // More button
+        // More button - Navigate to settings
         binding.ivMore.setOnClickListener {
-            // Navigate to settings/more options
-            // TODO: Implement navigation
+            val intent = Intent(this, MoreActivity::class.java)
+            startActivity(intent)
         }
     }
 
-    // Example: Create a test fake call
-    private fun createTestFakeCall() {
-        val testCall = net.android.st069_fakecallphoneprank.data.entity.FakeCall(
-            name = "John Doe",
-            phoneNumber = "099-345-213",
-            voiceType = "Male voice",
-            deviceType = "Samsung S20",
-            setTime = 60, // Call appears after 60 seconds countdown
-            talkTime = 120 // Call screen displays for 2 minutes
-        )
+    private fun openAddFakeCallFragment() {
+        // Replace the entire screen with AddFakeCall fragment
+        supportFragmentManager.beginTransaction()
+            .replace(android.R.id.content, AddFakeCall())
+            .addToBackStack("AddFakeCall")
+            .commit()
+    }
 
-        viewModel.insert(testCall)
+    override fun onBackPressed() {
+        // If there are fragments in back stack, pop them
+        if (supportFragmentManager.backStackEntryCount > 0) {
+            supportFragmentManager.popBackStack()
+        } else {
+            super.onBackPressed()
+        }
     }
 }

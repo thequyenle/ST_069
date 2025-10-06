@@ -1,59 +1,135 @@
 package net.android.st069_fakecallphoneprank
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
+import net.android.st069_fakecallphoneprank.databinding.FragmentSetTimeBinding
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [SetTime.newInstance] factory method to
- * create an instance of this fragment.
- */
 class SetTime : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
+    private var _binding: FragmentSetTimeBinding? = null
+    private val binding get() = _binding!!
+
+    private var currentSetTime: Int = 0
+    private var selectedSetTime: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            currentSetTime = it.getInt("CURRENT_SET_TIME", 0)
         }
+        selectedSetTime = currentSetTime
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_set_time, container, false)
+    ): View {
+        _binding = FragmentSetTimeBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SetTime.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SetTime().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setupClickListeners()
+        updateSelection(selectedSetTime)
+    }
+
+    private fun setupClickListeners() {
+        // Back button - find the ImageView with back arrow in layoutTitle
+        binding.layoutTitle.setOnClickListener {
+            saveAndReturn()
+        }
+
+        // 15 seconds (using first button - you can adjust based on your layout)
+        binding.iv15s.setOnClickListener {
+            selectTime(15)
+        }
+
+        // 30 seconds
+        binding.iv30s.setOnClickListener {
+            selectTime(30)
+        }
+
+        // 1 minute (60 seconds)
+        binding.iv1m.setOnClickListener {
+            selectTime(60)
+        }
+
+        // 5 minutes (300 seconds)
+        binding.iv5m.setOnClickListener {
+            selectTime(300)
+        }
+
+        // 10 minutes (600 seconds)
+        binding.iv10m.setOnClickListener {
+            selectTime(600)
+        }
+    }
+
+    private fun selectTime(seconds: Int) {
+        selectedSetTime = seconds
+        updateSelection(seconds)
+    }
+
+    private fun updateSelection(seconds: Int) {
+        // Reset all to disabled state
+        binding.iv15s.setImageResource(R.drawable.bg_disable)
+        binding.tv15s.setTextColor(resources.getColor(R.color.text_secondary, null))
+
+        binding.iv30s.setImageResource(R.drawable.bg_disable)
+        binding.tv30s.setTextColor(resources.getColor(R.color.text_secondary, null))
+
+        binding.iv1m.setImageResource(R.drawable.bg_disable)
+        binding.tv1m.setTextColor(resources.getColor(R.color.text_secondary, null))
+
+        binding.iv5m.setImageResource(R.drawable.bg_disable)
+        binding.tv5m.setTextColor(resources.getColor(R.color.text_secondary, null))
+
+        binding.iv10m.setImageResource(R.drawable.bg_disable)
+        binding.tv10m.setTextColor(resources.getColor(R.color.text_secondary, null))
+
+        // Set selected state
+        when (seconds) {
+            15 -> {
+                binding.iv15s.setImageResource(R.drawable.bg_enable)
+                binding.tv15s.setTextColor(resources.getColor(android.R.color.white, null))
             }
+            30 -> {
+                binding.iv30s.setImageResource(R.drawable.bg_enable)
+                binding.tv30s.setTextColor(resources.getColor(android.R.color.white, null))
+            }
+            60 -> {
+                binding.iv1m.setImageResource(R.drawable.bg_enable)
+                binding.tv1m.setTextColor(resources.getColor(android.R.color.white, null))
+            }
+            300 -> {
+                binding.iv5m.setImageResource(R.drawable.bg_enable)
+                binding.tv5m.setTextColor(resources.getColor(android.R.color.white, null))
+            }
+            600 -> {
+                binding.iv10m.setImageResource(R.drawable.bg_enable)
+                binding.tv10m.setTextColor(resources.getColor(android.R.color.white, null))
+            }
+        }
+    }
+
+    private fun saveAndReturn() {
+        // Send result back to AddFakeCall fragment
+        setFragmentResult("SET_TIME_RESULT", bundleOf("SET_TIME" to selectedSetTime))
+
+        // Pop back stack
+        parentFragmentManager.popBackStack()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

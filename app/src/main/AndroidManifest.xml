@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
     <!-- EXISTING PERMISSIONS -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
@@ -32,8 +31,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ST069_FakeCallPhonePrank"
         tools:targetApi="31">
-
-        <!-- EXISTING ACTIVITIES -->
+        <activity
+            android:name=".activity.MoreActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.AvailableCallsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.AddFakeCallActivity"
+            android:exported="false" /> <!-- EXISTING ACTIVITIES -->
         <activity
             android:name=".HomeActivity"
             android:exported="false" />
@@ -51,42 +57,37 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".activity.MainActivity"
-            android:exported="false" />
-
-        <!-- NEW FAKE CALL ACTIVITIES -->
+            android:exported="false" /> <!-- NEW FAKE CALL ACTIVITIES -->
         <activity
             android:name=".activities.IncomingCallActivity"
-            android:exported="false"
             android:excludeFromRecents="true"
+            android:exported="false"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:showWhenLocked="true"
             android:turnScreenOn="true" />
-
         <activity
             android:name=".activities.ActiveCallActivity"
-            android:exported="false"
             android:excludeFromRecents="true"
+            android:exported="false"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:showWhenLocked="true"
             android:turnScreenOn="true" />
-
         <activity
             android:name=".activities.EndCallActivity"
-            android:exported="false"
             android:excludeFromRecents="true"
+            android:exported="false"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:showWhenLocked="true"
-            android:turnScreenOn="true" />
-
-        <!-- BROADCAST RECEIVER FOR ALARMS -->
+            android:turnScreenOn="true" /> <!-- BROADCAST RECEIVER FOR ALARMS -->
         <receiver
             android:name=".receivers.FakeCallReceiver"
             android:enabled="true"
@@ -96,7 +97,6 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-
     </application>
 
 </manifest>
