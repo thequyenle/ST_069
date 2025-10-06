@@ -70,6 +70,7 @@
             android:src="@drawable/img_addname"
             android:layout_marginTop="28dp"/>
         <TextView
+            android:id="@+id/tvName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="@id/ivAddName"
@@ -90,6 +91,7 @@
             android:src="@drawable/img_addphone"
             android:layout_marginTop="28dp"/>
         <TextView
+            android:id="@+id/tvPhone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="@id/ivAddPhone"
