@@ -44,8 +44,8 @@ class SelectDeviceActivity : AppCompatActivity() {
 
     private fun setupDeviceList() {
         deviceList = mutableListOf(
-            Device("1", "Pixel 5", R.drawable.device_pixel5, false),
-            Device("2", "Oppo", R.drawable.device_oppo, false),
+            Device("1", "Pixel 5", R.drawable.pixel5, false),
+            Device("2", "Oppo", R.drawable.oppo, false),
 
         )
     }
