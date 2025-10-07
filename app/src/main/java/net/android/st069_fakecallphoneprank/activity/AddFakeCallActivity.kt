@@ -188,21 +188,26 @@ class AddFakeCallActivity : AppCompatActivity() {
         voicePickerLauncher.launch(intent)
     }
 
-    private fun showDeviceSelectionDialog() {
-        val options = arrayOf(
-            "Pixel 5", "Oppo", "iOS 12", "Samsung S20",
-            "Xiaomi", "iOS 13", "Samsung A10", "Vivo"
-        )
-
-        android.app.AlertDialog.Builder(this)
-            .setTitle("Select Device")
-            .setItems(options) { _, which ->
-                selectedDevice = options[which]
-                Toast.makeText(this, "Selected: ${options[which]}", Toast.LENGTH_SHORT).show()
+    private val devicePickerLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            result.data?.let { data ->
+                selectedDevice = data.getStringExtra("SELECTED_DEVICE")
+                Toast.makeText(
+                    this,
+                    "Selected device: ${selectedDevice}",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
-            .show()
+        }
     }
 
+    private fun showDeviceSelectionDialog() {
+        val intent = Intent(this, SelectDeviceActivity::class.java)
+        intent.putExtra("CURRENT_DEVICE", selectedDevice)
+        devicePickerLauncher.launch(intent)
+    }
     private fun showSetTimeDialog() {
         // Hide content layout and show Fragment Container
         binding.layoutTitle.visibility = View.GONE      // ✅ This fixes double header!

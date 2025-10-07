@@ -39,6 +39,21 @@ class VoiceAdapter(
         notifyDataSetChanged()
     }
 
+    fun removeItem(position: Int): Voice {
+        val removedVoice = items.removeAt(position)
+        notifyItemRemoved(position)
+        return removedVoice
+    }
+
+    fun restoreItem(voice: Voice, position: Int) {
+        items.add(position, voice)
+        notifyItemInserted(position)
+    }
+
+    fun isCustomVoice(position: Int): Boolean {
+        return items[position].isCustom
+    }
+
     inner class VoiceViewHolder(
         val binding: ItemVoiceBinding
     ) : RecyclerView.ViewHolder(binding.root) {

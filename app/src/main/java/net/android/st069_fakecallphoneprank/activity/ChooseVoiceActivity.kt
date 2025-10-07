@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import net.android.st069_fakecallphoneprank.R
 import net.android.st069_fakecallphoneprank.adapters.VoiceAdapter
 import net.android.st069_fakecallphoneprank.data.model.Voice
@@ -121,6 +122,88 @@ class ChooseVoiceActivity : AppCompatActivity() {
 
         binding.rvVoices.layoutManager = LinearLayoutManager(this)
         binding.rvVoices.adapter = adapter
+
+        // Add swipe-to-delete functionality
+        val itemTouchHelper = androidx.recyclerview.widget.ItemTouchHelper(
+            object : androidx.recyclerview.widget.ItemTouchHelper.SimpleCallback(
+                0,
+                androidx.recyclerview.widget.ItemTouchHelper.LEFT or androidx.recyclerview.widget.ItemTouchHelper.RIGHT
+            ) {
+                override fun onMove(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder,
+                    target: RecyclerView.ViewHolder
+                ): Boolean = false
+
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                    val position = viewHolder.adapterPosition
+
+                    // Only allow deletion for custom voices
+                    if (!adapter.isCustomVoice(position)) {
+                        Toast.makeText(
+                            this@ChooseVoiceActivity,
+                            "Cannot delete preset voices",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        adapter.notifyItemChanged(position)
+                        return
+                    }
+
+                    // Remove item from adapter
+                    val deletedVoice = adapter.removeItem(position)
+
+                    // Show Snackbar with Undo option
+                    val snackbar = com.google.android.material.snackbar.Snackbar.make(
+                        binding.root,
+                        "${deletedVoice.name} deleted",
+                        com.google.android.material.snackbar.Snackbar.LENGTH_LONG
+                    )
+
+                    snackbar.setAction("UNDO") {
+                        // Restore item
+                        adapter.restoreItem(deletedVoice, position)
+                        Toast.makeText(
+                            this@ChooseVoiceActivity,
+                            "${deletedVoice.name} restored",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
+                    snackbar.addCallback(object : com.google.android.material.snackbar.Snackbar.Callback() {
+                        override fun onDismissed(transientBottomBar: com.google.android.material.snackbar.Snackbar?, event: Int) {
+                            // If not undone, delete the actual file
+                            if (event != DISMISS_EVENT_ACTION) {
+                                deletedVoice.filePath?.let { filePath ->
+                                    try {
+                                        File(filePath).delete()
+                                        android.util.Log.d("ChooseVoice", "Deleted file: $filePath")
+                                    } catch (e: Exception) {
+                                        android.util.Log.e("ChooseVoice", "Error deleting file", e)
+                                    }
+                                }
+                            }
+                        }
+                    })
+
+                    snackbar.show()
+                }
+
+                override fun getSwipeDirs(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder
+                ): Int {
+                    val position = viewHolder.adapterPosition
+                    // Disable swipe for preset voices
+                    return if (adapter.isCustomVoice(position)) {
+                        super.getSwipeDirs(recyclerView, viewHolder)
+                    } else {
+                        0 // No swipe
+                    }
+                }
+            }
+        )
+
+        itemTouchHelper.attachToRecyclerView(binding.rvVoices)
     }
 
     private fun setupClickListeners() {
@@ -222,6 +305,11 @@ class ChooseVoiceActivity : AppCompatActivity() {
         btnPlay: ImageView?,
         btnStop: ImageView?
     ) {
+        if (isRecording) {
+            Toast.makeText(this, "Already recording", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         try {
             // Create audio file path
             val tempDir = File(cacheDir, "temp_recordings")
@@ -232,14 +320,14 @@ class ChooseVoiceActivity : AppCompatActivity() {
 
             // Setup MediaRecorder
             mediaRecorder = MediaRecorder().apply {
-                setAudioSource(MediaRecorder.AudioSource.MIC)
-                setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
-                setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
-                setOutputFile(audioFilePath)
-
                 try {
+                    setAudioSource(MediaRecorder.AudioSource.MIC)
+                    setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
+                    setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
+                    setOutputFile(audioFilePath)
                     prepare()
                     start()
+
                     isRecording = true
 
                     // Change background to running state
@@ -255,18 +343,48 @@ class ChooseVoiceActivity : AppCompatActivity() {
                     startTimer(tvTimer)
 
                 } catch (e: IOException) {
-                    Toast.makeText(this@ChooseVoiceActivity, "Recording failed", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@ChooseVoiceActivity, "Recording failed: ${e.message}", Toast.LENGTH_SHORT).show()
+                    android.util.Log.e("ChooseVoice", "Error starting recording", e)
+
+                    // Clean up on failure
+                    try {
+                        release()
+                    } catch (e2: Exception) {
+                        // Ignore
+                    }
+                    mediaRecorder = null
+                    isRecording = false
                 }
             }
         } catch (e: Exception) {
             Toast.makeText(this, "Error starting recording: ${e.message}", Toast.LENGTH_SHORT).show()
+            android.util.Log.e("ChooseVoice", "Error in startRecordingInDialog", e)
+            mediaRecorder = null
+            isRecording = false
         }
     }
 
     private fun stopRecordingInDialog() {
+        if (!isRecording) {
+            Toast.makeText(this, "No recording in progress", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         try {
+            // Check if recording duration is sufficient (at least 1 second)
+            val recordingDuration = (System.currentTimeMillis() - recordingStartTime) / 1000
+            if (recordingDuration < 1) {
+                Toast.makeText(this, "Recording too short. Please record at least 1 second.", Toast.LENGTH_SHORT).show()
+                return
+            }
+
             mediaRecorder?.apply {
-                stop()
+                try {
+                    stop()
+                } catch (e: RuntimeException) {
+                    // Handle stop() failure
+                    android.util.Log.e("ChooseVoice", "Error stopping MediaRecorder", e)
+                }
                 release()
             }
             mediaRecorder = null
@@ -282,7 +400,28 @@ class ChooseVoiceActivity : AppCompatActivity() {
             showSaveRecordingDialog()
 
         } catch (e: Exception) {
-            Toast.makeText(this, "Error stopping recording", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Error stopping recording: ${e.message}", Toast.LENGTH_SHORT).show()
+            android.util.Log.e("ChooseVoice", "Error in stopRecordingInDialog", e)
+
+            // Clean up
+            try {
+                mediaRecorder?.release()
+            } catch (e2: Exception) {
+                // Ignore
+            }
+            mediaRecorder = null
+            isRecording = false
+            timerHandler.removeCallbacksAndMessages(null)
+
+            // Delete temp file if it exists
+            audioFilePath?.let {
+                try {
+                    File(it).delete()
+                } catch (e2: Exception) {
+                    // Ignore
+                }
+            }
+            audioFilePath = null
         }
     }
 
@@ -303,8 +442,8 @@ class ChooseVoiceActivity : AppCompatActivity() {
     private fun showSaveRecordingDialog() {
         val dialogView = layoutInflater.inflate(R.layout.dialog_create_name, null)
         val input = dialogView.findViewById<EditText>(R.id.etVoiceName)
-        val btnCancel = dialogView.findViewById<Button>(R.id.btnCancel)
-        val btnOk = dialogView.findViewById<Button>(R.id.btnOk)
+        val btnCancel = dialogView.findViewById<TextView>(R.id.btnCancel)  // Changed to TextView
+        val btnOk = dialogView.findViewById<TextView>(R.id.btnOk)          // Changed to TextView
 
         val dialog = AlertDialog.Builder(this)
             .setView(dialogView)
@@ -393,10 +532,67 @@ class ChooseVoiceActivity : AppCompatActivity() {
         selectedVoice = voice
         adapter.selectVoice(voice)
 
-        // Setup media player (simplified - you would load actual audio)
-        btnPlayPause?.setOnClickListener {
-            // Toggle play/pause
-            Toast.makeText(this, "Playing ${voice.name}", Toast.LENGTH_SHORT).show()
+        // Setup media player for custom voices
+        if (voice.filePath != null && File(voice.filePath).exists()) {
+            try {
+                mediaPlayer?.release()
+                mediaPlayer = MediaPlayer().apply {
+                    setDataSource(voice.filePath)
+                    prepare()
+
+                    // Set duration
+                    val duration = this.duration
+                    seekBar?.max = duration
+                    tvTotalTime?.text = formatTime(duration)
+                    tvCurrentTime?.text = "00:00"
+                }
+
+                // Play/Pause button
+                var isPlaying = false
+                btnPlayPause?.setOnClickListener {
+                    mediaPlayer?.let { player ->
+                        if (isPlaying) {
+                            player.pause()
+                            btnPlayPause.setImageResource(R.drawable.ic_start_voice)
+                            isPlaying = false
+                        } else {
+                            player.start()
+                            btnPlayPause.setImageResource(android.R.drawable.ic_media_pause)
+                            isPlaying = true
+                            updateSeekBar(seekBar, tvCurrentTime, player)
+                        }
+                    }
+                }
+
+                // Seek bar
+                seekBar?.setOnSeekBarChangeListener(object : android.widget.SeekBar.OnSeekBarChangeListener {
+                    override fun onProgressChanged(seekBar: android.widget.SeekBar?, progress: Int, fromUser: Boolean) {
+                        if (fromUser) {
+                            mediaPlayer?.seekTo(progress)
+                            tvCurrentTime?.text = formatTime(progress)
+                        }
+                    }
+                    override fun onStartTrackingTouch(seekBar: android.widget.SeekBar?) {}
+                    override fun onStopTrackingTouch(seekBar: android.widget.SeekBar?) {}
+                })
+
+                // Auto stop at end
+                mediaPlayer?.setOnCompletionListener {
+                    btnPlayPause?.setImageResource(R.drawable.ic_start_voice)
+                    isPlaying = false
+                    seekBar?.progress = 0
+                    tvCurrentTime?.text = "00:00"
+                }
+
+            } catch (e: Exception) {
+                Toast.makeText(this, "Error loading audio: ${e.message}", Toast.LENGTH_SHORT).show()
+                android.util.Log.e("ChooseVoice", "Error playing voice", e)
+            }
+        } else {
+            // For preset voices without file
+            btnPlayPause?.setOnClickListener {
+                Toast.makeText(this, "Preview not available for preset voices", Toast.LENGTH_SHORT).show()
+            }
         }
 
         btnClose?.setOnClickListener {
@@ -404,11 +600,34 @@ class ChooseVoiceActivity : AppCompatActivity() {
         }
 
         playingDialog?.setOnDismissListener {
-            mediaPlayer?.release()
+            mediaPlayer?.apply {
+                if (isPlaying) {
+                    stop()
+                }
+                release()
+            }
             mediaPlayer = null
         }
 
         playingDialog?.show()
+    }
+
+    private fun updateSeekBar(seekBar: android.widget.SeekBar?, tvCurrentTime: TextView?, player: MediaPlayer) {
+        timerHandler.postDelayed(object : Runnable {
+            override fun run() {
+                if (player.isPlaying) {
+                    seekBar?.progress = player.currentPosition
+                    tvCurrentTime?.text = formatTime(player.currentPosition)
+                    timerHandler.postDelayed(this, 100)
+                }
+            }
+        }, 100)
+    }
+
+    private fun formatTime(milliseconds: Int): String {
+        val seconds = (milliseconds / 1000) % 60
+        val minutes = (milliseconds / (1000 * 60)) % 60
+        return String.format("%02d:%02d", minutes, seconds)
     }
 
     override fun onRequestPermissionsResult(
