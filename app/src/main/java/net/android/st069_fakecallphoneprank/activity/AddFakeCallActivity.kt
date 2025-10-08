@@ -151,6 +151,11 @@ class AddFakeCallActivity : AppCompatActivity() {
                 saveFakeCall()
             }
         }
+        // History
+        binding.ivHitory.setOnClickListener {
+            val intent = Intent(this, HistoryActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun openImagePicker() {
