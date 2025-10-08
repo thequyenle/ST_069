@@ -125,40 +125,70 @@ class AddFakeCallActivity : AppCompatActivity() {
     }
 
     private fun showNameInputDialog() {
-        val builder = android.app.AlertDialog.Builder(this)
-        val input = android.widget.EditText(this)
-        input.hint = "Enter name"
+        val dialogView = layoutInflater.inflate(R.layout.dialog_create_addfake_name, null)
+        val input = dialogView.findViewById<android.widget.EditText>(R.id.etVoiceName)
+        val btnCancel = dialogView.findViewById<android.widget.TextView>(R.id.btnCancel)
+        val btnOk = dialogView.findViewById<android.widget.TextView>(R.id.btnOk)
         input.setText(selectedName)
 
-        builder.setTitle("Contact Name")
-            .setView(input)
-            .setPositiveButton("OK") { _, _ ->
-                selectedName = input.text.toString()
-                binding.tvName.text = selectedName
-                binding.tvName.setTextColor(resources.getColor(android.R.color.black, null))
-                updateButtonStates()
+        val dialog = androidx.appcompat.app.AlertDialog.Builder(this)
+            .setView(dialogView)
+            .setCancelable(false)
+            .create()
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+        btnCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        btnOk.setOnClickListener {
+            val name = input.text.toString().trim()
+            if (name.isEmpty()) {
+                android.widget.Toast.makeText(this, "Please enter a name", android.widget.Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
-            .setNegativeButton("Cancel", null)
-            .show()
+            selectedName = name
+            binding.tvName.text = selectedName
+            binding.tvName.setTextColor(resources.getColor(android.R.color.black, null))
+            updateButtonStates()
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 
     private fun showPhoneInputDialog() {
-        val builder = android.app.AlertDialog.Builder(this)
-        val input = android.widget.EditText(this)
-        input.hint = "Enter phone number"
-        input.inputType = android.text.InputType.TYPE_CLASS_PHONE
+        val dialogView = layoutInflater.inflate(R.layout.dialog_create_addfake_phonenumber, null)
+        val input = dialogView.findViewById<android.widget.EditText>(R.id.etVoiceName)
+        val btnCancel = dialogView.findViewById<android.widget.TextView>(R.id.btnCancel)
+        val btnOk = dialogView.findViewById<android.widget.TextView>(R.id.btnOk)
         input.setText(selectedPhone)
+        input.inputType = android.text.InputType.TYPE_CLASS_PHONE
 
-        builder.setTitle("Phone Number")
-            .setView(input)
-            .setPositiveButton("OK") { _, _ ->
-                selectedPhone = input.text.toString()
-                binding.tvPhone.text = selectedPhone
-                binding.tvPhone.setTextColor(resources.getColor(android.R.color.black, null))
-                updateButtonStates()
+        val dialog = androidx.appcompat.app.AlertDialog.Builder(this)
+            .setView(dialogView)
+            .setCancelable(false)
+            .create()
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+        btnCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        btnOk.setOnClickListener {
+            val phone = input.text.toString().trim()
+            if (phone.isEmpty()) {
+                android.widget.Toast.makeText(this, "Please enter a phone number", android.widget.Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
-            .setNegativeButton("Cancel", null)
-            .show()
+            selectedPhone = phone
+            binding.tvPhone.text = selectedPhone
+            binding.tvPhone.setTextColor(resources.getColor(android.R.color.black, null))
+            updateButtonStates()
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 
     private val voicePickerLauncher = registerForActivityResult(
