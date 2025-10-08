@@ -2,6 +2,7 @@ package net.android.st069_fakecallphoneprank
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +12,7 @@ import net.android.st069_fakecallphoneprank.activity.AddFakeCallActivity
 import net.android.st069_fakecallphoneprank.activity.AvailableCallsActivity
 import net.android.st069_fakecallphoneprank.activity.MoreActivity
 import net.android.st069_fakecallphoneprank.databinding.ActivityHomeBinding
+import net.android.st069_fakecallphoneprank.utils.ImmersiveUtils
 import net.android.st069_fakecallphoneprank.viewmodel.FakeCallViewModel
 
 class HomeActivity : AppCompatActivity() {
@@ -33,6 +35,12 @@ class HomeActivity : AppCompatActivity() {
 
         setupObservers()
         setupClickListeners()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val root = findViewById<View>(R.id.main) // your root layout id
+        ImmersiveUtils.applyEdgeToEdgeHideNav(this, root, padTopForStatusBar = true)
     }
 
     private fun setupObservers() {

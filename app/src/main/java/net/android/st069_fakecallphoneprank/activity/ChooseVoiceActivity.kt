@@ -440,7 +440,7 @@ class ChooseVoiceActivity : AppCompatActivity() {
     }
 
     private fun showSaveRecordingDialog() {
-        val dialogView = layoutInflater.inflate(R.layout.dialog_create_name, null)
+        val dialogView = layoutInflater.inflate(R.layout.dialog_create_voice_name, null)
         val input = dialogView.findViewById<EditText>(R.id.etVoiceName)
         val btnCancel = dialogView.findViewById<TextView>(R.id.btnCancel)  // Changed to TextView
         val btnOk = dialogView.findViewById<TextView>(R.id.btnOk)          // Changed to TextView
