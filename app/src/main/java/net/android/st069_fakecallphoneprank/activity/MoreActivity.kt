@@ -1,21 +1,37 @@
 package net.android.st069_fakecallphoneprank.activity
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
+import net.android.st069_fakecallphoneprank.R
 import net.android.st069_fakecallphoneprank.databinding.ActivityMoreBinding
+import net.android.st069_fakecallphoneprank.dialog.RatingDialog
 
 class MoreActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMoreBinding
 
+    private var isRated = false
+    private lateinit var layoutRateUs: ConstraintLayout
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMoreBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        layoutRateUs = binding.layoutRate
+        loadRatingStatus()
+
 
         setupClickListeners()
+    }
+
+    companion object {
+        private const val PREFS_NAME = "FakeCallSettings"  // or any name you prefer
+        private const val KEY_RATED = "is_rated"
     }
 
     private fun setupClickListeners() {
@@ -33,7 +49,8 @@ class MoreActivity : AppCompatActivity() {
 
         // Rate Us
         binding.layoutRate.setOnClickListener {
-            openPlayStore()
+
+            showRatingDialog()
         }
 
         // Share App
@@ -44,49 +61,79 @@ class MoreActivity : AppCompatActivity() {
         // Privacy Policy
         binding.layoutPrivacy.setOnClickListener {
             // TODO: Open privacy policy
-            openUrl("https://your-privacy-policy-url.com")
+            openPrivacyPolicy()
         }
 
-        // About
-        binding.layoutAbout.setOnClickListener {
-            showAboutDialog()
+
+    }
+
+    private fun showRatingDialog() {
+        RatingDialog.show(
+            this,
+            onRatingSubmitted = { rating ->
+                // User đã chọn rating và submit
+                handleRatingSubmitted()
+            },
+            onDismiss = {
+                // Dialog đóng nhưng không submit (ấn Exit hoặc touch outside)
+                // Không làm gì, giữ nguyên trạng thái
+            }
+        )
+    }
+
+    private fun handleRatingSubmitted() {
+        // Đánh dấu đã rating
+        isRated = true
+        saveRatingStatus(true)
+
+        // Ẩn layout Rate Us với animation
+        layoutRateUs.animate()
+            .alpha(0f)
+            .translationY(-layoutRateUs.height.toFloat())
+            .setDuration(300)
+            .withEndAction {
+                layoutRateUs.visibility = View.GONE
+            }
+            .start()
+    }
+
+    // To this:
+    private fun saveRatingStatus(rated: Boolean) {
+        val prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        prefs.edit().putBoolean(KEY_RATED, rated).apply()
+    }
+
+    private fun loadRatingStatus() {
+        val prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        isRated = prefs.getBoolean(KEY_RATED, false)
+
+        // Nếu đã rating rồi thì ẩn luôn
+        if (isRated) {
+            layoutRateUs.visibility = View.GONE
         }
     }
 
-    private fun openPlayStore() {
-        try {
-            val uri = Uri.parse("market://details?id=$packageName")
-            val intent = Intent(Intent.ACTION_VIEW, uri)
-            startActivity(intent)
-        } catch (e: Exception) {
-            val uri = Uri.parse("https://play.google.com/store/apps/details?id=$packageName")
-            val intent = Intent(Intent.ACTION_VIEW, uri)
-            startActivity(intent)
-        }
-    }
 
     private fun shareApp() {
-        val shareIntent = Intent(Intent.ACTION_SEND).apply {
+        val shareIntent = Intent().apply {
+            action = Intent.ACTION_SEND
             type = "text/plain"
-            putExtra(Intent.EXTRA_SUBJECT, "Fake Call App")
             putExtra(
                 Intent.EXTRA_TEXT,
-                "Check out this awesome Fake Call app: https://play.google.com/store/apps/details?id=$packageName"
+                "Check out this amazing Alarm Clock app: http://play.google.com/store/apps/details?id=${packageName}"
             )
         }
-        startActivity(Intent.createChooser(shareIntent, "Share via"))
+        startActivity(Intent.createChooser(shareIntent, "Share app via"))
     }
 
-    private fun openUrl(url: String) {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+    private fun openPrivacyPolicy() {
+        val url = "https://sites.google.com/view/docx-reader-office-viewer/home"
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            data = android.net.Uri.parse(url)
+        }
         startActivity(intent)
     }
 
-    private fun showAboutDialog() {
-        android.app.AlertDialog.Builder(this)
-            .setTitle("About")
-            .setMessage("Fake Call - Prank Phone\nVersion 1.0\n\nCreate realistic fake calls to prank your friends!")
-            .setPositiveButton("OK", null)
-            .show()
-    }
+
+
 }

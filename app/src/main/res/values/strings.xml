@@ -43,6 +43,10 @@
     <string name="share_app">Share App</string>
     <string name="rate_us">Rate Us</string>
     <string name="language_more">Language</string>
+    <string name="do_you_like_the_app">Do you like the app?</string>
+    <string name="let_us_know_your_experience">Let us know your experience</string>
+    <string name="rate">Rate</string>
+    <string name="exit">Exit</string>
 
 
 </resources>
