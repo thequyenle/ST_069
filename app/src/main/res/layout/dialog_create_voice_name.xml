@@ -80,6 +80,11 @@
             android:paddingHorizontal="16dp"
             style="?android:attr/borderlessButtonStyle" />
 
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
         <!-- OK Button -->
         <TextView
             android:id="@+id/btnOk"
@@ -91,8 +96,7 @@
             android:textColor="@android:color/white"
             android:background="@drawable/bg_rounded_save_talktime"
             android:gravity="center"
-            android:layout_gravity="right"
-            android:layout_marginStart="28dp" />
+            android:layout_marginEnd="16dp" />
 
     </LinearLayout>
 
