@@ -6,14 +6,20 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import net.android.st069_fakecallphoneprank.R
 import net.android.st069_fakecallphoneprank.databinding.ActivityIncomingCallBinding
+import net.android.st069_fakecallphoneprank.viewmodel.FakeCallViewModel
 
 class IncomingCallActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityIncomingCallBinding
     private var mediaPlayer: MediaPlayer? = null
+    private lateinit var viewModel: FakeCallViewModel
 
     private var fakeCallId: Long = -1
     private var name: String = ""
@@ -38,6 +44,9 @@ class IncomingCallActivity : AppCompatActivity() {
 
         binding = ActivityIncomingCallBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Initialize ViewModel
+        viewModel = ViewModelProvider(this)[FakeCallViewModel::class.java]
 
         // Get data from intent
         fakeCallId = intent.getLongExtra("FAKE_CALL_ID", -1)
@@ -72,13 +81,25 @@ class IncomingCallActivity : AppCompatActivity() {
         // Accept button - go to active call
         binding.btnAccept.setOnClickListener {
             stopRingtone()
+            deactivateCall() // Deactivate instead of delete
             goToActiveCall()
         }
 
-        // Decline button - end call
+        // Decline button - end call and deactivate
         binding.btnDecline.setOnClickListener {
             stopRingtone()
+            deactivateCall() // Deactivate instead of delete
             finish()
+        }
+    }
+
+    private fun deactivateCall() {
+        if (fakeCallId != -1L) {
+            CoroutineScope(Dispatchers.IO).launch {
+                // Deactivate the call instead of deleting it
+                // This will make it disappear from Custom tab and appear in Available tab
+                viewModel.deactivateFakeCall(fakeCallId)
+            }
         }
     }
 

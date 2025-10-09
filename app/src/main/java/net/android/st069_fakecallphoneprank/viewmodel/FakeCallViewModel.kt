@@ -18,6 +18,7 @@ class FakeCallViewModel(application: Application) : AndroidViewModel(application
     val allFakeCalls: LiveData<List<FakeCall>>
     val activeFakeCalls: LiveData<List<FakeCall>>
     val upcomingCalls: LiveData<List<FakeCall>>
+    val pastCalls: LiveData<List<FakeCall>> // NEW
     val activeCallsCount: LiveData<Int>
 
     init {
@@ -28,6 +29,7 @@ class FakeCallViewModel(application: Application) : AndroidViewModel(application
         allFakeCalls = repository.allFakeCalls.asLiveData()
         activeFakeCalls = repository.activeFakeCalls.asLiveData()
         upcomingCalls = repository.getUpcomingCalls().asLiveData()
+        pastCalls = repository.getPastCalls().asLiveData() // NEW
         activeCallsCount = repository.activeCallsCount.asLiveData()
     }
 

@@ -15,11 +15,26 @@ class HistoryCallAdapter(
     private val onCallClick: (FakeCall) -> Unit
 ) : RecyclerView.Adapter<HistoryCallAdapter.ViewHolder>() {
 
-    private var items = listOf<FakeCall>()
+    private var items = mutableListOf<FakeCall>()
 
     fun submitList(newItems: List<FakeCall>) {
-        items = newItems
+        items = newItems.toMutableList()
         notifyDataSetChanged()
+    }
+
+    fun getItemAt(position: Int): FakeCall {
+        return items[position]
+    }
+
+    fun removeItem(position: Int): FakeCall {
+        val removedItem = items.removeAt(position)
+        notifyItemRemoved(position)
+        return removedItem
+    }
+
+    fun restoreItem(item: FakeCall, position: Int) {
+        items.add(position, item)
+        notifyItemInserted(position)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

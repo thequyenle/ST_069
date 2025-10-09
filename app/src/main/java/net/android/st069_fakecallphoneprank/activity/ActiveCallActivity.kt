@@ -7,15 +7,21 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import net.android.st069_fakecallphoneprank.R
 import net.android.st069_fakecallphoneprank.databinding.ActivityActiveCallBinding
+import net.android.st069_fakecallphoneprank.viewmodel.FakeCallViewModel
 
 class ActiveCallActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityActiveCallBinding
     private var callTimer: CountDownTimer? = null
     private var voicePlayer: MediaPlayer? = null
+    private lateinit var viewModel: FakeCallViewModel
 
     private var fakeCallId: Long = -1
     private var name: String = ""
@@ -41,6 +47,9 @@ class ActiveCallActivity : AppCompatActivity() {
 
         binding = ActivityActiveCallBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Initialize ViewModel
+        viewModel = ViewModelProvider(this)[FakeCallViewModel::class.java]
 
         // Get data from intent
         fakeCallId = intent.getLongExtra("FAKE_CALL_ID", -1)
@@ -82,16 +91,12 @@ class ActiveCallActivity : AppCompatActivity() {
 
         // Other buttons - optional functionality
         binding.btnMute.setOnClickListener {
-            // Toggle mute
             toggleMute()
         }
 
         binding.btnSpeaker.setOnClickListener {
-            // Toggle speaker
             toggleSpeaker()
         }
-
-        // Keypad, Add Call, Camera, Contact - optional implementations
     }
 
     private fun startCallTimer() {
@@ -151,6 +156,9 @@ class ActiveCallActivity : AppCompatActivity() {
         callTimer?.cancel()
         stopVoice()
 
+        // Deactivate the call (don't delete)
+        deactivateCall()
+
         // Go to end call screen
         val intent = Intent(this, EndCallActivity::class.java).apply {
             putExtra("NAME", name)
@@ -159,6 +167,14 @@ class ActiveCallActivity : AppCompatActivity() {
         }
         startActivity(intent)
         finish()
+    }
+
+    private fun deactivateCall() {
+        if (fakeCallId != -1L) {
+            CoroutineScope(Dispatchers.IO).launch {
+                viewModel.deactivateFakeCall(fakeCallId)
+            }
+        }
     }
 
     private fun stopVoice() {

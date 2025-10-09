@@ -35,9 +35,14 @@ interface FakeCallDao {
     @Query("SELECT * FROM fake_calls WHERE id = :id")
     suspend fun getFakeCallById(id: Long): FakeCall?
 
-    // Get upcoming calls (scheduled time is in the future)
+    // Get upcoming calls (scheduled time is in the future AND active)
     @Query("SELECT * FROM fake_calls WHERE scheduledTime > :currentTime AND isActive = 1 ORDER BY scheduledTime ASC")
     fun getUpcomingCalls(currentTime: Long = System.currentTimeMillis()): Flow<List<FakeCall>>
+
+    // Get past/completed calls (inactive OR past scheduled time)
+    // These are calls that have been triggered (accepted/declined)
+    @Query("SELECT * FROM fake_calls WHERE isActive = 0 ORDER BY scheduledTime DESC")
+    fun getPastCalls(): Flow<List<FakeCall>>
 
     // Delete all fake calls
     @Query("DELETE FROM fake_calls")

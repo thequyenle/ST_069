@@ -40,9 +40,14 @@ class FakeCallRepository(private val fakeCallDao: FakeCallDao) {
         return fakeCallDao.getFakeCallById(id)
     }
 
-    // Get upcoming calls
+    // Get upcoming calls (not yet called)
     fun getUpcomingCalls(): Flow<List<FakeCall>> {
         return fakeCallDao.getUpcomingCalls()
+    }
+
+    // Get past calls (already called/triggered)
+    fun getPastCalls(): Flow<List<FakeCall>> {
+        return fakeCallDao.getPastCalls()
     }
 
     // Delete all fake calls
