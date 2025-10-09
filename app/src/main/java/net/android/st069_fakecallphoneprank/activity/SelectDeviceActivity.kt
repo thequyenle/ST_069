@@ -1,13 +1,8 @@
 package net.android.st069_fakecallphoneprank.activity
 
-import android.app.Dialog
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.view.Window
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import net.android.st069_fakecallphoneprank.R
@@ -18,8 +13,7 @@ import net.android.st069_fakecallphoneprank.databinding.ActivitySelectDeviceBind
 class SelectDeviceActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySelectDeviceBinding
-    private lateinit var adapter: DeviceAdapter
-    private lateinit var deviceList: MutableList<Device>
+    private lateinit var deviceAdapter: DeviceAdapter
     private var selectedDevice: Device? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,81 +21,74 @@ class SelectDeviceActivity : AppCompatActivity() {
         binding = ActivitySelectDeviceBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setupToolbar()
         setupDeviceList()
-        setupRecyclerView()
-        setupClickListeners()
+        setupButtons()
+    }
 
-        // Get currently selected device
-        val currentDevice = intent.getStringExtra("CURRENT_DEVICE")
-        currentDevice?.let { device ->
-            deviceList.find { it.name == device }?.let {
-                it.isSelected = true
-                selectedDevice = it
-                adapter.notifyDataSetChanged()
-            }
+    private fun setupToolbar() {
+        binding.btnBack.setOnClickListener {
+            finish()
         }
     }
 
     private fun setupDeviceList() {
-        deviceList = mutableListOf(
-            Device("1", "Pixel 5", R.drawable.pixel5, false),
-            Device("2", "Oppo", R.drawable.oppo, false),
+        // Get current device from intent
+        val currentDevice = intent.getStringExtra("CURRENT_DEVICE")
 
-        )
-    }
+        // Create device list
+        val devices = getDeviceList(currentDevice)
 
-    private fun setupRecyclerView() {
-        adapter = DeviceAdapter(
-            deviceList,
-            onPreviewClicked = { device ->
-                showPreviewDialog(device)
-            },
-            onDeviceSelected = { device ->
-                selectedDevice = device
-                adapter.selectDevice(device)
-            }
-        )
-
-        binding.rvDevices.layoutManager = GridLayoutManager(this, 2)
-        binding.rvDevices.adapter = adapter
-    }
-
-    private fun setupClickListeners() {
-        // Back button
-        binding.btnBack.setOnClickListener {
-            finish()
+        // Setup adapter
+        deviceAdapter = DeviceAdapter(devices.toMutableList()) { device ->
+            selectedDevice = device
+            updateButtonState()
         }
 
-        // Done button
+        // Setup RecyclerView with 2 columns grid
+        binding.rvDevices.apply {
+            layoutManager = GridLayoutManager(this@SelectDeviceActivity, 2)
+            adapter = deviceAdapter
+            setHasFixedSize(true)
+        }
+
+        // Set initial selection if exists
+        selectedDevice = devices.find { it.isSelected }
+        updateButtonState()
+    }
+
+    private fun getDeviceList(currentDevice: String?): List<Device> {
+        return listOf(
+            Device(
+                id = 1,
+                name = "iPhone 15 Pro",
+                iconRes = R.drawable.oppo,
+                isSelected = currentDevice == "iPhone 15 Pro"
+            ),
+            Device(
+                id = 2,
+                name = "iPhone 14",
+                iconRes = R.drawable.pixel5,
+                isSelected = currentDevice == "iPhone 14"
+            )
+        )
+    }
+
+    private fun setupButtons() {
         binding.btnDone.setOnClickListener {
             selectedDevice?.let { device ->
                 val resultIntent = Intent().apply {
                     putExtra("SELECTED_DEVICE", device.name)
                 }
-                setResult(RESULT_OK, resultIntent)
+                setResult(Activity.RESULT_OK, resultIntent)
                 finish()
-            } ?: run {
-                Toast.makeText(this, "Please select a device", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    private fun showPreviewDialog(device: Device) {
-        val dialog = Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setContentView(R.layout.dialog_device_preview)
-
-        val ivFullPreview = dialog.findViewById<ImageView>(R.id.ivFullPreview)
-        val tvDeviceName = dialog.findViewById<TextView>(R.id.tvDeviceName)
-        val btnClose = dialog.findViewById<ImageButton>(R.id.btnClose)
-
-        ivFullPreview.setImageResource(device.previewImage)
-        tvDeviceName.text = device.name
-
-        btnClose.setOnClickListener {
-            dialog.dismiss()
-        }
-
-        dialog.show()
+    private fun updateButtonState() {
+        // Enable/disable Done button based on selection
+        binding.btnDone.isEnabled = selectedDevice != null
+        binding.btnDone.alpha = if (selectedDevice != null) 1.0f else 0.5f
     }
 }
