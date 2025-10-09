@@ -9,7 +9,7 @@
         android:id="@+id/layoutHeader"
         android:layout_width="0dp"
         android:layout_height="89dp"
-        android:background="@drawable/bg_title_addfakecall"
+        android:background="#FCCDA2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -17,14 +17,13 @@
         <!-- Back Button -->
         <ImageButton
             android:id="@+id/btnBack"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="17dp"
-            android:layout_marginBottom="16dp"
+            android:layout_width="11dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="23dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:scaleType="fitXY"
             android:src="@drawable/ic_arrowback_addfakecall"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/tvTitle"
             app:layout_constraintStart_toStartOf="parent" />
 
         <!-- Title -->
@@ -32,7 +31,7 @@
             android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="18dp"
             android:fontFamily="@font/roboto"
             android:text="Available Fake Calls"
             android:textColor="#2F2F2F"

@@ -32,6 +32,9 @@
         android:theme="@style/Theme.ST069_FakeCallPhonePrank"
         tools:targetApi="31">
         <activity
+            android:name=".activity.AvailableCallsApiActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.HistoryActivity"
             android:exported="false" />
         <activity

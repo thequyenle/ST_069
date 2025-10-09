@@ -7,6 +7,7 @@ import android.media.MediaPlayer
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
@@ -57,6 +58,11 @@ class IncomingCallActivity : AppCompatActivity() {
         deviceType = intent.getStringExtra("DEVICE_TYPE")
         talkTime = intent.getIntExtra("TALK_TIME", 15)
 
+        // DEBUG: Log the device type
+        Log.d("IncomingCallActivity", "Device Type Received: '$deviceType'")
+        Log.d("IncomingCallActivity", "Name: $name")
+        Log.d("IncomingCallActivity", "Phone: $phoneNumber")
+
         // Inflate the appropriate layout based on device type
         inflateLayoutBasedOnDevice()
 
@@ -66,19 +72,22 @@ class IncomingCallActivity : AppCompatActivity() {
     }
 
     private fun inflateLayoutBasedOnDevice() {
+        Log.d("IncomingCallActivity", "Checking device type: '$deviceType'")
+
         when (deviceType) {
-            "iPhone 15 Pro" -> {
-                // Use Oppo layout
+            "Oppo" -> {
+                Log.d("IncomingCallActivity", "Loading OPPO layout")
                 oppoBinding = ActivityIncomingCallOppoBinding.inflate(layoutInflater)
                 setContentView(oppoBinding!!.root)
             }
-            "iPhone 14" -> {
-                // Use Pixel 5 layout
+            "Pixel 5" -> {
+                Log.d("IncomingCallActivity", "Loading PIXEL 5 layout")
                 pixel5Binding = ActivityIncomingCallPixel5Binding.inflate(layoutInflater)
                 setContentView(pixel5Binding!!.root)
             }
             else -> {
-                // Default to Pixel 5 layout
+                // Default to Pixel 5 layout if device type is null or unknown
+                Log.d("IncomingCallActivity", "Device type not matched, using Pixel 5 as default. Value was: '$deviceType'")
                 pixel5Binding = ActivityIncomingCallPixel5Binding.inflate(layoutInflater)
                 setContentView(pixel5Binding!!.root)
             }
@@ -88,6 +97,7 @@ class IncomingCallActivity : AppCompatActivity() {
     private fun setupUI() {
         when {
             oppoBinding != null -> {
+                Log.d("IncomingCallActivity", "Setting up Oppo UI")
                 // Setup Oppo UI
                 oppoBinding?.tvCallerName?.text = name
 
@@ -100,6 +110,7 @@ class IncomingCallActivity : AppCompatActivity() {
             }
 
             pixel5Binding != null -> {
+                Log.d("IncomingCallActivity", "Setting up Pixel 5 UI")
                 // Setup Pixel 5 UI
                 pixel5Binding?.tvCallerName?.text = name
                 pixel5Binding?.tvCallStatus?.text = "Call coming..."
