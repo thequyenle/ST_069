@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import net.android.st069_fakecallphoneprank.activities.IncomingCallActivity
+import net.android.st069_fakecallphoneprank.activity.IncomingCallActivity
 
 class FakeCallReceiver : BroadcastReceiver() {
 

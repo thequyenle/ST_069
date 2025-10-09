@@ -61,15 +61,15 @@ class SelectDeviceActivity : AppCompatActivity() {
         return listOf(
             Device(
                 id = 1,
-                name = "iPhone 15 Pro",
-                iconRes = R.drawable.oppo,
-                isSelected = currentDevice == "iPhone 15 Pro"
+                name = "Oppo",
+                iconRes = R.drawable.ic_oppo_select_device,
+                isSelected = currentDevice == "Oppo"
             ),
             Device(
                 id = 2,
-                name = "iPhone 14",
-                iconRes = R.drawable.pixel5,
-                isSelected = currentDevice == "iPhone 14"
+                name = "Pixel 5",
+                iconRes = R.drawable.ic_pixel5_select_device,
+                isSelected = currentDevice == "Pixel 5"
             )
         )
     }

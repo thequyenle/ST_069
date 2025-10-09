@@ -74,7 +74,7 @@
             android:name=".activity.MainActivity"
             android:exported="false" /> <!-- NEW FAKE CALL ACTIVITIES -->
         <activity
-            android:name=".activities.IncomingCallActivity"
+            android:name=".activity.IncomingCallActivity"
             android:excludeFromRecents="true"
             android:exported="false"
             android:launchMode="singleTask"
