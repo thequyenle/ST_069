@@ -5,10 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
-import androidx.cardview.widget.CardView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.card.MaterialCardView
 import net.android.st069_fakecallphoneprank.R
 import net.android.st069_fakecallphoneprank.data.model.Device
 
@@ -54,91 +52,33 @@ class DeviceAdapter(
 
     inner class DeviceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        // Try to find views with various possible IDs
-        private val rootLayout: View? = itemView.findViewById(R.id.rootLayout)
-            ?: itemView.findViewById(R.id.cardView)
-            ?: itemView.findViewById(R.id.layoutRoot)
-
-        private val tvDeviceName: TextView? = itemView.findViewById(R.id.tvDeviceName)
-            ?: itemView.findViewById(R.id.tvName)
-            ?: itemView.findViewById(R.id.tvTitle)
-            ?: itemView.findViewById(R.id.textViewName)
-
-        private val ivDeviceIcon: ImageView? = itemView.findViewById(R.id.ivDeviceIcon)
-            ?: itemView.findViewById(R.id.ivIcon)
-            ?: itemView.findViewById(R.id.ivDevice)
-            ?: itemView.findViewById(R.id.imageViewIcon)
-
-        private val ivSelected: ImageView? = itemView.findViewById(R.id.ivSelected)
-            ?: itemView.findViewById(R.id.ivCheck)
-            ?: itemView.findViewById(R.id.ivCheckmark)
-            ?: itemView.findViewById(R.id.imageViewCheck)
+        // Cast to MaterialCardView instead of CardView
+        private val cardView: MaterialCardView = itemView as MaterialCardView
+        private val ivDevicePreview: ImageView = itemView.findViewById(R.id.ivDevicePreview)
+        private val ivCheckbox: ImageView = itemView.findViewById(R.id.ivCheckbox)
 
         fun bind(device: Device, isSelected: Boolean) {
-            // Set device name
-            tvDeviceName?.text = device.name
+            // Set device preview image
+            ivDevicePreview.setImageResource(device.iconRes)
 
-            // Set device icon
-            ivDeviceIcon?.setImageResource(device.iconRes)
-
-            // Show/hide selection indicator
-            ivSelected?.visibility = if (isSelected) View.VISIBLE else View.GONE
-
-            // Update visual appearance for selection
+            // Update selection state
             if (isSelected) {
-                // Try to update background
-                try {
-                    when {
-                        rootLayout is CardView -> {
-                            rootLayout.setCardBackgroundColor(Color.parseColor("#E3F2FD"))
-                            rootLayout.strokeColor = Color.parseColor("#2196F3")
-                            rootLayout.strokeWidth = 4
-                        }
-                        rootLayout is ConstraintLayout -> {
-                            rootLayout.setBackgroundResource(R.drawable.bg_device_selected)
-                        }
-                        else -> {
-                            itemView.setBackgroundResource(R.drawable.bg_device_selected)
-                        }
-                    }
-                } catch (e: Exception) {
-                    // Fallback to simple alpha change
-                    itemView.alpha = 1.0f
-                }
+                // Selected state
+                cardView.setCardBackgroundColor(Color.parseColor("#E3F2FD"))
+                cardView.strokeColor = Color.parseColor("#2196F3")
+                cardView.strokeWidth = 8
 
-                // Change icon tint to blue when selected
-                ivDeviceIcon?.setColorFilter(Color.parseColor("#2196F3"))
-
-                // Make text bold when selected
-                tvDeviceName?.setTextColor(Color.parseColor("#2196F3"))
-                tvDeviceName?.typeface = android.graphics.Typeface.DEFAULT_BOLD
+                // Show selected checkbox
+                ivCheckbox.setImageResource(R.drawable.ic_selected_devices)
 
             } else {
                 // Unselected state
-                try {
-                    when {
-                        rootLayout is CardView -> {
-                            rootLayout.setCardBackgroundColor(Color.WHITE)
-                            rootLayout.strokeColor = Color.parseColor("#E0E0E0")
-                            rootLayout.strokeWidth = 2
-                        }
-                        rootLayout is ConstraintLayout -> {
-                            rootLayout.setBackgroundResource(R.drawable.bg_device_unselected)
-                        }
-                        else -> {
-                            itemView.setBackgroundResource(R.drawable.bg_device_unselected)
-                        }
-                    }
-                } catch (e: Exception) {
-                    itemView.alpha = 0.7f
-                }
+                cardView.setCardBackgroundColor(Color.WHITE)
+                cardView.strokeColor = Color.parseColor("#E0E0E0")
+                cardView.strokeWidth = 4
 
-                // Default icon color
-                ivDeviceIcon?.clearColorFilter()
-
-                // Default text style
-                tvDeviceName?.setTextColor(Color.parseColor("#2F2F2F"))
-                tvDeviceName?.typeface = android.graphics.Typeface.DEFAULT
+                // Show unselected checkbox
+                ivCheckbox.setImageResource(R.drawable.ic_un_selected_devices)
             }
 
             // Click listener
