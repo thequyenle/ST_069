@@ -12,22 +12,34 @@ class ApiRepository {
 
     private val apiService = ApiClient.fakeCallApiService
 
-    // Get all fake calls
+    // Get all fake calls (combines kid + general)
     fun getAllFakeCalls(): Flow<Resource<List<FakeCallApi>>> = flow {
         try {
             emit(Resource.Loading())
 
-            val response = apiService.getAllFakeCalls()
+            // Fetch both kid and general categories
+            val kidResponse = apiService.getKidFakeCalls()
+            val generalResponse = apiService.getGeneralFakeCalls()
 
-            if (response.isSuccessful) {
-                val data = response.body()
-                if (data != null) {
-                    emit(Resource.Success(data))
+            if (kidResponse.isSuccessful && generalResponse.isSuccessful) {
+                val kidData = kidResponse.body() ?: emptyList()
+                val generalData = generalResponse.body() ?: emptyList()
+
+                // Combine both lists
+                val allData = kidData + generalData
+
+                if (allData.isNotEmpty()) {
+                    emit(Resource.Success(allData))
                 } else {
                     emit(Resource.Error("No data available"))
                 }
             } else {
-                emit(Resource.Error("Error: ${response.code()} ${response.message()}"))
+                val errorMessage = when {
+                    !kidResponse.isSuccessful -> "Error loading kid calls: ${kidResponse.code()}"
+                    !generalResponse.isSuccessful -> "Error loading general calls: ${generalResponse.code()}"
+                    else -> "Error loading data"
+                }
+                emit(Resource.Error(errorMessage))
             }
 
         } catch (e: Exception) {

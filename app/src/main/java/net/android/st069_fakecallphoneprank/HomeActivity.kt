@@ -10,6 +10,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import net.android.st069_fakecallphoneprank.activity.AddFakeCallActivity
 import net.android.st069_fakecallphoneprank.activity.AvailableCallsActivity
+import net.android.st069_fakecallphoneprank.activity.AvailableCallsApiActivity
 import net.android.st069_fakecallphoneprank.activity.MoreActivity
 import net.android.st069_fakecallphoneprank.databinding.ActivityHomeBinding
 import net.android.st069_fakecallphoneprank.utils.ImmersiveUtils
@@ -69,7 +70,7 @@ class HomeActivity : AppCompatActivity() {
 
         // Available Fake Call button - Navigate to list activity
         binding.ivAvaibleCall.setOnClickListener {
-            val intent = Intent(this, AvailableCallsActivity::class.java)
+            val intent = Intent(this, AvailableCallsApiActivity::class.java)
             startActivity(intent)
         }
 

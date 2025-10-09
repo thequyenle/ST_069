@@ -8,9 +8,8 @@ import java.util.concurrent.TimeUnit
 
 object ApiClient {
 
-    // TODO: Replace with your actual server URL
-    // Example: "https://yourserver.com/" or "http://192.168.1.100:3000/"
-    private const val BASE_URL = "https://yourserver.com/"
+    // Your actual server URL
+    private const val BASE_URL = "https://lvtglobal.site/"
 
     // Public base URL for constructing full image/mp3 paths
     const val MEDIA_BASE_URL = BASE_URL

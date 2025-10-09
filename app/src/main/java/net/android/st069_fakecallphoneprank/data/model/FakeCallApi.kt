@@ -1,6 +1,3 @@
-// 1. API Response Models (Updated for your data format)
-// Save to: app/src/main/java/net/android/st069_fakecallphoneprank/data/model/ApiModels.kt
-
 package net.android.st069_fakecallphoneprank.data.model
 
 import com.google.gson.annotations.SerializedName
@@ -27,19 +24,19 @@ data class FakeCallApi(
 ) {
     // Helper function to get full avatar URL
     fun getFullAvatarUrl(baseUrl: String): String {
-        return if (avatar.startsWith("http")) {
-            avatar
-        } else {
-            baseUrl + avatar
+        return when {
+            avatar.startsWith("http") -> avatar
+            avatar.startsWith("/") -> baseUrl.removeSuffix("/") + avatar
+            else -> baseUrl + avatar
         }
     }
 
     // Helper function to get full mp3 URL
     fun getFullMp3Url(baseUrl: String): String {
-        return if (mp3.startsWith("http")) {
-            mp3
-        } else {
-            baseUrl + mp3
+        return when {
+            mp3.startsWith("http") -> mp3
+            mp3.startsWith("/") -> baseUrl.removeSuffix("/") + mp3
+            else -> baseUrl + mp3
         }
     }
 }
