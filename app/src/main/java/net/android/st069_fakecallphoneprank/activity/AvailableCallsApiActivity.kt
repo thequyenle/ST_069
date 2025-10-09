@@ -8,6 +8,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import net.android.st069_fakecallphoneprank.adapters.AvailableCallAdapter
+import net.android.st069_fakecallphoneprank.api.ApiClient
 import net.android.st069_fakecallphoneprank.data.Resource
 import net.android.st069_fakecallphoneprank.data.model.CallCategory
 import net.android.st069_fakecallphoneprank.data.model.FakeCallApi
