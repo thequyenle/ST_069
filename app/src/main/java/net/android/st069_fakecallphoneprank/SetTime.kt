@@ -146,6 +146,12 @@ class SetTime : Fragment() {
         }
 
         dialog.show()
+
+        // Set dim background with custom color
+        dialog.window?.apply {
+            setDimAmount(0.5f)
+            addFlags(android.view.WindowManager.LayoutParams.FLAG_DIM_BEHIND)
+        }
     }
 
     private fun selectTime(seconds: Int) {

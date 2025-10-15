@@ -11,12 +11,12 @@
     android:backgroundTint="#FFFFFF">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="#FFFFFF"
         android:padding="8dp">
 
-        <!-- Phone Preview Image -->
+
         <ImageView
             android:id="@+id/ivDevicePreview"
             android:layout_width="156dp"
@@ -28,6 +28,20 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="8dp" />
 
+        <!-- Phone Preview Image -->
+        <TextView
+            android:id="@+id/tvDeviceName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pixel 5"
+            android:textSize="13sp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/roboto_extra_bold"
+            android:textColor="#FFFFFFFF"
+            app:layout_constraintTop_toTopOf="@id/ivDevicePreview"
+            app:layout_constraintStart_toStartOf="@id/ivDevicePreview"
+            />
         <!-- Selection Checkbox -->
         <ImageView
             android:id="@+id/ivCheckbox"

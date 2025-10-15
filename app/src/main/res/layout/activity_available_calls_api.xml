@@ -6,7 +6,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFC8DC"
+    android:background="#FFFFFF"
     tools:context=".activity.AvailableCallsApiActivity">
 
     <!-- Header -->
@@ -22,10 +22,11 @@
         <!-- Back Button -->
         <ImageButton
             android:id="@+id/btnBack"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="10dp"
+            android:layout_height="20dp"
+            android:scaleType="fitXY"
             android:layout_marginStart="17dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="18.5dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_arrowback_addfakecall"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -37,33 +38,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:fontFamily="@font/roboto"
+            android:fontFamily="@font/roboto_condensed_semibold"
             android:text="Available Fake Call"
             android:textColor="#2F2F2F"
             android:textSize="20sp"
-            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <!-- Refresh Button -->
-        <ImageButton
-            android:id="@+id/btnRefresh"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginEnd="17dp"
-            android:layout_marginBottom="16dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@android:drawable/ic_menu_rotate"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- Tab Layout -->
     <LinearLayout
         android:id="@+id/layoutTabs"
         android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_marginHorizontal="24dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/bg_tabs"
@@ -74,8 +64,8 @@
 
         <TextView
             android:id="@+id/btnKid"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_width="154dp"
+            android:layout_height="35dp"
             android:layout_weight="1"
             android:background="@drawable/selector_tab"
             android:fontFamily="@font/roboto"
@@ -86,8 +76,8 @@
 
         <TextView
             android:id="@+id/btnGeneral"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_width="154dp"
+            android:layout_height="35dp"
             android:layout_weight="1"
             android:background="@drawable/selector_tab"
             android:fontFamily="@font/roboto"
@@ -113,8 +103,7 @@
         android:id="@+id/rvCalls"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        android:clipToPadding="false"
+        android:layout_marginTop="20dp"
         android:paddingBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import net.android.st069_fakecallphoneprank.R
@@ -55,11 +56,15 @@ class DeviceAdapter(
         // Cast to MaterialCardView instead of CardView
         private val cardView: MaterialCardView = itemView as MaterialCardView
         private val ivDevicePreview: ImageView = itemView.findViewById(R.id.ivDevicePreview)
+        private val tvDeviceName: TextView = itemView.findViewById(R.id.tvDeviceName)
         private val ivCheckbox: ImageView = itemView.findViewById(R.id.ivCheckbox)
 
         fun bind(device: Device, isSelected: Boolean) {
             // Set device preview image
             ivDevicePreview.setImageResource(device.iconRes)
+
+            // Set device name
+            tvDeviceName.text = device.name
 
             // Update selection state
             if (isSelected) {

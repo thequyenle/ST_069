@@ -297,6 +297,12 @@ class ChooseVoiceActivity : AppCompatActivity() {
         }
 
         recordingDialog?.show()
+
+        // Set dim background with custom color
+        recordingDialog?.window?.apply {
+            setDimAmount(0.5f)
+            addFlags(android.view.WindowManager.LayoutParams.FLAG_DIM_BEHIND)
+        }
     }
 
     private fun startRecordingInDialog(
@@ -474,6 +480,15 @@ class ChooseVoiceActivity : AppCompatActivity() {
         }
 
         dialog.show()
+        val width = (259 * resources.displayMetrics.density).toInt()
+        val height = (192 * resources.displayMetrics.density).toInt()
+        dialog.window?.setLayout(width, height)
+
+        // Set dim background with custom color
+        dialog.window?.apply {
+            setDimAmount(0.5f)
+            addFlags(android.view.WindowManager.LayoutParams.FLAG_DIM_BEHIND)
+        }
     }
 
     private fun saveCustomVoice(name: String) {
@@ -516,6 +531,12 @@ class ChooseVoiceActivity : AppCompatActivity() {
         playingDialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
         playingDialog?.setContentView(R.layout.dialog_media_playing)
         playingDialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+        // Set dim background with custom color
+        playingDialog?.window?.apply {
+            setDimAmount(0.5f)
+            addFlags(android.view.WindowManager.LayoutParams.FLAG_DIM_BEHIND)
+        }
 
         val tvVoiceName = playingDialog?.findViewById<TextView>(R.id.tvVoiceName)
         val ivMusicIcon = playingDialog?.findViewById<ImageView>(R.id.ivMusicIcon)

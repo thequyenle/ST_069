@@ -25,4 +25,7 @@
     <!-- Splash Background -->
     <color name="splash_gradient_start">#1E3A5F</color>
     <color name="splash_gradient_end">#42A5F5</color>
+
+    <!-- Dialog Dim Background -->
+    <color name="dialog_dim_background">#E7E3E380</color>
 </resources>

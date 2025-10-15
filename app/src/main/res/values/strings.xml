@@ -50,11 +50,14 @@
     <string name="create_a_name_for_the_voice_so_it_can_be_easily_searched_in_the_voice_list">Create a name for the voice so it can be easily searched in the voice list.</string>
     <string name="create_a_name_for_the_addfake">Create a name for the add fake call.</string>
     <string name="create_a_phonenumber_for_the_addfake">Create a phone number for the add fake call.</string>
-
+    <string name="enter_phone">Enter phone number</string>
     <string name="enter_name">Enter name</string>
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
     <string name="create_a_phone_number">Create A Phone Number</string>
+    <string name="phone_call_ring_time">Phone Call Ring Time</string>
+    <string name="end_the_call_after_the_amount_of_time_you_choose">End the call after the amount of time you choose</string>
+    <string name="done_btn">Done</string>
 
 
 </resources>

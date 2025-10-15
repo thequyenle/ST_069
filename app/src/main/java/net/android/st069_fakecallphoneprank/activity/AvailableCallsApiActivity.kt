@@ -114,9 +114,6 @@ class AvailableCallsApiActivity : AppCompatActivity() {
             finish()
         }
 
-        binding.btnRefresh.setOnClickListener {
-            viewModel.refresh()
-        }
     }
 
     private fun onCallItemClick(fakeCall: FakeCallApi) {

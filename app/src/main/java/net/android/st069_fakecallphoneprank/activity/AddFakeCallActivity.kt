@@ -253,6 +253,15 @@ class AddFakeCallActivity : AppCompatActivity() {
         }
 
         dialog.show()
+        val width = (259 * resources.displayMetrics.density).toInt()
+        val height = (192 * resources.displayMetrics.density).toInt()
+        dialog.window?.setLayout(width, height)
+
+        // Set dim background with custom color
+        dialog.window?.apply {
+            setDimAmount(0.5f)
+            addFlags(android.view.WindowManager.LayoutParams.FLAG_DIM_BEHIND)
+        }
     }
 
     private fun showPhoneInputDialog() {
@@ -287,6 +296,17 @@ class AddFakeCallActivity : AppCompatActivity() {
         }
 
         dialog.show()
+
+        // Convert dp to pixels and set fixed dimensions
+        val width = (259 * resources.displayMetrics.density).toInt()
+        val height = (192 * resources.displayMetrics.density).toInt()
+        dialog.window?.setLayout(width, height)
+
+        // Set dim background with custom color
+        dialog.window?.apply {
+            setDimAmount(0.5f)
+            addFlags(android.view.WindowManager.LayoutParams.FLAG_DIM_BEHIND)
+        }
     }
 
     private fun showVoiceSelectionDialog() {
