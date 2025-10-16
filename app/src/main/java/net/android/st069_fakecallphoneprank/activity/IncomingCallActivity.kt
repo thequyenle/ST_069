@@ -39,11 +39,16 @@ class IncomingCallActivity : AppCompatActivity() {
 
     private var mediaPlayer: MediaPlayer? = null
 
+    private var fakeCallId: Long = -1
     private var name: String = ""
     private var phoneNumber: String = ""
     private var avatar: String? = null
     private var deviceType: String? = null
     private var talkTime: Int = 15
+
+    // Pre-loaded bitmaps (loaded before layout inflation)
+    private var preloadedAvatarBitmap: Bitmap? = null
+    private var preloadedBackgroundBitmap: Bitmap? = null
 
     // Swipe gesture variables (for Oppo)
     private var initialX: Float = 0f
@@ -66,6 +71,7 @@ class IncomingCallActivity : AppCompatActivity() {
         }
 
         // Get data from intent
+        fakeCallId = intent.getLongExtra("FAKE_CALL_ID", -1)
         name = intent.getStringExtra("NAME") ?: "Unknown"
         phoneNumber = intent.getStringExtra("PHONE_NUMBER") ?: ""
         avatar = intent.getStringExtra("AVATAR")
@@ -76,6 +82,10 @@ class IncomingCallActivity : AppCompatActivity() {
         Log.d("IncomingCallActivity", "Device Type Received: '$deviceType'")
         Log.d("IncomingCallActivity", "Name: $name")
         Log.d("IncomingCallActivity", "Phone: $phoneNumber")
+        Log.d("IncomingCallActivity", "Avatar: $avatar")
+
+        // PRE-LOAD avatar and background bitmaps BEFORE inflating layout
+        preloadAvatarBitmaps()
 
         // Inflate the appropriate layout based on device type
         inflateLayoutBasedOnDevice()
@@ -103,6 +113,40 @@ class IncomingCallActivity : AppCompatActivity() {
         }
     }
 
+    private fun preloadAvatarBitmaps() {
+        if (!avatar.isNullOrEmpty()) {
+            val avatarFile = java.io.File(avatar!!)
+            if (avatarFile.exists()) {
+                Log.d("IncomingCallActivity", "Pre-loading avatar from: ${avatarFile.absolutePath}")
+                try {
+                    // Decode with smaller size for faster loading
+                    val options = android.graphics.BitmapFactory.Options()
+                    options.inSampleSize = 2 // Load at 50% size for speed
+                    val originalBitmap = android.graphics.BitmapFactory.decodeFile(avatarFile.absolutePath, options)
+
+                    if (originalBitmap != null) {
+                        Log.d("IncomingCallActivity", "Bitmap loaded: ${originalBitmap.width}x${originalBitmap.height}")
+
+                        // Create circular avatar
+                        preloadedAvatarBitmap = createCircularBitmap(originalBitmap)
+
+                        // Create blurred background
+                        preloadedBackgroundBitmap = createBlurredBitmap(originalBitmap)
+
+                        Log.d("IncomingCallActivity", "Avatar and background pre-loaded successfully!")
+                    } else {
+                        Log.e("IncomingCallActivity", "Failed to decode bitmap")
+                    }
+                } catch (e: Exception) {
+                    Log.e("IncomingCallActivity", "Error pre-loading avatar: ${e.message}", e)
+                }
+            } else {
+                Log.w("IncomingCallActivity", "Avatar file not found: $avatar")
+            }
+        }
+    }
+
+
     private fun setupUI() {
         when {
             oppoBinding != null -> {
@@ -124,19 +168,14 @@ class IncomingCallActivity : AppCompatActivity() {
                 pixel5Binding?.tvCallerName?.text = name
                 pixel5Binding?.tvCallStatus?.text = "Call coming..."
 
-                // Set avatar
-                if (!avatar.isNullOrEmpty()) {
-                    Glide.with(this)
-                        .load(Uri.parse(avatar))
-                        .placeholder(R.drawable.ic_addavatar)
-                        .circleCrop()
-                        .into(pixel5Binding!!.ivAvatar)
-
-                    // Set background using avatar with blur/darken effect
-                    setBackgroundFromAvatar(Uri.parse(avatar))
+                // Use pre-loaded bitmaps (already loaded before layout inflation)
+                if (preloadedAvatarBitmap != null && preloadedBackgroundBitmap != null) {
+                    pixel5Binding?.ivAvatar?.setImageBitmap(preloadedAvatarBitmap)
+                    pixel5Binding?.ivBackground?.setImageBitmap(preloadedBackgroundBitmap)
+                    Log.d("IncomingCallActivity", "Avatar and background set from pre-loaded bitmaps!")
                 } else {
+                    // Fallback to default if pre-loading failed
                     pixel5Binding?.ivAvatar?.setImageResource(R.drawable.ic_addavatar)
-                    // Set default background if no avatar
                     pixel5Binding?.ivBackground?.setImageResource(R.drawable.bg_call_pixel5)
                 }
             }
@@ -267,247 +306,111 @@ class IncomingCallActivity : AppCompatActivity() {
         }
     }
 
-    // ========== PIXEL 5 SPECIFIC METHODS ==========
-
-    private fun setBackgroundFromAvatar(avatarUri: Uri) {
-        try {
-            Glide.with(this)
-                .asBitmap()
-                .load(avatarUri)
-                .transform(CenterCrop())
-                .into(object : CustomTarget<Bitmap>() {
-                    override fun onResourceReady(resource: Bitmap, transition: com.bumptech.glide.request.transition.Transition<in Bitmap>?) {
-                        // Create a blurred version of the bitmap for background
-                        val blurredBitmap = createBlurredBitmap(resource)
-                        pixel5Binding?.ivBackground?.setImageBitmap(blurredBitmap)
-                    }
-
-                    override fun onLoadCleared(placeholder: Drawable?) {
-                        // Set default background if loading is cleared
-                        pixel5Binding?.ivBackground?.setImageResource(R.drawable.bg_call_pixel5)
-                    }
-
-                    override fun onLoadFailed(errorDrawable: Drawable?) {
-                        // Set default background if loading fails
-                        pixel5Binding?.ivBackground?.setImageResource(R.drawable.bg_call_pixel5)
-                    }
-                })
-        } catch (e: Exception) {
-            // Set default background if any error occurs
-            pixel5Binding?.ivBackground?.setImageResource(R.drawable.bg_call_pixel5)
-        }
-    }
+    // ========== BITMAP PROCESSING METHODS ==========
 
     private fun createBlurredBitmap(originalBitmap: Bitmap): Bitmap {
-        val width = originalBitmap.width
-        val height = originalBitmap.height
-        val blurredBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        // Scale down MORE for better performance (10% size = 100x faster)
+        val scaleFactor = 0.1f
+        val width = (originalBitmap.width * scaleFactor).toInt().coerceAtLeast(50)
+        val height = (originalBitmap.height * scaleFactor).toInt().coerceAtLeast(50)
 
+        // Create scaled bitmap
+        val scaledBitmap = Bitmap.createScaledBitmap(originalBitmap, width, height, true)
+
+        // Apply simple blur with smaller radius for speed
+        val blurredBitmap = fastBlurSimple(scaledBitmap, 15)
+
+        // Apply darkening overlay
         val canvas = Canvas(blurredBitmap)
         val paint = Paint()
+        paint.colorFilter = PorterDuffColorFilter(Color.argb(80, 0, 0, 0), PorterDuff.Mode.SRC_ATOP)
+        canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), paint)
 
-        // Apply blur effect using a simple box blur algorithm (70% blur)
-        val blurredImage = fastBlur(originalBitmap, 20f)
+        // Scale back up to original size for proper display
+        val finalBitmap = Bitmap.createScaledBitmap(blurredBitmap, originalBitmap.width, originalBitmap.height, true)
 
-        // Draw the blurred image
-        canvas.drawBitmap(blurredImage, 0f, 0f, paint)
-
-        // Apply slight darkening to ensure UI elements remain visible
-        paint.colorFilter = PorterDuffColorFilter(Color.argb(60, 0, 0, 0), PorterDuff.Mode.SRC_ATOP)
-        canvas.drawBitmap(blurredImage, 0f, 0f, paint)
-
-        return blurredBitmap
+        return finalBitmap
     }
 
-    private fun fastBlur(sentBitmap: Bitmap, radius: Float): Bitmap {
-        val bitmap = sentBitmap.copy(sentBitmap.config, true)
+    private fun fastBlurSimple(bitmap: Bitmap, radius: Int): Bitmap {
         val width = bitmap.width
         val height = bitmap.height
         val pixels = IntArray(width * height)
         bitmap.getPixels(pixels, 0, width, 0, 0, width, height)
 
-        val radiusInt = radius.toInt()
-        val wm = width - 1
-        val hm = height - 1
-        val wh = width * height
-        val div = 2 * radiusInt + 1
-        val r = IntArray(wh)
-        val g = IntArray(wh)
-        val b = IntArray(wh)
-        var rsum: Int
-        var gsum: Int
-        var bsum: Int
-        var x: Int
-        var y: Int
-        var i: Int
-        var p: Int
-        var yp: Int
-        var yi: Int
-        var yw: Int
+        // Simple box blur - much safer than stack blur
+        for (pass in 0 until 2) {
+            // Horizontal pass
+            for (y in 0 until height) {
+                for (x in 0 until width) {
+                    var r = 0
+                    var g = 0
+                    var b = 0
+                    var count = 0
 
-        val vmin = IntArray(Math.max(width, height))
+                    for (dx in -radius..radius) {
+                        val nx = x + dx
+                        if (nx >= 0 && nx < width) {
+                            val pixel = pixels[y * width + nx]
+                            r += (pixel shr 16) and 0xFF
+                            g += (pixel shr 8) and 0xFF
+                            b += pixel and 0xFF
+                            count++
+                        }
+                    }
 
-        var divsum = div + 1 shr 1
-        divsum *= divsum
-        val dv = IntArray(256 * divsum)
-        i = 0
-        while (i < 256 * divsum) {
-            dv[i] = i / divsum
-            i++
-        }
-
-        yi = 0
-        yw = yi
-
-        val stack = Array(div) { IntArray(3) }
-        var stackpointer: Int
-        var stackstart: Int
-        var rbs: Int
-        val r1 = radius + 1
-        var routsum: Int
-        var goutsum: Int
-        var boutsum: Int
-        var rinsum: Int
-        var ginsum: Int
-        var binsum: Int
-
-        y = 0
-        while (y < height) {
-            var bsum = 0
-            var gsum = 0
-            var rsum = 0
-            var boutsum = 0
-            var goutsum = 0
-            var routsum = 0
-            var binsum = 0
-            var ginsum = 0
-            var rinsum = 0
-            i = -radiusInt
-            while (i <= radiusInt) {
-                p = pixels[yi + Math.min(wm, Math.max(i, 0))]
-                rinsum += p and 0xff0000 shr 16
-                ginsum += p and 0x00ff00 shr 8
-                binsum += p and 0x0000ff
-                rsum += rinsum
-                gsum += ginsum
-                bsum += binsum
-                i++
-            }
-            stackpointer = radiusInt
-
-            x = 0
-            while (x < width) {
-                r[yi] = dv[rsum]
-                g[yi] = dv[gsum]
-                b[yi] = dv[bsum]
-                rsum -= routsum
-                gsum -= goutsum
-                bsum -= boutsum
-
-                stackstart = stackpointer - radiusInt + div
-                routsum -= stack[stackstart and (div - 1)][0]
-                goutsum -= stack[stackstart and (div - 1)][1]
-                boutsum -= stack[stackstart and (div - 1)][2]
-
-                if (yi < wm) {
-                    p = pixels[yi + wm]
-                    rinsum += p and 0xff0000 shr 16
-                    ginsum += p and 0x00ff00 shr 8
-                    binsum += p and 0x0000ff
-                } else {
-                    p = 0
+                    if (count > 0) {
+                        pixels[y * width + x] = (0xFF shl 24) or ((r / count) shl 16) or ((g / count) shl 8) or (b / count)
+                    }
                 }
-
-                rsum += rinsum
-                gsum += ginsum
-                bsum += binsum
-
-                stackpointer = (stackpointer + 1) % div
-                rinsum -= stack[stackpointer][0]
-                ginsum -= stack[stackpointer][1]
-                binsum -= stack[stackpointer][2]
-
-                stack[stackpointer][0] = p and 0xff0000 shr 16
-                stack[stackpointer][1] = p and 0x00ff00 shr 8
-                stack[stackpointer][2] = p and 0x0000ff
-
-                yi++
-                x++
             }
-            yw += width
-            y++
-        }
 
-        x = 0
-        while (x < width) {
-            var bsum = 0
-            var gsum = 0
-            var rsum = 0
-            var boutsum = 0
-            var goutsum = 0
-            var routsum = 0
-            var binsum = 0
-            var ginsum = 0
-            var rinsum = 0
-            yp = -radiusInt * width
-            i = -radiusInt
-            while (i <= radiusInt) {
-                yi = Math.max(0, yp) + x
-                rinsum += r[yi]
-                ginsum += g[yi]
-                binsum += b[yi]
-                rsum += rinsum
-                gsum += ginsum
-                bsum += binsum
-                yp += width
-                i++
-            }
-            yi = x
-            stackpointer = radiusInt
+            // Vertical pass
+            for (x in 0 until width) {
+                for (y in 0 until height) {
+                    var r = 0
+                    var g = 0
+                    var b = 0
+                    var count = 0
 
-            y = 0
-            while (y < height) {
-                pixels[yi] = -0x1000000 and pixels[yi] or (dv[rsum] shl 16) or (dv[gsum] shl 8) or dv[bsum]
-                rsum -= routsum
-                gsum -= goutsum
-                bsum -= boutsum
+                    for (dy in -radius..radius) {
+                        val ny = y + dy
+                        if (ny >= 0 && ny < height) {
+                            val pixel = pixels[ny * width + x]
+                            r += (pixel shr 16) and 0xFF
+                            g += (pixel shr 8) and 0xFF
+                            b += pixel and 0xFF
+                            count++
+                        }
+                    }
 
-                stackstart = stackpointer - radiusInt + div
-                routsum -= stack[stackstart and (div - 1)][0]
-                goutsum -= stack[stackstart and (div - 1)][1]
-                boutsum -= stack[stackstart and (div - 1)][2]
-
-                if (yi + wm < wh) {
-                    p = pixels[yi + wm]
-                    rinsum += p and 0xff0000 shr 16
-                    ginsum += p and 0x00ff00 shr 8
-                    binsum += p and 0x0000ff
-                } else {
-                    p = 0
+                    if (count > 0) {
+                        pixels[y * width + x] = (0xFF shl 24) or ((r / count) shl 16) or ((g / count) shl 8) or (b / count)
+                    }
                 }
-
-                rsum += rinsum
-                gsum += ginsum
-                bsum += binsum
-
-                stackpointer = (stackpointer + 1) % div
-                rinsum -= stack[stackpointer][0]
-                ginsum -= stack[stackpointer][1]
-                binsum -= stack[stackpointer][2]
-
-                stack[stackpointer][0] = p and 0xff0000 shr 16
-                stack[stackpointer][1] = p and 0x00ff00 shr 8
-                stack[stackpointer][2] = p and 0x0000ff
-
-                yi += width
-                y++
             }
-            x++
         }
 
-        bitmap.setPixels(pixels, 0, width, 0, 0, width, height)
-        return bitmap
+        val blurredBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        blurredBitmap.setPixels(pixels, 0, width, 0, 0, width, height)
+        return blurredBitmap
     }
+
+    private fun createCircularBitmap(bitmap: Bitmap): Bitmap {
+        val size = Math.min(bitmap.width, bitmap.height)
+        val output = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(output)
+
+        val paint = Paint()
+        paint.isAntiAlias = true
+        paint.shader = android.graphics.BitmapShader(bitmap, android.graphics.Shader.TileMode.CLAMP, android.graphics.Shader.TileMode.CLAMP)
+
+        val radius = size / 2f
+        canvas.drawCircle(radius, radius, radius, paint)
+
+        return output
+    }
+
 
     private fun setupPixel5Buttons() {
         pixel5Binding?.btnAccept?.setOnClickListener {
@@ -554,6 +457,7 @@ class IncomingCallActivity : AppCompatActivity() {
         stopRingtone()
 
         val intent = Intent(this, ActiveCallActivity::class.java).apply {
+            putExtra("FAKE_CALL_ID", fakeCallId)
             putExtra("NAME", name)
             putExtra("PHONE_NUMBER", phoneNumber)
             putExtra("AVATAR", avatar)

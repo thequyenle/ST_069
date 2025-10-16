@@ -5,9 +5,7 @@
     android:layout_height="match_parent"
     android:background="#000000">
 
-
-
-
+    <!-- Background Image - MUST BE FIRST to appear behind other views -->
     <ImageView
         android:id="@+id/ivBackgroundEndCall"
         android:layout_width="match_parent"
@@ -19,6 +17,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:src="@drawable/bg_call_pixel5"
         android:scaleType="centerCrop"/>
+
     <!-- Back Button -->
     <ImageView
         android:id="@+id/btnBack"

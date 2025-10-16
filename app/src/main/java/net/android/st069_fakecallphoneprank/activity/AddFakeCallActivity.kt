@@ -47,11 +47,19 @@ class AddFakeCallActivity : AppCompatActivity() {
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             result.data?.data?.let { uri ->
-                selectedAvatar = uri.toString()
-                Glide.with(this)
-                    .load(uri)
-                    .circleCrop()
-                    .into(binding.ivAddAvatar)
+                // Copy image to internal storage instead of using content URI
+                val savedPath = saveImageToInternalStorage(uri)
+                if (savedPath != null) {
+                    selectedAvatar = savedPath
+                    Glide.with(this)
+                        .load(java.io.File(savedPath))
+                        .circleCrop()
+                        .into(binding.ivAddAvatar)
+                    android.util.Log.d("AddFakeCallActivity", "Image saved to: $savedPath")
+                } else {
+                    Toast.makeText(this, "Failed to save image", Toast.LENGTH_SHORT).show()
+                    android.util.Log.e("AddFakeCallActivity", "Failed to save image from URI: $uri")
+                }
             }
         }
     }
@@ -612,5 +620,37 @@ class AddFakeCallActivity : AppCompatActivity() {
             .setMessage(message)
             .setPositiveButton("OK", null)
             .show()
+    }
+
+    /**
+     * Copy image from content URI to app's internal storage
+     * Returns the absolute file path, or null if failed
+     */
+    private fun saveImageToInternalStorage(uri: Uri): String? {
+        return try {
+            // Create avatars directory in internal storage
+            val avatarsDir = java.io.File(filesDir, "avatars")
+            if (!avatarsDir.exists()) {
+                avatarsDir.mkdirs()
+            }
+
+            // Generate unique filename
+            val timestamp = System.currentTimeMillis()
+            val fileName = "avatar_$timestamp.jpg"
+            val destFile = java.io.File(avatarsDir, fileName)
+
+            // Copy image data
+            contentResolver.openInputStream(uri)?.use { input ->
+                destFile.outputStream().use { output ->
+                    input.copyTo(output)
+                }
+            }
+
+            // Return absolute path
+            destFile.absolutePath
+        } catch (e: Exception) {
+            android.util.Log.e("AddFakeCallActivity", "Error saving image to internal storage", e)
+            null
+        }
     }
 }
