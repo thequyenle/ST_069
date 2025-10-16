@@ -7,10 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
 import net.android.st069_fakecallphoneprank.adapters.HistoryCallAdapter
 import net.android.st069_fakecallphoneprank.data.entity.FakeCall
 import net.android.st069_fakecallphoneprank.databinding.FragmentAvailableCallsBinding
@@ -38,14 +35,15 @@ class AvailableCallsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupRecyclerView()
-        setupSwipeToDelete()
         setupObservers()
     }
 
     private fun setupRecyclerView() {
         adapter = HistoryCallAdapter(
-            showEditButton = false,
-            onEditClick = { },
+            showEditButton = false, // No edit for history/past calls
+            onEditClick = {
+                // No edit functionality for past calls
+            },
             onCallClick = { fakeCall ->
                 triggerFakeCall(fakeCall)
             }
@@ -55,60 +53,8 @@ class AvailableCallsFragment : Fragment() {
         binding.rvAvailableCalls.adapter = adapter
     }
 
-    private fun setupSwipeToDelete() {
-        val itemTouchHelper = ItemTouchHelper(
-            object : ItemTouchHelper.SimpleCallback(
-                0,
-                ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
-            ) {
-                override fun onMove(
-                    recyclerView: RecyclerView,
-                    viewHolder: RecyclerView.ViewHolder,
-                    target: RecyclerView.ViewHolder
-                ): Boolean = false
-
-                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                    val position = viewHolder.adapterPosition
-
-                    // Remove item from adapter
-                    val deletedCall = adapter.removeItem(position)
-
-                    // Show Snackbar with Undo option
-                    val snackbar = Snackbar.make(
-                        binding.root,
-                        "${deletedCall.name} deleted",
-                        Snackbar.LENGTH_LONG
-                    )
-
-                    snackbar.setAction("UNDO") {
-                        // Restore item
-                        adapter.restoreItem(deletedCall, position)
-                        Toast.makeText(
-                            requireContext(),
-                            "${deletedCall.name} restored",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-
-                    snackbar.addCallback(object : Snackbar.Callback() {
-                        override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-                            // If not undone, delete from database
-                            if (event != DISMISS_EVENT_ACTION) {
-                                viewModel.delete(deletedCall)
-                            }
-                        }
-                    })
-
-                    snackbar.show()
-                }
-            }
-        )
-
-        itemTouchHelper.attachToRecyclerView(binding.rvAvailableCalls)
-    }
-
     private fun setupObservers() {
-        // Show PAST calls (already called)
+        // Show PAST/TRIGGERED calls (already called) - This is the HISTORY
         viewModel.pastCalls.observe(viewLifecycleOwner) { fakeCalls ->
             if (fakeCalls.isEmpty()) {
                 binding.tvEmpty.visibility = View.VISIBLE
@@ -122,6 +68,7 @@ class AvailableCallsFragment : Fragment() {
     }
 
     private fun triggerFakeCall(fakeCall: FakeCall) {
+        // Trigger the fake call again (re-trigger from history)
         val scheduler = FakeCallScheduler(requireContext())
 
         val updatedCall = fakeCall.copy(
@@ -133,7 +80,7 @@ class AvailableCallsFragment : Fragment() {
 
         Toast.makeText(
             requireContext(),
-            "Fake call will trigger shortly",
+            "Triggering fake call from ${fakeCall.name}",
             Toast.LENGTH_SHORT
         ).show()
     }

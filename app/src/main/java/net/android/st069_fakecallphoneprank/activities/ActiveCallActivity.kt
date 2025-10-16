@@ -43,7 +43,6 @@ class ActiveCallActivity : AppCompatActivity() {
 
     // Pre-loaded bitmaps (loaded before layout inflation)
     private var preloadedAvatarBitmap: Bitmap? = null
-    private var preloadedBackgroundBitmap: Bitmap? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,10 +75,10 @@ class ActiveCallActivity : AppCompatActivity() {
         Log.d("ActiveCallActivity", "FAKE_CALL_ID: $fakeCallId")
         Log.d("ActiveCallActivity", "Name: $name")
         Log.d("ActiveCallActivity", "Avatar: $avatar")
-        Log.d("ActiveCallActivity", "Avatar is null or empty: ${avatar.isNullOrEmpty()}")
+        Log.d("ActiveCallActivity", "Voice Type: $voiceType")
 
-        // PRE-LOAD avatar and background bitmaps BEFORE setting content view
-        preloadAvatarBitmaps()
+        // PRE-LOAD avatar bitmap
+        preloadAvatarBitmap()
 
         setupUI()
         setupClickListeners()
@@ -87,27 +86,20 @@ class ActiveCallActivity : AppCompatActivity() {
         playVoice()
     }
 
-    private fun preloadAvatarBitmaps() {
+    private fun preloadAvatarBitmap() {
         if (!avatar.isNullOrEmpty()) {
             val avatarFile = java.io.File(avatar!!)
             if (avatarFile.exists()) {
                 Log.d("ActiveCallActivity", "Pre-loading avatar from: ${avatarFile.absolutePath}")
                 try {
-                    // Decode with smaller size for faster loading
                     val options = android.graphics.BitmapFactory.Options()
-                    options.inSampleSize = 2 // Load at 50% size for speed
+                    options.inSampleSize = 2
                     val originalBitmap = android.graphics.BitmapFactory.decodeFile(avatarFile.absolutePath, options)
 
                     if (originalBitmap != null) {
                         Log.d("ActiveCallActivity", "Bitmap loaded: ${originalBitmap.width}x${originalBitmap.height}")
-
-                        // Create circular avatar
                         preloadedAvatarBitmap = createCircularBitmap(originalBitmap)
-
-                        // Create blurred background
-                        preloadedBackgroundBitmap = createBlurredBitmap(originalBitmap)
-
-                        Log.d("ActiveCallActivity", "Avatar and background pre-loaded successfully!")
+                        Log.d("ActiveCallActivity", "Avatar pre-loaded successfully!")
                     } else {
                         Log.e("ActiveCallActivity", "Failed to decode bitmap")
                     }
@@ -124,13 +116,57 @@ class ActiveCallActivity : AppCompatActivity() {
         // Set caller name
         binding.tvCallerName.text = name
 
-        // Use pre-loaded bitmaps (already loaded before layout inflation)
-        if (preloadedAvatarBitmap != null && preloadedBackgroundBitmap != null) {
-            binding.ivAvatar.setImageBitmap(preloadedAvatarBitmap)
-            binding.ivBackgroundActiveCall.setImageBitmap(preloadedBackgroundBitmap)
-            Log.d("ActiveCallActivity", "Avatar and background set from pre-loaded bitmaps!")
+        // Set avatar and background
+        if (!avatar.isNullOrEmpty()) {
+            // Check if avatar is URL or local file
+            if (avatar!!.startsWith("http")) {
+                // Load from URL using Glide
+                Log.d("ActiveCallActivity", "Loading avatar from URL: $avatar")
+                com.bumptech.glide.Glide.with(this)
+                    .load(avatar)
+                    .placeholder(R.drawable.ic_addavatar)
+                    .error(R.drawable.ic_addavatar)
+                    .circleCrop()
+                    .into(binding.ivAvatar)
+
+                // Load background from URL
+                com.bumptech.glide.Glide.with(this)
+                    .load(avatar)
+                    .placeholder(R.drawable.bg_call_pixel5)
+                    .error(R.drawable.bg_call_pixel5)
+                    .into(object : com.bumptech.glide.request.target.CustomTarget<android.graphics.drawable.Drawable>() {
+                        override fun onResourceReady(resource: android.graphics.drawable.Drawable, transition: com.bumptech.glide.request.transition.Transition<in android.graphics.drawable.Drawable>?) {
+                            binding.ivBackgroundActiveCall.setImageDrawable(resource)
+                            binding.ivBackgroundActiveCall.setColorFilter(Color.parseColor("#E3000000"), PorterDuff.Mode.SRC_ATOP)
+                            Log.d("ActiveCallActivity", "Background set from URL with #E3000000 tint!")
+                        }
+
+                        override fun onLoadCleared(placeholder: android.graphics.drawable.Drawable?) {
+                            binding.ivBackgroundActiveCall.setImageResource(R.drawable.bg_call_pixel5)
+                        }
+                    })
+            } else {
+                // Load from local file
+                if (preloadedAvatarBitmap != null) {
+                    binding.ivAvatar.setImageBitmap(preloadedAvatarBitmap)
+                    Log.d("ActiveCallActivity", "Avatar set from pre-loaded bitmap!")
+                } else {
+                    binding.ivAvatar.setImageResource(R.drawable.ic_addavatar)
+                }
+
+                // Set background from local file
+                val avatarFile = java.io.File(avatar!!)
+                if (avatarFile.exists()) {
+                    val originalBitmap = android.graphics.BitmapFactory.decodeFile(avatarFile.absolutePath)
+                    binding.ivBackgroundActiveCall.setImageBitmap(originalBitmap)
+                    binding.ivBackgroundActiveCall.setColorFilter(Color.parseColor("#E3000000"), PorterDuff.Mode.SRC_ATOP)
+                    Log.d("ActiveCallActivity", "Background set from local file with #E3000000 tint!")
+                } else {
+                    binding.ivBackgroundActiveCall.setImageResource(R.drawable.bg_call_pixel5)
+                }
+            }
         } else {
-            // Fallback to default if pre-loading failed
+            // No avatar - use defaults
             binding.ivAvatar.setImageResource(R.drawable.ic_addavatar)
             binding.ivBackgroundActiveCall.setImageResource(R.drawable.bg_call_pixel5)
         }
@@ -178,16 +214,35 @@ class ActiveCallActivity : AppCompatActivity() {
 
     private fun playVoice() {
         // Play voice if custom voice is set
-        if (!voiceType.isNullOrEmpty() && voiceType!!.contains("/")) {
+        if (!voiceType.isNullOrEmpty()) {
             try {
+                Log.d("ActiveCallActivity", "Playing voice from: $voiceType")
                 voicePlayer = MediaPlayer().apply {
-                    setDataSource(voiceType)
-                    prepare()
-                    start()
+                    // Check if URL or local file
+                    if (voiceType!!.startsWith("http")) {
+                        // Load from URL
+                        setDataSource(voiceType)
+                    } else {
+                        // Load from local file
+                        setDataSource(voiceType)
+                    }
+                    setAudioStreamType(android.media.AudioManager.STREAM_MUSIC)
+                    prepareAsync() // Use async prepare for URLs
+                    setOnPreparedListener {
+                        Log.d("ActiveCallActivity", "Voice prepared, starting playback")
+                        start()
+                    }
+                    setOnErrorListener { _, what, extra ->
+                        Log.e("ActiveCallActivity", "MediaPlayer error: what=$what, extra=$extra")
+                        true
+                    }
                 }
             } catch (e: Exception) {
+                Log.e("ActiveCallActivity", "Error playing voice: ${e.message}", e)
                 e.printStackTrace()
             }
+        } else {
+            Log.d("ActiveCallActivity", "No voice type provided")
         }
     }
 
@@ -247,132 +302,6 @@ class ActiveCallActivity : AppCompatActivity() {
         super.onDestroy()
         callTimer?.cancel()
         stopVoice()
-    }
-
-    // ========== BLUR BACKGROUND METHODS ==========
-
-    private fun setBackgroundFromAvatarFile(avatarFile: java.io.File) {
-        Log.d("ActiveCallActivity", "setBackgroundFromAvatarFile called with file: ${avatarFile.absolutePath}")
-        try {
-            Glide.with(this)
-                .asBitmap()
-                .load(avatarFile)
-                .transform(CenterCrop())
-                .into(object : CustomTarget<Bitmap>() {
-                    override fun onResourceReady(resource: Bitmap, transition: com.bumptech.glide.request.transition.Transition<in Bitmap>?) {
-                        Log.d("ActiveCallActivity", "Bitmap loaded successfully, size: ${resource.width}x${resource.height}")
-                        // Create a blurred version of the bitmap for background
-                        val blurredBitmap = createBlurredBitmap(resource)
-                        Log.d("ActiveCallActivity", "Blurred bitmap created, setting to background")
-                        binding.ivBackgroundActiveCall.setImageBitmap(blurredBitmap)
-                        Log.d("ActiveCallActivity", "Background blur applied successfully!")
-                    }
-
-                    override fun onLoadCleared(placeholder: Drawable?) {
-                        Log.w("ActiveCallActivity", "Glide load cleared, using default background")
-                        // Set default background if loading is cleared
-                        binding.ivBackgroundActiveCall.setImageResource(R.drawable.bg_call_pixel5)
-                    }
-
-                    override fun onLoadFailed(errorDrawable: Drawable?) {
-                        Log.e("ActiveCallActivity", "Glide load failed, using default background")
-                        // Set default background if loading fails
-                        binding.ivBackgroundActiveCall.setImageResource(R.drawable.bg_call_pixel5)
-                    }
-                })
-        } catch (e: Exception) {
-            Log.e("ActiveCallActivity", "Exception in setBackgroundFromAvatarFile: ${e.message}", e)
-            // Set default background if any error occurs
-            binding.ivBackgroundActiveCall.setImageResource(R.drawable.bg_call_pixel5)
-        }
-    }
-
-    private fun createBlurredBitmap(originalBitmap: Bitmap): Bitmap {
-        // Scale down MORE for better performance (10% size = 100x faster)
-        val scaleFactor = 0.1f
-        val width = (originalBitmap.width * scaleFactor).toInt().coerceAtLeast(50)
-        val height = (originalBitmap.height * scaleFactor).toInt().coerceAtLeast(50)
-
-        // Create scaled bitmap
-        val scaledBitmap = Bitmap.createScaledBitmap(originalBitmap, width, height, true)
-
-        // Apply simple blur with smaller radius for speed
-        val blurredBitmap = fastBlurSimple(scaledBitmap, 15)
-
-        // Apply darkening overlay
-        val canvas = Canvas(blurredBitmap)
-        val paint = Paint()
-        paint.colorFilter = PorterDuffColorFilter(Color.argb(80, 0, 0, 0), PorterDuff.Mode.SRC_ATOP)
-        canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), paint)
-
-        // Scale back up to original size for proper display
-        val finalBitmap = Bitmap.createScaledBitmap(blurredBitmap, originalBitmap.width, originalBitmap.height, true)
-
-        return finalBitmap
-    }
-
-    private fun fastBlurSimple(bitmap: Bitmap, radius: Int): Bitmap {
-        val width = bitmap.width
-        val height = bitmap.height
-        val pixels = IntArray(width * height)
-        bitmap.getPixels(pixels, 0, width, 0, 0, width, height)
-
-        // Simple box blur - much safer than stack blur
-        for (pass in 0 until 2) {
-            // Horizontal pass
-            for (y in 0 until height) {
-                for (x in 0 until width) {
-                    var r = 0
-                    var g = 0
-                    var b = 0
-                    var count = 0
-
-                    for (dx in -radius..radius) {
-                        val nx = x + dx
-                        if (nx >= 0 && nx < width) {
-                            val pixel = pixels[y * width + nx]
-                            r += (pixel shr 16) and 0xFF
-                            g += (pixel shr 8) and 0xFF
-                            b += pixel and 0xFF
-                            count++
-                        }
-                    }
-
-                    if (count > 0) {
-                        pixels[y * width + x] = (0xFF shl 24) or ((r / count) shl 16) or ((g / count) shl 8) or (b / count)
-                    }
-                }
-            }
-
-            // Vertical pass
-            for (x in 0 until width) {
-                for (y in 0 until height) {
-                    var r = 0
-                    var g = 0
-                    var b = 0
-                    var count = 0
-
-                    for (dy in -radius..radius) {
-                        val ny = y + dy
-                        if (ny >= 0 && ny < height) {
-                            val pixel = pixels[ny * width + x]
-                            r += (pixel shr 16) and 0xFF
-                            g += (pixel shr 8) and 0xFF
-                            b += pixel and 0xFF
-                            count++
-                        }
-                    }
-
-                    if (count > 0) {
-                        pixels[y * width + x] = (0xFF shl 24) or ((r / count) shl 16) or ((g / count) shl 8) or (b / count)
-                    }
-                }
-            }
-        }
-
-        val blurredBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-        blurredBitmap.setPixels(pixels, 0, width, 0, 0, width, height)
-        return blurredBitmap
     }
 
     private fun createCircularBitmap(bitmap: Bitmap): Bitmap {

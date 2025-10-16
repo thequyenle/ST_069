@@ -33,9 +33,14 @@ class AvailableCallsApiActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
-        adapter = AvailableCallAdapter { fakeCall ->
-            onCallItemClick(fakeCall)
-        }
+        adapter = AvailableCallAdapter(
+            onItemClick = { fakeCall ->
+                onCallItemClick(fakeCall)
+            },
+            onCallClick = { fakeCall ->
+                onCallButtonClick(fakeCall)
+            }
+        )
 
         binding.rvCalls.apply {
             layoutManager = LinearLayoutManager(this@AvailableCallsApiActivity)
@@ -124,6 +129,20 @@ class AvailableCallsApiActivity : AppCompatActivity() {
             putExtra("API_CALL_AVATAR", fakeCall.getFullAvatarUrl(ApiClient.MEDIA_BASE_URL))
             putExtra("API_CALL_VOICE", fakeCall.getFullMp3Url(ApiClient.MEDIA_BASE_URL))
             putExtra("API_CALL_CATEGORY", fakeCall.category)
+        }
+        startActivity(intent)
+    }
+
+    private fun onCallButtonClick(fakeCall: FakeCallApi) {
+        // Trigger immediate incoming call with this data
+        val intent = Intent(this, net.android.st069_fakecallphoneprank.activity.IncomingCallActivity::class.java).apply {
+            putExtra("FAKE_CALL_ID", -1L) // -1 for API calls (not saved in DB)
+            putExtra("NAME", fakeCall.name)
+            putExtra("PHONE_NUMBER", fakeCall.phone)
+            putExtra("AVATAR", fakeCall.getFullAvatarUrl(ApiClient.MEDIA_BASE_URL))
+            putExtra("VOICE_TYPE", fakeCall.getFullMp3Url(ApiClient.MEDIA_BASE_URL))
+            putExtra("DEVICE_TYPE", "Pixel 5") // Default to Pixel 5
+            putExtra("TALK_TIME", 30) // Default 30 seconds
         }
         startActivity(intent)
     }

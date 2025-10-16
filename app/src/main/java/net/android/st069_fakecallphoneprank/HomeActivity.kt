@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import net.android.st069_fakecallphoneprank.activity.AddFakeCallActivity
-import net.android.st069_fakecallphoneprank.activity.AvailableCallsActivity
 import net.android.st069_fakecallphoneprank.activity.AvailableCallsApiActivity
 import net.android.st069_fakecallphoneprank.activity.MoreActivity
 import net.android.st069_fakecallphoneprank.databinding.ActivityHomeBinding
@@ -77,6 +76,12 @@ class HomeActivity : AppCompatActivity() {
         // More button - Navigate to settings
         binding.ivMore.setOnClickListener {
             val intent = Intent(this, MoreActivity::class.java)
+            startActivity(intent)
+        }
+
+        // Settings button - Navigate to Settings activity
+        binding.ivSetting.setOnClickListener {
+            val intent = Intent(this, net.android.st069_fakecallphoneprank.activity.setting::class.java)
             startActivity(intent)
         }
     }

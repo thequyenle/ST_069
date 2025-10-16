@@ -31,7 +31,7 @@ import net.android.st069_fakecallphoneprank.R
 import net.android.st069_fakecallphoneprank.utils.ImmersiveUtils
 
 class setting : AppCompatActivity() {
-    
+
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var btnBack: ImageButton
     private lateinit var phoneCallRingTimeLayout: ConstraintLayout
@@ -39,27 +39,43 @@ class setting : AppCompatActivity() {
     private lateinit var vibrationLayout: ConstraintLayout
     private lateinit var soundLayout: ConstraintLayout
     private lateinit var flashLayout: ConstraintLayout
-    
+
     private lateinit var phoneCallRingTimeText: TextView
     private lateinit var ringToneText: TextView
     private lateinit var vibrationSwitch: ImageView
     private lateinit var soundSwitch: ImageView
     private lateinit var flashSwitch: ImageView
-    
+
     private val RINGTONE_REQUEST_CODE = 101
+    private val CAMERA_PERMISSION_REQUEST_CODE = 102
+    private val NOTIFICATION_PERMISSION_REQUEST_CODE = 103
     
     // For ringtone selection
     private val ringtonePickerLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
-            val uri = result.data?.getParcelableExtra<Uri>(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
-            uri?.let {
-                val ringtone = RingtoneManager.getRingtone(this, uri)
-                val title = ringtone.getTitle(this)
-                ringToneText.text = title
-                sharedPreferences.edit().putString("ringtone_uri", uri.toString()).apply()
-                sharedPreferences.edit().putString("ringtone_name", title.toString()).apply()
+            try {
+                val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    result.data?.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI, Uri::class.java)
+                } else {
+                    @Suppress("DEPRECATION")
+                    result.data?.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
+                }
+
+                uri?.let {
+                    val ringtone = RingtoneManager.getRingtone(this, uri)
+                    val title = ringtone.getTitle(this)
+                    ringToneText.text = title
+                    sharedPreferences.edit().putString("ringtone_uri", uri.toString()).apply()
+                    sharedPreferences.edit().putString("ringtone_name", title.toString()).apply()
+                } ?: run {
+                    // If uri is null, user might have selected default or silent
+                    Toast.makeText(this, "Ringtone updated", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Toast.makeText(this, "Failed to set ringtone", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -192,17 +208,31 @@ class setting : AppCompatActivity() {
         flashLayout.setOnClickListener {
             val currentState = sharedPreferences.getBoolean("flash_enabled", false)
             val newState = !currentState
-            
+
             // Check camera flash availability
             if (newState && !packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)) {
                 Toast.makeText(this, "Flash is not available on this device", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            
+
+            // Check camera permission for Android 6.0+
+            if (newState && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                    != PackageManager.PERMISSION_GRANTED) {
+                    // Request camera permission
+                    ActivityCompat.requestPermissions(
+                        this,
+                        arrayOf(Manifest.permission.CAMERA),
+                        CAMERA_PERMISSION_REQUEST_CODE
+                    )
+                    return@setOnClickListener
+                }
+            }
+
             sharedPreferences.edit().putBoolean("flash_enabled", newState).apply()
-            
+
             flashSwitch.setImageResource(
-                if (newState) R.drawable.ic_switch_setting_on 
+                if (newState) R.drawable.ic_switch_setting_on
                 else R.drawable.ic_switch_setting_off
             )
         }
@@ -243,33 +273,82 @@ class setting : AppCompatActivity() {
     }
     
     private fun openRingtonePicker() {
-        val intent = Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
-        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_RINGTONE)
-        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "Select Ringtone")
-        
-        // Set the current ringtone
-        val currentRingtoneUri = sharedPreferences.getString("ringtone_uri", null)
-        if (currentRingtoneUri != null) {
-            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, Uri.parse(currentRingtoneUri))
+        try {
+            val intent = Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
+            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_RINGTONE)
+            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "Select Ringtone")
+            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true)
+            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, false)
+
+            // Set the current ringtone
+            val currentRingtoneUri = sharedPreferences.getString("ringtone_uri", null)
+            if (currentRingtoneUri != null) {
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, Uri.parse(currentRingtoneUri))
+            } else {
+                // Set default ringtone if no custom ringtone is set
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI,
+                    RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE))
+            }
+
+            ringtonePickerLauncher.launch(intent)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(this, "Unable to open ringtone picker", Toast.LENGTH_SHORT).show()
         }
-        
-        ringtonePickerLauncher.launch(intent)
     }
     
     private fun triggerVibration() {
-        val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            val vibratorManager = getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
-            vibratorManager.defaultVibrator
-        } else {
-            @Suppress("DEPRECATION")
-            getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        try {
+            val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                // Android 12+ (API 31+)
+                val vibratorManager = getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+                vibratorManager.defaultVibrator
+            } else {
+                // Android 9-11 (API 28-30)
+                @Suppress("DEPRECATION")
+                getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+            }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                // Android 8+ (API 26+) - includes Android 9-13
+                vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE))
+            } else {
+                // Fallback for older versions (shouldn't reach here for Android 9+)
+                @Suppress("DEPRECATION")
+                vibrator.vibrate(200)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(this, "Vibration not available", Toast.LENGTH_SHORT).show()
         }
-        
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE))
-        } else {
-            @Suppress("DEPRECATION")
-            vibrator.vibrate(200)
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        when (requestCode) {
+            CAMERA_PERMISSION_REQUEST_CODE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission granted, enable flash
+                    sharedPreferences.edit().putBoolean("flash_enabled", true).apply()
+                    flashSwitch.setImageResource(R.drawable.ic_switch_setting_on)
+                    Toast.makeText(this, "Flash enabled", Toast.LENGTH_SHORT).show()
+                } else {
+                    // Permission denied
+                    Toast.makeText(this, "Camera permission is required for flash", Toast.LENGTH_SHORT).show()
+                }
+            }
+            NOTIFICATION_PERMISSION_REQUEST_CODE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this, "Notification permission granted", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this, "Notification permission denied", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 }

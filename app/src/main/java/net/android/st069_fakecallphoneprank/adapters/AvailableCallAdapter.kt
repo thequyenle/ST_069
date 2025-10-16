@@ -10,7 +10,8 @@ import net.android.st069_fakecallphoneprank.data.model.FakeCallApi
 import net.android.st069_fakecallphoneprank.databinding.ItemAvailableCallBinding
 
 class AvailableCallAdapter(
-    private val onItemClick: (FakeCallApi) -> Unit
+    private val onItemClick: (FakeCallApi) -> Unit,
+    private val onCallClick: (FakeCallApi) -> Unit
 ) : RecyclerView.Adapter<AvailableCallAdapter.ViewHolder>() {
 
     private var items = listOf<FakeCallApi>()
@@ -46,6 +47,9 @@ class AvailableCallAdapter(
 
             // Load avatar from full URL
             val fullAvatarUrl = call.getFullAvatarUrl(ApiClient.MEDIA_BASE_URL)
+            android.util.Log.d("AvailableCallAdapter", "Loading avatar for ${call.name}")
+            android.util.Log.d("AvailableCallAdapter", "Avatar path from API: ${call.avatar}")
+            android.util.Log.d("AvailableCallAdapter", "Full avatar URL: $fullAvatarUrl")
 
             Glide.with(binding.root.context)
                 .load(fullAvatarUrl)
@@ -60,7 +64,7 @@ class AvailableCallAdapter(
             }
 
             binding.btnCall.setOnClickListener {
-                onItemClick(call)
+                onCallClick(call)
             }
         }
     }

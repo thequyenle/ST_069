@@ -22,6 +22,13 @@ class FakeCallReceiver : BroadcastReceiver() {
                 val deviceType = intent.getStringExtra("DEVICE_TYPE")
                 val talkTime = intent.getIntExtra("TALK_TIME", 15)
 
+                // DEBUG: Log avatar path
+                Log.d("FakeCallReceiver", "Avatar received: '$avatar'")
+                if (avatar != null) {
+                    val avatarFile = java.io.File(avatar)
+                    Log.d("FakeCallReceiver", "Avatar file exists: ${avatarFile.exists()}")
+                }
+
                 // Launch incoming call activity
                 val callIntent = Intent(context, IncomingCallActivity::class.java).apply {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
@@ -34,6 +41,7 @@ class FakeCallReceiver : BroadcastReceiver() {
                     putExtra("TALK_TIME", talkTime)
                 }
 
+                Log.d("FakeCallReceiver", "Starting IncomingCallActivity with avatar: '$avatar'")
                 context.startActivity(callIntent)
             }
 
