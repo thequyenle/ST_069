@@ -671,6 +671,15 @@ class IncomingCallActivity : AppCompatActivity() {
                     return
                 }
 
+                // Check if camera has flash unit
+                val characteristics = cameraManager?.getCameraCharacteristics(cameraId!!)
+                val hasFlash = characteristics?.get(android.hardware.camera2.CameraCharacteristics.FLASH_INFO_AVAILABLE) == true
+
+                if (!hasFlash) {
+                    Log.w("IncomingCallActivity", "Camera does not have a flash unit")
+                    return
+                }
+
                 // Flash blinking pattern
                 flashRunnable = object : Runnable {
                     var isOn = false
@@ -683,6 +692,8 @@ class IncomingCallActivity : AppCompatActivity() {
                             }
                         } catch (e: CameraAccessException) {
                             Log.e("IncomingCallActivity", "Error toggling flash", e)
+                        } catch (e: IllegalArgumentException) {
+                            Log.e("IncomingCallActivity", "Flash not available", e)
                         }
                     }
                 }

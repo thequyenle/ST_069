@@ -621,13 +621,25 @@ class ChooseVoiceActivity : AppCompatActivity() {
         }
 
         playingDialog?.setOnDismissListener {
-            mediaPlayer?.apply {
-                if (isPlaying) {
-                    stop()
+            try {
+                mediaPlayer?.apply {
+                    try {
+                        if (isPlaying) {
+                            stop()
+                        }
+                    } catch (e: IllegalStateException) {
+                        // MediaPlayer already in illegal state, just release
+                        android.util.Log.e("ChooseVoice", "MediaPlayer in illegal state on dismiss", e)
+                    }
+                    release()
                 }
-                release()
+            } catch (e: Exception) {
+                android.util.Log.e("ChooseVoice", "Error dismissing media player", e)
+            } finally {
+                mediaPlayer = null
+                // Stop any pending timer updates
+                timerHandler.removeCallbacksAndMessages(null)
             }
-            mediaPlayer = null
         }
 
         playingDialog?.show()
@@ -636,10 +648,19 @@ class ChooseVoiceActivity : AppCompatActivity() {
     private fun updateSeekBar(seekBar: android.widget.SeekBar?, tvCurrentTime: TextView?, player: MediaPlayer) {
         timerHandler.postDelayed(object : Runnable {
             override fun run() {
-                if (player.isPlaying) {
-                    seekBar?.progress = player.currentPosition
-                    tvCurrentTime?.text = formatTime(player.currentPosition)
-                    timerHandler.postDelayed(this, 100)
+                try {
+                    // Check if player is still valid and playing
+                    if (player.isPlaying) {
+                        seekBar?.progress = player.currentPosition
+                        tvCurrentTime?.text = formatTime(player.currentPosition)
+                        timerHandler.postDelayed(this, 100)
+                    }
+                } catch (e: IllegalStateException) {
+                    // MediaPlayer is in illegal state, stop updating
+                    android.util.Log.e("ChooseVoice", "MediaPlayer in illegal state", e)
+                } catch (e: Exception) {
+                    // Any other exception, stop updating
+                    android.util.Log.e("ChooseVoice", "Error updating seek bar", e)
                 }
             }
         }, 100)

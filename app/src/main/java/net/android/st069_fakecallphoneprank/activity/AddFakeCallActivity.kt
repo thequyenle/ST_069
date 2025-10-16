@@ -91,13 +91,37 @@ class AddFakeCallActivity : AppCompatActivity() {
         selectedName = intent.getStringExtra("NAME") ?: ""
         selectedPhone = intent.getStringExtra("PHONE") ?: ""
         selectedAvatar = intent.getStringExtra("AVATAR")
-        selectedVoice = intent.getStringExtra("VOICE")
+
+        // Voice data from database is a file path, need to extract display name
+        val voiceData = intent.getStringExtra("VOICE")
+        if (voiceData != null) {
+            selectedVoiceFilePath = voiceData
+            // Extract just the filename without extension for display
+            selectedVoice = extractVoiceNameFromPath(voiceData)
+        }
+
         selectedDevice = intent.getStringExtra("DEVICE")
         selectedSetTime = intent.getIntExtra("SET_TIME", 0)
         selectedTalkTime = intent.getIntExtra("TALK_TIME", 15)
 
         // Update UI with loaded data
         updateUIWithData()
+    }
+
+    private fun extractVoiceNameFromPath(path: String): String {
+        // If it's a URL or file path, extract the filename
+        return if (path.contains("/")) {
+            val fileName = path.substringAfterLast("/")
+            // Remove extension if present
+            if (fileName.contains(".")) {
+                fileName.substringBeforeLast(".")
+            } else {
+                fileName
+            }
+        } else {
+            // If it's already just a name, return as is
+            path
+        }
     }
 
     private fun updateUIWithData() {
@@ -323,17 +347,16 @@ class AddFakeCallActivity : AppCompatActivity() {
         voicePickerLauncher.launch(intent)
     }
 
+    private var selectedVoiceFilePath: String? = null
+
     private val voicePickerLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             result.data?.let { data ->
                 selectedVoice = data.getStringExtra("SELECTED_VOICE")
-                val voiceFilePath = data.getStringExtra("VOICE_FILE_PATH")
+                selectedVoiceFilePath = data.getStringExtra("VOICE_FILE_PATH")
 
-                if (voiceFilePath != null) {
-                    selectedVoice = voiceFilePath
-                }
                 updateVoiceText()
                 updateButtonStates()
             }
@@ -567,7 +590,7 @@ class AddFakeCallActivity : AppCompatActivity() {
                         avatar = selectedAvatar,
                         name = selectedName,
                         phoneNumber = selectedPhone,
-                        voiceType = selectedVoice,
+                        voiceType = selectedVoiceFilePath ?: selectedVoice, // Store file path for playback
                         deviceType = selectedDevice,
                         setTime = selectedSetTime,
                         talkTime = selectedTalkTime,
@@ -590,7 +613,7 @@ class AddFakeCallActivity : AppCompatActivity() {
                 avatar = selectedAvatar,
                 name = selectedName,
                 phoneNumber = selectedPhone,
-                voiceType = selectedVoice,
+                voiceType = selectedVoiceFilePath ?: selectedVoice, // Store file path for playback
                 deviceType = selectedDevice,
                 setTime = selectedSetTime,
                 talkTime = selectedTalkTime,
@@ -605,21 +628,23 @@ class AddFakeCallActivity : AppCompatActivity() {
     }
 
     private fun previewFakeCall() {
-        val message = buildString {
-            append("Preview:\n\n")
-            append("Name: $selectedName\n")
-            append("Phone: $selectedPhone\n")
-            append("Voice: ${selectedVoice ?: "Default"}\n")
-            append("Device: ${selectedDevice ?: "Default"}\n")
-            append("Set Time: ${selectedSetTime}s\n")
-            append("Talk Time: ${selectedTalkTime}s")
-        }
+        // Create a temporary FakeCall object for preview (not saved to database)
+        val previewCall = FakeCall(
+            avatar = selectedAvatar,
+            name = selectedName,
+            phoneNumber = selectedPhone,
+            voiceType = selectedVoiceFilePath ?: selectedVoice, // Use file path for playback
+            deviceType = selectedDevice,
+            setTime = 0, // Trigger immediately
+            talkTime = selectedTalkTime,
+            isActive = false // Don't save to active calls
+        )
 
-        android.app.AlertDialog.Builder(this)
-            .setTitle("Fake Call Preview")
-            .setMessage(message)
-            .setPositiveButton("OK", null)
-            .show()
+        // Trigger the fake call immediately using the scheduler
+        val scheduler = net.android.st069_fakecallphoneprank.services.FakeCallScheduler(this)
+        scheduler.scheduleFakeCall(previewCall)
+
+        Toast.makeText(this, "Preview: Fake call triggered immediately", Toast.LENGTH_SHORT).show()
     }
 
     /**

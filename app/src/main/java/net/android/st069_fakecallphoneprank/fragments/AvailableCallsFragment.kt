@@ -7,7 +7,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import net.android.st069_fakecallphoneprank.adapters.HistoryCallAdapter
 import net.android.st069_fakecallphoneprank.data.entity.FakeCall
 import net.android.st069_fakecallphoneprank.databinding.FragmentAvailableCallsBinding
@@ -35,6 +38,7 @@ class AvailableCallsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupRecyclerView()
+        setupSwipeToDelete()
         setupObservers()
     }
 
@@ -51,6 +55,58 @@ class AvailableCallsFragment : Fragment() {
 
         binding.rvAvailableCalls.layoutManager = LinearLayoutManager(requireContext())
         binding.rvAvailableCalls.adapter = adapter
+    }
+
+    private fun setupSwipeToDelete() {
+        val itemTouchHelper = ItemTouchHelper(
+            object : ItemTouchHelper.SimpleCallback(
+                0,
+                ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+            ) {
+                override fun onMove(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder,
+                    target: RecyclerView.ViewHolder
+                ): Boolean = false
+
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                    val position = viewHolder.adapterPosition
+
+                    // Remove item from adapter
+                    val deletedCall = adapter.removeItem(position)
+
+                    // Show Snackbar with Undo option
+                    val snackbar = Snackbar.make(
+                        binding.root,
+                        "${deletedCall.name} deleted from history",
+                        Snackbar.LENGTH_LONG
+                    )
+
+                    snackbar.setAction("UNDO") {
+                        // Restore item
+                        adapter.restoreItem(deletedCall, position)
+                        Toast.makeText(
+                            requireContext(),
+                            "${deletedCall.name} restored",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
+                    snackbar.addCallback(object : Snackbar.Callback() {
+                        override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                            // If not undone, delete from database permanently
+                            if (event != DISMISS_EVENT_ACTION) {
+                                viewModel.delete(deletedCall)
+                            }
+                        }
+                    })
+
+                    snackbar.show()
+                }
+            }
+        )
+
+        itemTouchHelper.attachToRecyclerView(binding.rvAvailableCalls)
     }
 
     private fun setupObservers() {
@@ -71,16 +127,25 @@ class AvailableCallsFragment : Fragment() {
         // Trigger the fake call again (re-trigger from history)
         val scheduler = FakeCallScheduler(requireContext())
 
+        // Re-activate and trigger immediately
         val updatedCall = fakeCall.copy(
             setTime = 0,
-            scheduledTime = System.currentTimeMillis()
+            scheduledTime = System.currentTimeMillis(),
+            isActive = true // Temporarily activate to allow trigger
         )
 
+        // Update in database temporarily
+        viewModel.update(updatedCall)
+
+        // Schedule the immediate fake call
         scheduler.scheduleFakeCall(updatedCall)
+
+        // After trigger, it will automatically deactivate and return to history
+        // This happens in the FakeCallReceiver or after the call ends
 
         Toast.makeText(
             requireContext(),
-            "Triggering fake call from ${fakeCall.name}",
+            "Re-triggering fake call from ${fakeCall.name}",
             Toast.LENGTH_SHORT
         ).show()
     }

@@ -147,16 +147,23 @@ class CustomCallsFragment : Fragment() {
     private fun triggerFakeCall(fakeCall: FakeCall) {
         val scheduler = FakeCallScheduler(requireContext())
 
+        // Update call to trigger immediately and deactivate it
+        // This will move it from Custom (upcoming) to Available (past/history)
         val updatedCall = fakeCall.copy(
             setTime = 0,
-            scheduledTime = System.currentTimeMillis()
+            scheduledTime = System.currentTimeMillis(),
+            isActive = false // Deactivate so it moves to history/Available tab
         )
 
+        // Update in database to move to history
+        viewModel.update(updatedCall)
+
+        // Schedule the immediate fake call
         scheduler.scheduleFakeCall(updatedCall)
 
         Toast.makeText(
             requireContext(),
-            "Fake call will trigger shortly",
+            "Fake call triggered and moved to history",
             Toast.LENGTH_SHORT
         ).show()
     }
