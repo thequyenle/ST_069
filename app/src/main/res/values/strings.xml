@@ -58,6 +58,16 @@
     <string name="phone_call_ring_time">Phone Call Ring Time</string>
     <string name="end_the_call_after_the_amount_of_time_you_choose">End the call after the amount of time you choose</string>
     <string name="done_btn">Done</string>
+    <string name="the_call_has_ended">The call has ended</string>
+    <string name="mute">Mute</string>
+    <string name="keypad">Keypad</string>
+    <string name="speaker">Speaker</string>
+    <string name="contact">Contact</string>
+    <string name="add_call">Add Call</string>
+    <string name="camera">Camera</string>
+    <string name="silent">Silent</string>
+    <string name="message">Message</string>
+    <string name="return_">Return</string>
 
 
 </resources>

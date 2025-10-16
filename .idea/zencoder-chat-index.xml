@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ai.zencoder.plugin.chat.index">
+    <option name="activeChatId" value="3bc250af-cb95-42f1-9166-eb70b982b06e" />
+    <option name="chatMetadata" value="{&quot;3bc250af-cb95-42f1-9166-eb70b982b06e&quot;:{&quot;id&quot;:&quot;3bc250af-cb95-42f1-9166-eb70b982b06e&quot;,&quot;title&quot;:&quot;Repository Overview Generation&quot;,&quot;createdAt&quot;:1760510034521,&quot;updatedAt&quot;:1760510859258,&quot;isAgent&quot;:true,&quot;isNameGenerated&quot;:true,&quot;messageCount&quot;:10,&quot;lastMessagePreview&quot;:&quot;I've been helping you with two main tasks:\n\n1. **Repository Documentation**: I created a comprehensi...&quot;}}" />
+  </component>
+</project>

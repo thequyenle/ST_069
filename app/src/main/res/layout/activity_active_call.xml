@@ -45,6 +45,17 @@
         app:layout_constraintTop_toBottomOf="@id/ivAvatar" />
 
     <!-- Timer -->
+    <ImageView
+        android:id="@+id/ivBackgroundActiveCall"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="bottom|end"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:src="@drawable/bg_call_pixel5"
+        android:scaleType="centerCrop"/>
     <TextView
         android:id="@+id/tvTimer"
         android:layout_width="wrap_content"
@@ -92,7 +103,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:fontFamily="@font/roboto"
-                android:text="Mute"
+                android:text="@string/mute"
                 android:textColor="@android:color/white"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -118,7 +129,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:fontFamily="@font/roboto"
-                android:text="Keypad"
+                android:text="@string/keypad"
                 android:textColor="@android:color/white"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -144,7 +155,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:fontFamily="@font/roboto"
-                android:text="Speaker"
+                android:text="@string/speaker"
                 android:textColor="@android:color/white"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -183,7 +194,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:fontFamily="@font/roboto"
-                android:text="Add Call"
+                android:text="@string/add_call"
                 android:textColor="@android:color/white"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -209,7 +220,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:fontFamily="@font/roboto"
-                android:text="Camera"
+                android:text="@string/camera"
                 android:textColor="@android:color/white"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -235,7 +246,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:fontFamily="@font/roboto"
-                android:text="Contact"
+                android:text="@string/contact"
                 android:textColor="@android:color/white"
                 android:textSize="12sp" />
         </LinearLayout>

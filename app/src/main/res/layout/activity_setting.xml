@@ -90,6 +90,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginStart="22.5dp"/>
         <TextView
+            android:id="@+id/tvPhoneCallRingTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
@@ -148,6 +149,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginStart="22.5dp"/>
         <TextView
+            android:id="@+id/tvRingtoneName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
@@ -206,6 +208,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginStart="22.5dp"/>
         <ImageView
+            android:id="@+id/ivVibrationSwitch"
             android:layout_width="42dp"
             android:layout_height="24dp"
             android:layout_marginEnd="16dp"
@@ -263,6 +266,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginStart="22.5dp"/>
         <ImageView
+            android:id="@+id/ivSoundSwitch"
             android:layout_width="42dp"
             android:layout_height="24dp"
             android:layout_marginEnd="16dp"
@@ -320,6 +324,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginStart="22.5dp"/>
         <ImageView
+            android:id="@+id/ivFlashSwitch"
             android:layout_width="42dp"
             android:layout_height="24dp"
             android:layout_marginEnd="16dp"
