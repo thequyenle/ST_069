@@ -10,6 +10,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import net.android.st069_fakecallphoneprank.R
 import net.android.st069_fakecallphoneprank.databinding.ActivityMoreBinding
 import net.android.st069_fakecallphoneprank.dialog.RatingDialog
+import net.android.st069_fakecallphoneprank.utils.FullscreenHelper
 
 class MoreActivity : AppCompatActivity() {
 
@@ -20,13 +21,21 @@ class MoreActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = ActivityMoreBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Enable fullscreen edge-to-edge (after setContentView)
+        FullscreenHelper.enableFullscreen(this)
         layoutRateUs = binding.layoutRate
         loadRatingStatus()
 
-
         setupClickListeners()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        FullscreenHelper.enableFullscreen(this)
     }
 
     companion object {

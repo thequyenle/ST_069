@@ -33,6 +33,10 @@ class RatingDialog(
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(R.layout.dialog_rating)
 
+        // Make dialog non-cancelable (cannot close by clicking outside)
+        setCancelable(false)
+        setCanceledOnTouchOutside(false)
+
         // Set dialog properties
         window?.apply {
             setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -93,10 +97,17 @@ class RatingDialog(
     }
 
     private fun setupListeners() {
-        // Rating bar change listener
+        // Rating bar change listener - prevent re-selecting the same star
         ratingBar.setOnRatingChangeListener { _, rating, fromUser ->
             if (fromUser) {
-                selectedRating = rating.toInt()
+                val newRating = rating.toInt()
+
+                // If user clicks the same star, don't change rating
+                if (newRating == selectedRating) {
+                    return@setOnRatingChangeListener
+                }
+
+                selectedRating = newRating
                 if (selectedRating == 0) {
                     // Reset về trạng thái ban đầu khi rating = 0
                     resetToInitialState()

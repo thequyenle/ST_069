@@ -22,6 +22,7 @@ import android.graphics.drawable.GradientDrawable
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
+import net.android.st069_fakecallphoneprank.utils.FullscreenHelper
 
 class AddFakeCallActivity : AppCompatActivity() {
 
@@ -57,7 +58,7 @@ class AddFakeCallActivity : AppCompatActivity() {
                         .into(binding.ivAddAvatar)
                     android.util.Log.d("AddFakeCallActivity", "Image saved to: $savedPath")
                 } else {
-                    Toast.makeText(this, "Failed to save image", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.failed_save_image), Toast.LENGTH_SHORT).show()
                     android.util.Log.e("AddFakeCallActivity", "Failed to save image from URI: $uri")
                 }
             }
@@ -66,8 +67,12 @@ class AddFakeCallActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = ActivityAddFakeCallBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Enable fullscreen edge-to-edge (after setContentView)
+        FullscreenHelper.enableFullscreen(this)
 
         // Check if in edit mode
         isEditMode = intent.getBooleanExtra("EDIT_MODE", false)
@@ -83,6 +88,11 @@ class AddFakeCallActivity : AppCompatActivity() {
         }
 
         setupClickListeners()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        FullscreenHelper.enableFullscreen(this)
     }
 
     private fun loadEditData() {
@@ -644,7 +654,8 @@ class AddFakeCallActivity : AppCompatActivity() {
         val scheduler = net.android.st069_fakecallphoneprank.services.FakeCallScheduler(this)
         scheduler.scheduleFakeCall(previewCall)
 
-        Toast.makeText(this, "Preview: Fake call triggered immediately", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this,
+            getString(R.string.preview_fake_call_triggered_immediately), Toast.LENGTH_SHORT).show()
     }
 
     /**

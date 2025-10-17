@@ -3,6 +3,7 @@ package net.android.st069_fakecallphoneprank.activity
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.tabs.TabLayoutMediator
+import net.android.st069_fakecallphoneprank.R
 import net.android.st069_fakecallphoneprank.adapters.HistoryPagerAdapter
 import net.android.st069_fakecallphoneprank.databinding.ActivityHistoryBinding
 
@@ -25,8 +26,8 @@ class HistoryActivity : AppCompatActivity() {
 
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
             tab.text = when (position) {
-                0 -> "Custom"
-                1 -> "Available"
+                0 -> getString(R.string.custom)
+                1 -> getString(R.string.available)
                 else -> ""
             }
         }.attach()

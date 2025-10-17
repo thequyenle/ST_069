@@ -41,6 +41,7 @@ import net.android.st069_fakecallphoneprank.R
 import net.android.st069_fakecallphoneprank.activities.ActiveCallActivity
 import net.android.st069_fakecallphoneprank.databinding.ActivityIncomingCallOppoBinding
 import net.android.st069_fakecallphoneprank.databinding.ActivityIncomingCallPixel5Binding
+import net.android.st069_fakecallphoneprank.utils.FullscreenHelper
 
 class IncomingCallActivity : AppCompatActivity() {
 
@@ -122,6 +123,9 @@ class IncomingCallActivity : AppCompatActivity() {
 
         // Inflate the appropriate layout based on device type
         inflateLayoutBasedOnDevice()
+
+        // Enable fullscreen edge-to-edge (after setContentView)
+        FullscreenHelper.enableFullscreen(this)
 
         setupUI()
         setupInteractions()
@@ -239,8 +243,8 @@ class IncomingCallActivity : AppCompatActivity() {
                             .into(object : CustomTarget<Drawable>() {
                                 override fun onResourceReady(resource: Drawable, transition: com.bumptech.glide.request.transition.Transition<in Drawable>?) {
                                     pixel5Binding?.ivBackground?.setImageDrawable(resource)
-                                    pixel5Binding?.ivBackground?.setColorFilter(Color.parseColor("#E3000000"), PorterDuff.Mode.SRC_ATOP)
-                                    Log.d("IncomingCallActivity", "Background set from URL with #E3000000 tint!")
+                                    pixel5Binding?.ivBackground?.setColorFilter(Color.parseColor("#B3000000"), PorterDuff.Mode.SRC_ATOP)
+                                    Log.d("IncomingCallActivity", "Background set from URL with #B3000000 tint!")
                                 }
 
                                 override fun onLoadCleared(placeholder: Drawable?) {
@@ -261,8 +265,8 @@ class IncomingCallActivity : AppCompatActivity() {
                         if (avatarFile.exists()) {
                             val originalBitmap = android.graphics.BitmapFactory.decodeFile(avatarFile.absolutePath)
                             pixel5Binding?.ivBackground?.setImageBitmap(originalBitmap)
-                            pixel5Binding?.ivBackground?.setColorFilter(Color.parseColor("#E3000000"), PorterDuff.Mode.SRC_ATOP)
-                            Log.d("IncomingCallActivity", "Background set from local file with #E3000000 tint!")
+                            pixel5Binding?.ivBackground?.setColorFilter(Color.parseColor("#B3000000"), PorterDuff.Mode.SRC_ATOP)
+                            Log.d("IncomingCallActivity", "Background set from local file with #B3000000 tint!")
                         } else {
                             pixel5Binding?.ivBackground?.setImageResource(R.drawable.bg_call_pixel5)
                         }

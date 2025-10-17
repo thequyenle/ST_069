@@ -68,6 +68,34 @@
     <string name="silent">Silent</string>
     <string name="message">Message</string>
     <string name="return_">Return</string>
+    <string name="thank_you_feedback">Thank you for your feedback!</string>
+    <string name="please_select_rating">Please select a rating</string>
+    <string name="preview_fake_call">Preview: Fake call triggered immediately</string>
+    <string name="fake_call_updated">Fake call updated successfully!</string>
+    <string name="fake_call_scheduled">Fake call scheduled successfully!</string>
+    <string name="please_enter_name">Please enter a name</string>
+    <string name="please_enter_phone">Please enter a phone number</string>
+    <string name="please_choose_voice">Please choose a voice</string>
+    <string name="please_select_device">Please select a device</string>
+    <string name="please_set_time">Please set time</string>
+    <string name="please_set_talk_time">Please set talk time</string>
+    <string name="no_scheduled_calls">No scheduled calls</string>
+    <string name="fake_call_triggered">Fake call triggered and moved to history</string>
+    <string name="deleted_from_history">deleted from history</string>
+    <string name="deleted">deleted</string>
+    <string name="restored">restored</string>
+    <string name="undo">UNDO</string>
+    <string name="voice_name">Voice:</string>
+    <string name="choose_voice_default">Choose Voice</string>
+    <string name="select_device_default">Select Device</string>
+    <string name="set_time_default">Set Time</string>
+    <string name="talk_time_default">Talk Time</string>
+    <string name="now">Now</string>
+    <string name="failed_save_image">Failed to save image</string>
+    <string name="re_triggering_call">Re-triggering fake call from</string>
+    <string name="preview_fake_call_triggered_immediately">Preview: Fake call triggered immediately</string>
+    <string name="custom">Custom</string>
+    <string name="available">Available</string>
 
 
 </resources>

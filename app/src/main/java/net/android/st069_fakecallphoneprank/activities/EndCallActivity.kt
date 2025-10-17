@@ -113,8 +113,8 @@ class EndCallActivity : AppCompatActivity() {
                     .into(object : com.bumptech.glide.request.target.CustomTarget<android.graphics.drawable.Drawable>() {
                         override fun onResourceReady(resource: android.graphics.drawable.Drawable, transition: com.bumptech.glide.request.transition.Transition<in android.graphics.drawable.Drawable>?) {
                             binding.ivBackgroundEndCall.setImageDrawable(resource)
-                            binding.ivBackgroundEndCall.setColorFilter(Color.parseColor("#E3000000"), PorterDuff.Mode.SRC_ATOP)
-                            Log.d("EndCallActivity", "Background set from URL with #E3000000 tint!")
+                            binding.ivBackgroundEndCall.setColorFilter(Color.parseColor("#B3000000"), PorterDuff.Mode.SRC_ATOP)
+                            Log.d("EndCallActivity", "Background set from URL with #B3000000 tint!")
                         }
 
                         override fun onLoadCleared(placeholder: android.graphics.drawable.Drawable?) {
@@ -135,8 +135,8 @@ class EndCallActivity : AppCompatActivity() {
                 if (avatarFile.exists()) {
                     val originalBitmap = android.graphics.BitmapFactory.decodeFile(avatarFile.absolutePath)
                     binding.ivBackgroundEndCall.setImageBitmap(originalBitmap)
-                    binding.ivBackgroundEndCall.setColorFilter(Color.parseColor("#E3000000"), PorterDuff.Mode.SRC_ATOP)
-                    Log.d("EndCallActivity", "Background set from local file with #E3000000 tint!")
+                    binding.ivBackgroundEndCall.setColorFilter(Color.parseColor("#B3000000"), PorterDuff.Mode.SRC_ATOP)
+                    Log.d("EndCallActivity", "Background set from local file with #B3000000 tint!")
                 } else {
                     binding.ivBackgroundEndCall.setImageResource(R.drawable.bg_call_pixel5)
                 }

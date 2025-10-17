@@ -137,7 +137,7 @@ class ActiveCallActivity : AppCompatActivity() {
                     .into(object : com.bumptech.glide.request.target.CustomTarget<android.graphics.drawable.Drawable>() {
                         override fun onResourceReady(resource: android.graphics.drawable.Drawable, transition: com.bumptech.glide.request.transition.Transition<in android.graphics.drawable.Drawable>?) {
                             binding.ivBackgroundActiveCall.setImageDrawable(resource)
-                            binding.ivBackgroundActiveCall.setColorFilter(Color.parseColor("#E3000000"), PorterDuff.Mode.SRC_ATOP)
+                            binding.ivBackgroundActiveCall.setColorFilter(Color.parseColor("#B3000000"), PorterDuff.Mode.SRC_ATOP)
                             Log.d("ActiveCallActivity", "Background set from URL with #E3000000 tint!")
                         }
 
@@ -159,7 +159,7 @@ class ActiveCallActivity : AppCompatActivity() {
                 if (avatarFile.exists()) {
                     val originalBitmap = android.graphics.BitmapFactory.decodeFile(avatarFile.absolutePath)
                     binding.ivBackgroundActiveCall.setImageBitmap(originalBitmap)
-                    binding.ivBackgroundActiveCall.setColorFilter(Color.parseColor("#E3000000"), PorterDuff.Mode.SRC_ATOP)
+                    binding.ivBackgroundActiveCall.setColorFilter(Color.parseColor("#B3000000"), PorterDuff.Mode.SRC_ATOP)
                     Log.d("ActiveCallActivity", "Background set from local file with #E3000000 tint!")
                 } else {
                     binding.ivBackgroundActiveCall.setImageResource(R.drawable.bg_call_pixel5)
