@@ -58,13 +58,19 @@ class IntroActivity : AppCompatActivity() {
                     true // Enable smooth scroll animation
                 )
             } else {
-                // Last page - mark intro as done and go to permission
-                getSharedPreferences("fakecall_prefs", MODE_PRIVATE)
-                    .edit()
+                // Last page - mark intro as done
+                val prefs = getSharedPreferences("fakecall_prefs", MODE_PRIVATE)
+                prefs.edit()
                     .putBoolean("intro_done", true)
                     .apply()
 
-                startActivity(Intent(this, PermissionActivity::class.java))
+                // Navigate to permission or home based on permission status
+                val intent = if (!prefs.getBoolean("permission_done", false)) {
+                    Intent(this, PermissionActivity::class.java)
+                } else {
+                    Intent(this, net.android.st069_fakecallphoneprank.HomeActivity::class.java)
+                }
+                startActivity(intent)
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                 finish()
             }
