@@ -1,7 +1,6 @@
 package net.android.st069_fakecallphoneprank.activity
 
 import android.Manifest
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -11,15 +10,15 @@ import android.os.Bundle
 import android.provider.Settings
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import net.android.st069_fakecallphoneprank.HomeActivity
 import net.android.st069_fakecallphoneprank.R
+import net.android.st069_fakecallphoneprank.base.BaseActivity
 import net.android.st069_fakecallphoneprank.databinding.ActivityPermissionBinding
 import net.android.st069_fakecallphoneprank.utils.LocaleHelper
 
-class PermissionActivity : AppCompatActivity() {
+class PermissionActivity : BaseActivity() {
 
     private lateinit var binding: ActivityPermissionBinding
 
@@ -239,15 +238,7 @@ class PermissionActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        showSystemUI()
         updateToggleStates()
         updateContinueButtonVisibility()
-    }
-
-    private fun Activity.showSystemUI() {
-        window.statusBarColor = android.graphics.Color.TRANSPARENT
-        window.decorView.systemUiVisibility =
-            View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
     }
 }

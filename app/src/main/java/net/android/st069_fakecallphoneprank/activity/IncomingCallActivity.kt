@@ -30,7 +30,6 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
-import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
@@ -39,12 +38,12 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.target.Target
 import net.android.st069_fakecallphoneprank.R
 import net.android.st069_fakecallphoneprank.activities.ActiveCallActivity
+import net.android.st069_fakecallphoneprank.base.BaseActivity
 import net.android.st069_fakecallphoneprank.databinding.ActivityIncomingCallOppoBinding
 import net.android.st069_fakecallphoneprank.databinding.ActivityIncomingCallPixel5Binding
-import net.android.st069_fakecallphoneprank.utils.FullscreenHelper
 import net.android.st069_fakecallphoneprank.utils.LocaleHelper
 
-class IncomingCallActivity : AppCompatActivity() {
+class IncomingCallActivity : BaseActivity() {
 
     private var oppoBinding: ActivityIncomingCallOppoBinding? = null
     private var pixel5Binding: ActivityIncomingCallPixel5Binding? = null
@@ -128,9 +127,6 @@ class IncomingCallActivity : AppCompatActivity() {
 
         // Inflate the appropriate layout based on device type
         inflateLayoutBasedOnDevice()
-
-        // Enable fullscreen edge-to-edge (after setContentView)
-        FullscreenHelper.enableFullscreen(this)
 
         setupUI()
         setupInteractions()

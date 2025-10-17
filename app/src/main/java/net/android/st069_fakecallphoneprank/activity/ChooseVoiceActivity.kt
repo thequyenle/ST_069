@@ -14,20 +14,21 @@ import android.view.View
 import android.view.Window
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import net.android.st069_fakecallphoneprank.R
 import net.android.st069_fakecallphoneprank.adapters.VoiceAdapter
+import net.android.st069_fakecallphoneprank.base.BaseActivity
+import net.android.st069_fakecallphoneprank.base.DialogHelper
 import net.android.st069_fakecallphoneprank.data.model.Voice
 import net.android.st069_fakecallphoneprank.databinding.ActivityChooseVoiceBinding
 import net.android.st069_fakecallphoneprank.utils.LocaleHelper
 import java.io.File
 import java.io.IOException
 
-class ChooseVoiceActivity : AppCompatActivity() {
+class ChooseVoiceActivity : BaseActivity() {
 
     private lateinit var binding: ActivityChooseVoiceBinding
     private lateinit var adapter: VoiceAdapter
@@ -146,11 +147,11 @@ class ChooseVoiceActivity : AppCompatActivity() {
 
                     // Only allow deletion for custom voices
                     if (!adapter.isCustomVoice(position)) {
-                        Toast.makeText(
-                            this@ChooseVoiceActivity,
-                            "Cannot delete preset voices",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        // Toast.makeText(
+                        //     this@ChooseVoiceActivity,
+                        //     "Cannot delete preset voices",
+                        //     Toast.LENGTH_SHORT
+                        // ).show()
                         adapter.notifyItemChanged(position)
                         return
                     }
@@ -168,11 +169,11 @@ class ChooseVoiceActivity : AppCompatActivity() {
                     snackbar.setAction("UNDO") {
                         // Restore item
                         adapter.restoreItem(deletedVoice, position)
-                        Toast.makeText(
-                            this@ChooseVoiceActivity,
-                            "${deletedVoice.name} restored",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        // Toast.makeText(
+                        //     this@ChooseVoiceActivity,
+                        //     "${deletedVoice.name} restored",
+                        //     Toast.LENGTH_SHORT
+                        // ).show()
                     }
 
                     snackbar.addCallback(object : com.google.android.material.snackbar.Snackbar.Callback() {
@@ -228,7 +229,7 @@ class ChooseVoiceActivity : AppCompatActivity() {
                 setResult(RESULT_OK, resultIntent)
                 finish()
             } ?: run {
-                Toast.makeText(this, "Please select a voice", Toast.LENGTH_SHORT).show()
+                // Toast.makeText(this, "Please select a voice", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -318,7 +319,7 @@ class ChooseVoiceActivity : AppCompatActivity() {
         btnStop: ImageView?
     ) {
         if (isRecording) {
-            Toast.makeText(this, "Already recording", Toast.LENGTH_SHORT).show()
+            // Toast.makeText(this, "Already recording", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -355,7 +356,7 @@ class ChooseVoiceActivity : AppCompatActivity() {
                     startTimer(tvTimer)
 
                 } catch (e: IOException) {
-                    Toast.makeText(this@ChooseVoiceActivity, "Recording failed: ${e.message}", Toast.LENGTH_SHORT).show()
+                    // Toast.makeText(this@ChooseVoiceActivity, "Recording failed: ${e.message}", Toast.LENGTH_SHORT).show()
                     android.util.Log.e("ChooseVoice", "Error starting recording", e)
 
                     // Clean up on failure
@@ -369,7 +370,7 @@ class ChooseVoiceActivity : AppCompatActivity() {
                 }
             }
         } catch (e: Exception) {
-            Toast.makeText(this, "Error starting recording: ${e.message}", Toast.LENGTH_SHORT).show()
+            // Toast.makeText(this, "Error starting recording: ${e.message}", Toast.LENGTH_SHORT).show()
             android.util.Log.e("ChooseVoice", "Error in startRecordingInDialog", e)
             mediaRecorder = null
             isRecording = false
@@ -378,7 +379,7 @@ class ChooseVoiceActivity : AppCompatActivity() {
 
     private fun stopRecordingInDialog() {
         if (!isRecording) {
-            Toast.makeText(this, "No recording in progress", Toast.LENGTH_SHORT).show()
+            // Toast.makeText(this, "No recording in progress", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -386,7 +387,7 @@ class ChooseVoiceActivity : AppCompatActivity() {
             // Check if recording duration is sufficient (at least 1 second)
             val recordingDuration = (System.currentTimeMillis() - recordingStartTime) / 1000
             if (recordingDuration < 1) {
-                Toast.makeText(this, "Recording too short. Please record at least 1 second.", Toast.LENGTH_SHORT).show()
+                // Toast.makeText(this, "Recording too short. Please record at least 1 second.", Toast.LENGTH_SHORT).show()
                 return
             }
 
@@ -412,7 +413,7 @@ class ChooseVoiceActivity : AppCompatActivity() {
             showSaveRecordingDialog()
 
         } catch (e: Exception) {
-            Toast.makeText(this, "Error stopping recording: ${e.message}", Toast.LENGTH_SHORT).show()
+            // Toast.makeText(this, "Error stopping recording: ${e.message}", Toast.LENGTH_SHORT).show()
             android.util.Log.e("ChooseVoice", "Error in stopRecordingInDialog", e)
 
             // Clean up
@@ -476,7 +477,7 @@ class ChooseVoiceActivity : AppCompatActivity() {
 
             // Validate input - dialog stays open if empty
             if (voiceName.isEmpty()) {
-                Toast.makeText(this, "Please enter a name", Toast.LENGTH_SHORT).show()
+                // Toast.makeText(this, "Please enter a name", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -486,6 +487,7 @@ class ChooseVoiceActivity : AppCompatActivity() {
         }
 
         dialog.show()
+        DialogHelper.applyFullscreenToDialog(dialog)
         val width = (259 * resources.displayMetrics.density).toInt()
         val height = (192 * resources.displayMetrics.density).toInt()
         dialog.window?.setLayout(width, height)
@@ -524,11 +526,11 @@ class ChooseVoiceActivity : AppCompatActivity() {
             voiceList.add(newVoice)
             adapter.notifyItemInserted(voiceList.size - 1)
 
-            Toast.makeText(this, "Voice saved successfully!", Toast.LENGTH_SHORT).show()
+            // Toast.makeText(this, "Voice saved successfully!", Toast.LENGTH_SHORT).show()
             audioFilePath = null
 
         } catch (e: Exception) {
-            Toast.makeText(this, "Error saving voice: ${e.message}", Toast.LENGTH_SHORT).show()
+            // Toast.makeText(this, "Error saving voice: ${e.message}", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -612,13 +614,13 @@ class ChooseVoiceActivity : AppCompatActivity() {
                 }
 
             } catch (e: Exception) {
-                Toast.makeText(this, "Error loading audio: ${e.message}", Toast.LENGTH_SHORT).show()
+                // Toast.makeText(this, "Error loading audio: ${e.message}", Toast.LENGTH_SHORT).show()
                 android.util.Log.e("ChooseVoice", "Error playing voice", e)
             }
         } else {
             // For preset voices without file
             btnPlayPause?.setOnClickListener {
-                Toast.makeText(this, "Preview not available for preset voices", Toast.LENGTH_SHORT).show()
+                // Toast.makeText(this, "Preview not available for preset voices", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -690,7 +692,7 @@ class ChooseVoiceActivity : AppCompatActivity() {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     showRecordingDialog()
                 } else {
-                    Toast.makeText(this, "Microphone permission required", Toast.LENGTH_SHORT).show()
+                    // Toast.makeText(this, "Microphone permission required", Toast.LENGTH_SHORT).show()
                 }
             }
         }

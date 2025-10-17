@@ -14,20 +14,19 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.willy.ratingbar.ScaleRatingBar
 import net.android.st069_fakecallphoneprank.activity.AddFakeCallActivity
 import net.android.st069_fakecallphoneprank.activity.AvailableCallsApiActivity
 import net.android.st069_fakecallphoneprank.activity.MoreActivity
+import net.android.st069_fakecallphoneprank.base.BaseActivity
+import net.android.st069_fakecallphoneprank.base.DialogHelper
 import net.android.st069_fakecallphoneprank.databinding.ActivityHomeBinding
-import net.android.st069_fakecallphoneprank.utils.FullscreenHelper
-import net.android.st069_fakecallphoneprank.utils.ImmersiveUtils
 import net.android.st069_fakecallphoneprank.utils.LocaleHelper
 import net.android.st069_fakecallphoneprank.viewmodel.FakeCallViewModel
 
-class HomeActivity : AppCompatActivity() {
+class HomeActivity : BaseActivity() {
 
     private lateinit var binding: ActivityHomeBinding
     private val viewModel: FakeCallViewModel by viewModels()
@@ -48,19 +47,14 @@ class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        enableEdgeToEdge()
-
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Enable fullscreen edge-to-edge (after setContentView)
-        FullscreenHelper.enableFullscreen(this)
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+//            val statusBars = insets.getInsets(WindowInsetsCompat.Type.statusBars())
+//            v.setPadding(statusBars.left, statusBars.top, statusBars.right, v.paddingBottom)
+//            insets
+//        }
 
         sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
 
@@ -70,13 +64,6 @@ class HomeActivity : AppCompatActivity() {
         setupObservers()
         setupClickListeners()
         setupBackPressHandler()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        val root = findViewById<View>(R.id.main)
-        ImmersiveUtils.applyEdgeToEdgeHideNav(this, root, padTopForStatusBar = true)
-        FullscreenHelper.enableFullscreen(this)
     }
 
     private fun setupObservers() {
@@ -287,5 +274,6 @@ class HomeActivity : AppCompatActivity() {
         }
 
         dialog.show()
+        DialogHelper.applyFullscreenToDialog(dialog)
     }
 }

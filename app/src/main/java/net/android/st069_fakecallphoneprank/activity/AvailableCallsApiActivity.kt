@@ -6,10 +6,10 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import net.android.st069_fakecallphoneprank.adapters.AvailableCallAdapter
 import net.android.st069_fakecallphoneprank.api.ApiClient
+import net.android.st069_fakecallphoneprank.base.BaseActivity
 import net.android.st069_fakecallphoneprank.data.Resource
 import net.android.st069_fakecallphoneprank.data.model.CallCategory
 import net.android.st069_fakecallphoneprank.data.model.FakeCallApi
@@ -17,7 +17,7 @@ import net.android.st069_fakecallphoneprank.databinding.ActivityAvailableCallsAp
 import net.android.st069_fakecallphoneprank.utils.LocaleHelper
 import net.android.st069_fakecallphoneprank.viewmodel.AvailableCallsViewModel
 
-class AvailableCallsApiActivity : AppCompatActivity() {
+class AvailableCallsApiActivity : BaseActivity() {
 
     private lateinit var binding: ActivityAvailableCallsApiBinding
     private val viewModel: AvailableCallsViewModel by viewModels()

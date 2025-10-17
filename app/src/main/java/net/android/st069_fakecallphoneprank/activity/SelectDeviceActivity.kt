@@ -4,15 +4,15 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import net.android.st069_fakecallphoneprank.R
 import net.android.st069_fakecallphoneprank.adapters.DeviceAdapter
+import net.android.st069_fakecallphoneprank.base.BaseActivity
 import net.android.st069_fakecallphoneprank.data.model.Device
 import net.android.st069_fakecallphoneprank.databinding.ActivitySelectDeviceBinding
 import net.android.st069_fakecallphoneprank.utils.LocaleHelper
 
-class SelectDeviceActivity : AppCompatActivity() {
+class SelectDeviceActivity : BaseActivity() {
 
     private lateinit var binding: ActivitySelectDeviceBinding
     private lateinit var deviceAdapter: DeviceAdapter

@@ -59,10 +59,7 @@
             android:exported="false" />
         <activity
             android:name=".activity.MoreActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activity.AvailableCallsActivity"
-            android:exported="false" /> <!-- EXISTING ACTIVITIES -->
+            android:exported="false" /><!-- EXISTING ACTIVITIES -->
         <activity
             android:name=".HomeActivity"
             android:exported="false" />

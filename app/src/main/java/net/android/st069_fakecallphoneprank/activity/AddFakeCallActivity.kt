@@ -4,32 +4,33 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.view.View
-import android.view.WindowInsets
-import android.view.WindowInsetsController
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.launch
 import net.android.st069_fakecallphoneprank.R
+import net.android.st069_fakecallphoneprank.base.BaseActivity
+import net.android.st069_fakecallphoneprank.base.DialogHelper
 import net.android.st069_fakecallphoneprank.data.entity.FakeCall
 import net.android.st069_fakecallphoneprank.databinding.ActivityAddFakeCallBinding
 import net.android.st069_fakecallphoneprank.viewmodel.FakeCallViewModel
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
+import android.os.Build
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
+import android.view.View
+import android.view.WindowInsets
+import android.view.WindowInsetsController
 import net.android.st069_fakecallphoneprank.utils.FullscreenHelper
 import net.android.st069_fakecallphoneprank.utils.LocaleHelper
 
-class AddFakeCallActivity : AppCompatActivity() {
+class AddFakeCallActivity : BaseActivity() {
 
     private lateinit var binding: ActivityAddFakeCallBinding
     private val viewModel: FakeCallViewModel by viewModels()
@@ -305,6 +306,7 @@ class AddFakeCallActivity : AppCompatActivity() {
 
 
         dialog.show()
+        DialogHelper.applyFullscreenToDialog(dialog)
         val width = (259 * resources.displayMetrics.density).toInt()
         val height = (192 * resources.displayMetrics.density).toInt()
         dialog.window?.setLayout(width, height)
@@ -351,6 +353,7 @@ class AddFakeCallActivity : AppCompatActivity() {
         }
 
         dialog.show()
+        DialogHelper.applyFullscreenToDialog(dialog)
 
         // Convert dp to pixels and set fixed dimensions
         val width = (259 * resources.displayMetrics.density).toInt()

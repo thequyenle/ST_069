@@ -15,7 +15,6 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
 import android.view.WindowManager
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
@@ -24,11 +23,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import net.android.st069_fakecallphoneprank.R
+import net.android.st069_fakecallphoneprank.base.BaseActivity
 import net.android.st069_fakecallphoneprank.databinding.ActivityActiveCallBinding
 import net.android.st069_fakecallphoneprank.utils.LocaleHelper
 import net.android.st069_fakecallphoneprank.viewmodel.FakeCallViewModel
 
-class ActiveCallActivity : AppCompatActivity() {
+class ActiveCallActivity : BaseActivity() {
 
     private lateinit var binding: ActivityActiveCallBinding
     private var callTimer: CountDownTimer? = null

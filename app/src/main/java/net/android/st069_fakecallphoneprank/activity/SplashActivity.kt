@@ -1,19 +1,17 @@
 package net.android.st069_fakecallphoneprank.activity
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import net.android.st069_fakecallphoneprank.HomeActivity
+import net.android.st069_fakecallphoneprank.base.BaseActivity
 import net.android.st069_fakecallphoneprank.databinding.ActivitySplashBinding
 import net.android.st069_fakecallphoneprank.intro.IntroActivity
 import net.android.st069_fakecallphoneprank.utils.LocaleHelper
 
-class SplashActivity : AppCompatActivity() {
+class SplashActivity : BaseActivity() {
 
     private lateinit var binding: ActivitySplashBinding
 
@@ -48,17 +46,5 @@ class SplashActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }, 3000) // 3 seconds
-    }
-
-    override fun onResume() {
-        super.onResume()
-        showSystemUI()
-    }
-
-    private fun Activity.showSystemUI() {
-        window.statusBarColor = android.graphics.Color.TRANSPARENT
-        window.decorView.systemUiVisibility =
-            View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
     }
 }

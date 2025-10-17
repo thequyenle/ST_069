@@ -4,18 +4,15 @@ import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.os.Build
 import android.os.Bundle
-import android.view.View
 import android.view.Window
-import android.view.WindowInsets
-import android.view.WindowInsetsController
 import android.view.WindowManager
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import com.willy.ratingbar.ScaleRatingBar
 import net.android.st069_fakecallphoneprank.R
+import net.android.st069_fakecallphoneprank.base.DialogHelper
 
 class RatingDialog(
     context: Context,
@@ -48,10 +45,10 @@ class RatingDialog(
                 WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.WRAP_CONTENT
             )
-
-            // Hide navigation bar (keep status bar visible)
-            hideNavigationBar()
         }
+
+        // Apply fullscreen using DialogHelper
+        DialogHelper.applyFullscreenToDialog(this)
 
         initViews()
         setupInitialState()
@@ -194,31 +191,6 @@ class RatingDialog(
         // Enable button vote and restore full opacity
         btnVote.isEnabled = true
         btnVote.alpha = 1.0f
-    }
-
-    private fun Window.hideNavigationBar() {
-        try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                // Android 11+ (API 30+)
-                setDecorFitsSystemWindows(false)
-                insetsController?.let { controller ->
-                    // Hide only navigation bar, keep status bar visible
-                    controller.hide(WindowInsets.Type.navigationBars())
-                    controller.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-                }
-            } else {
-                // Android 9-10 (API 28-29)
-                @Suppress("DEPRECATION")
-                decorView.systemUiVisibility = (
-                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                        )
-            }
-        } catch (e: Exception) {
-            android.util.Log.w("RatingDialog", "Could not hide navigation bar: ${e.message}")
-        }
     }
 
     companion object {

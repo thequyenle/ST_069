@@ -7,16 +7,16 @@ import android.graphics.Rect
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import net.android.st069_fakecallphoneprank.HomeActivity
 import net.android.st069_fakecallphoneprank.R
+import net.android.st069_fakecallphoneprank.base.BaseActivity
 import net.android.st069_fakecallphoneprank.databinding.ActivityLanguageBinding
 import net.android.st069_fakecallphoneprank.intro.IntroActivity
 import net.android.st069_fakecallphoneprank.utils.LocaleHelper
 
-class LanguageActivity : AppCompatActivity() {
+class LanguageActivity : BaseActivity() {
 
     private lateinit var binding: ActivityLanguageBinding
     private lateinit var languageList: MutableList<LanguageItem>

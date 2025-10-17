@@ -16,27 +16,22 @@ import android.os.VibratorManager
 import android.provider.Settings
 import android.view.View
 import android.view.Window
-import android.view.WindowInsets
-import android.view.WindowInsetsController
 import android.view.WindowManager
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import net.android.st069_fakecallphoneprank.R
-import net.android.st069_fakecallphoneprank.utils.ImmersiveUtils
+import net.android.st069_fakecallphoneprank.base.BaseActivity
+import net.android.st069_fakecallphoneprank.base.DialogHelper
 import net.android.st069_fakecallphoneprank.utils.LocaleHelper
 
-class setting : AppCompatActivity() {
+class setting : BaseActivity() {
 
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var btnBack: ImageButton
@@ -83,8 +78,6 @@ class setting : AppCompatActivity() {
                 Toast.makeText(this, getString(R.string.failed_to_set_ringtone), Toast.LENGTH_SHORT).show()
             }
         }
-        // Reapply immersive mode after returning from ringtone picker
-        hideSystemUI()
     }
 
     override fun attachBaseContext(newBase: Context) {
@@ -94,11 +87,7 @@ class setting : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        enableEdgeToEdge()
         setContentView(R.layout.activity_setting)
-
-        // Set up full screen after setting content view
-        setupFullScreen()
 
         // Initialize shared preferences
         sharedPreferences = getSharedPreferences("FakeCallSettings", Context.MODE_PRIVATE)
@@ -111,64 +100,6 @@ class setting : AppCompatActivity() {
 
         // Setup click listeners
         setupClickListeners()
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
-    }
-
-    private fun setupFullScreen() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            // Android 11+ (API 30+)
-            window.setDecorFitsSystemWindows(false)
-            window.insetsController?.let { controller ->
-                controller.hide(WindowInsets.Type.navigationBars())
-                controller.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-            }
-        } else {
-            // Android 9-10 (API 28-29)
-            @Suppress("DEPRECATION")
-            window.decorView.systemUiVisibility = (
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                            or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                            or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                    )
-        }
-
-        // Keep screen on (optional)
-        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-    }
-
-    private fun hideSystemUI() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.insetsController?.let { controller ->
-                controller.hide(WindowInsets.Type.navigationBars())
-                controller.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-            }
-        } else {
-            @Suppress("DEPRECATION")
-            window.decorView.systemUiVisibility = (
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                            or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                            or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                    )
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        hideSystemUI()
-    }
-
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        super.onWindowFocusChanged(hasFocus)
-        if (hasFocus) {
-            hideSystemUI()
-        }
     }
 
     private fun initViews() {
@@ -333,40 +264,9 @@ class setting : AppCompatActivity() {
             }
             .create()
 
-        // Show dialog and hide navigation bar
+        // Show dialog and apply fullscreen
         dialog.show()
-        dialog.window?.let { window ->
-            hideNavigationBarForDialog(window)
-        }
-
-        // Set listener to reapply immersive mode when dialog is dismissed
-        dialog.setOnDismissListener {
-            hideSystemUI()
-        }
-    }
-
-    private fun hideNavigationBarForDialog(window: Window) {
-        try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                // Android 11+ (API 30+)
-                window.setDecorFitsSystemWindows(false)
-                window.insetsController?.let { controller ->
-                    controller.hide(WindowInsets.Type.navigationBars())
-                    controller.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-                }
-            } else {
-                // Android 9-10 (API 28-29)
-                @Suppress("DEPRECATION")
-                window.decorView.systemUiVisibility = (
-                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                        )
-            }
-        } catch (e: Exception) {
-            android.util.Log.w("SettingActivity", "Could not hide navigation bar: ${e.message}")
-        }
+        DialogHelper.applyFullscreenToDialog(dialog)
     }
 
     private fun openRingtonePicker() {
@@ -391,7 +291,7 @@ class setting : AppCompatActivity() {
             ringtonePickerLauncher.launch(intent)
         } catch (e: Exception) {
             e.printStackTrace()
-            Toast.makeText(this, "Unable to open ringtone picker", Toast.LENGTH_SHORT).show()
+           // Toast.makeText(this, "Unable to open ringtone picker", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -417,7 +317,7 @@ class setting : AppCompatActivity() {
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            Toast.makeText(this, "Vibration not available", Toast.LENGTH_SHORT).show()
+           // Toast.makeText(this, getString(R.string.vibration_not_available), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -434,22 +334,19 @@ class setting : AppCompatActivity() {
                     // Permission granted, enable flash
                     sharedPreferences.edit().putBoolean("flash_enabled", true).apply()
                     flashSwitch.setImageResource(R.drawable.ic_switch_setting_on)
-                    Toast.makeText(this, "Flash enabled", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(this, "Flash enabled", Toast.LENGTH_SHORT).show()
                 } else {
                     // Permission denied
-                    Toast.makeText(this, "Camera permission is required for flash", Toast.LENGTH_SHORT).show()
+                   // Toast.makeText(this, "Camera permission is required for flash", Toast.LENGTH_SHORT).show()
                 }
             }
             NOTIFICATION_PERMISSION_REQUEST_CODE -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(this, "Notification permission granted", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(this, "Notification permission granted", Toast.LENGTH_SHORT).show()
                 } else {
-                    Toast.makeText(this, "Notification permission denied", Toast.LENGTH_SHORT).show()
+                   // Toast.makeText(this, "Notification permission denied", Toast.LENGTH_SHORT).show()
                 }
             }
         }
-
-        // Reapply immersive mode after permission dialog
-        hideSystemUI()
     }
 }

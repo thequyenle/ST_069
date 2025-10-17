@@ -12,15 +12,15 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.WindowManager
-import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.request.target.CustomTarget
 import net.android.st069_fakecallphoneprank.R
+import net.android.st069_fakecallphoneprank.base.BaseActivity
 import net.android.st069_fakecallphoneprank.databinding.ActivityEndCallBinding
 import net.android.st069_fakecallphoneprank.utils.LocaleHelper
 
-class EndCallActivity : AppCompatActivity() {
+class EndCallActivity : BaseActivity() {
 
     private lateinit var binding: ActivityEndCallBinding
 
