@@ -226,36 +226,36 @@ class HomeActivity : AppCompatActivity() {
                     }
                     1 -> {
                         imvAvtRate.setImageResource(R.drawable.ic_1star)
-                        tv1.text = "Oh, no!"
-                        tv2.text = "Please give us some feedback"
+                        tv1.text = getString(R.string.rating_oh_no)
+                        tv2.text = getString(R.string.rating_feedback_request)
                         btnVote.isEnabled = true
                         btnVote.alpha = 1.0f
                     }
                     2 -> {
                         imvAvtRate.setImageResource(R.drawable.ic_2star)
-                        tv1.text = "Oh, no!"
-                        tv2.text = "Please give us some feedback"
+                        tv1.text = getString(R.string.rating_oh_no)
+                        tv2.text = getString(R.string.rating_feedback_request)
                         btnVote.isEnabled = true
                         btnVote.alpha = 1.0f
                     }
                     3 -> {
                         imvAvtRate.setImageResource(R.drawable.ic_3star)
-                        tv1.text = "Could be better!"
-                        tv2.text = "How can we improve?"
+                        tv1.text = getString(R.string.rating_could_be_better)
+                        tv2.text = getString(R.string.rating_how_to_improve)
                         btnVote.isEnabled = true
                         btnVote.alpha = 1.0f
                     }
                     4 -> {
                         imvAvtRate.setImageResource(R.drawable.ic_4star)
-                        tv1.text = "We love you too!"
-                        tv2.text = "Thanks for your feedback"
+                        tv1.text = getString(R.string.rating_love_you)
+                        tv2.text = getString(R.string.rating_thanks)
                         btnVote.isEnabled = true
                         btnVote.alpha = 1.0f
                     }
                     5 -> {
                         imvAvtRate.setImageResource(R.drawable.ic_5star)
-                        tv1.text = "We love you too!"
-                        tv2.text = "Thanks for your feedback"
+                        tv1.text = getString(R.string.rating_love_you)
+                        tv2.text = getString(R.string.rating_thanks)
                         btnVote.isEnabled = true
                         btnVote.alpha = 1.0f
                     }

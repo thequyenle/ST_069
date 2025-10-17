@@ -71,8 +71,8 @@ class RatingDialog(
 
         // Reset icon và text về mặc định
         imvAvtRate.setImageResource(R.drawable.ic_ask)
-        tv1.text = "Do you like the app?"
-        tv2.text = "Let us know your experience"
+        tv1.text = context.getString(R.string.do_you_like_the_app)
+        tv2.text = context.getString(R.string.let_us_know_your_experience)
 
         // Disable button vote and set visual feedback
         btnVote.isEnabled = false
@@ -93,8 +93,8 @@ class RatingDialog(
         imvAvtRate.setImageResource(R.drawable.ic_ask)
 
         // Set text mặc định
-        tv1.text = "Do you like the app?"
-        tv2.text = "Let us know your experience"
+        tv1.text = context.getString(R.string.do_you_like_the_app)
+        tv2.text = context.getString(R.string.let_us_know_your_experience)
 
         // Disable button vote ban đầu and set visual feedback
         btnVote.isEnabled = false
@@ -133,8 +133,8 @@ class RatingDialog(
                 if (selectedRating == 0) {
                     // Reset UI to initial state
                     imvAvtRate.setImageResource(R.drawable.ic_ask)
-                    tv1.text = "Do you like the app?"
-                    tv2.text = "Let us know your experience"
+                    tv1.text = context.getString(R.string.do_you_like_the_app)
+                    tv2.text = context.getString(R.string.let_us_know_your_experience)
                     btnVote.isEnabled = false
                     btnVote.alpha = 0.5f
                 } else {
@@ -166,28 +166,28 @@ class RatingDialog(
         when (rating) {
             1 -> {
                 imvAvtRate.setImageResource(R.drawable.ic_1star)
-                tv1.text = "Oh, no!"
-                tv2.text = "Please give us some feedback"
+                tv1.text = context.getString(R.string.rating_oh_no)
+                tv2.text = context.getString(R.string.rating_feedback_request)
             }
             2 -> {
                 imvAvtRate.setImageResource(R.drawable.ic_2star)
-                tv1.text = "Oh, no!"
-                tv2.text = "Please give us some feedback"
+                tv1.text = context.getString(R.string.rating_oh_no)
+                tv2.text = context.getString(R.string.rating_feedback_request)
             }
             3 -> {
                 imvAvtRate.setImageResource(R.drawable.ic_3star)
-                tv1.text = "Could be better!"
-                tv2.text = "How can we improve?"
+                tv1.text = context.getString(R.string.rating_could_be_better)
+                tv2.text = context.getString(R.string.rating_how_to_improve)
             }
             4 -> {
                 imvAvtRate.setImageResource(R.drawable.ic_4star)
-                tv1.text = "We love you too!"
-                tv2.text = "Thanks for your feedback"
+                tv1.text = context.getString(R.string.rating_love_you)
+                tv2.text = context.getString(R.string.rating_thanks)
             }
             5 -> {
                 imvAvtRate.setImageResource(R.drawable.ic_5star)
-                tv1.text = "We love you too!"
-                tv2.text = "Thanks for your feedback"
+                tv1.text = context.getString(R.string.rating_love_you)
+                tv2.text = context.getString(R.string.rating_thanks)
             }
         }
 

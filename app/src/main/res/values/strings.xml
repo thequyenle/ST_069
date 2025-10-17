@@ -96,6 +96,12 @@
     <string name="preview_fake_call_triggered_immediately">Preview: Fake call triggered immediately</string>
     <string name="custom">Custom</string>
     <string name="available">Available</string>
+    <string name="rating_oh_no">Oh, no!</string>
+    <string name="rating_feedback_request">Please give us some feedback</string>
+    <string name="rating_could_be_better">Could be better!</string>
+    <string name="rating_how_to_improve">How can we improve?</string>
+    <string name="rating_love_you">We love you too!</string>
+    <string name="rating_thanks">Thanks for your feedback</string>
 
 
 </resources>
