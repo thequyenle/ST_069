@@ -60,8 +60,8 @@ class RatingDialog(
 
     override fun onStart() {
         super.onStart()
-        // Reset về trạng thái ban đầu mỗi khi dialog hiển thị
-        resetToInitialState()
+        // Don't reset to initial state here to prevent flickering
+        // Initial state is already set in setupInitialState() called from onCreate()
     }
 
     private fun resetToInitialState() {
@@ -74,8 +74,9 @@ class RatingDialog(
         tv1.text = "Do you like the app?"
         tv2.text = "Let us know your experience"
 
-        // Disable button vote
+        // Disable button vote and set visual feedback
         btnVote.isEnabled = false
+        btnVote.alpha = 0.5f
     }
 
     private fun initViews() {
@@ -95,8 +96,9 @@ class RatingDialog(
         tv1.text = "Do you like the app?"
         tv2.text = "Let us know your experience"
 
-        // Disable button vote ban đầu
+        // Disable button vote ban đầu and set visual feedback
         btnVote.isEnabled = false
+        btnVote.alpha = 0.5f
 
         // Reset rating bar về 0 (tất cả sao empty)
         ratingBar.rating = 0f
@@ -109,16 +111,21 @@ class RatingDialog(
             if (fromUser) {
                 val newRating = rating.toInt()
 
-                // If user clicks the same star, reset to previous rating and don't change
+                // If user clicks the same star, don't do anything
                 if (newRating == selectedRating) {
-                    ratingBarView.rating = selectedRating.toFloat()
                     return@setOnRatingChangeListener
                 }
 
                 selectedRating = newRating
+
+                // Update UI without resetting the rating bar
                 if (selectedRating == 0) {
-                    // Reset về trạng thái ban đầu khi rating = 0
-                    resetToInitialState()
+                    // Reset UI to initial state but don't touch the rating bar
+                    imvAvtRate.setImageResource(R.drawable.ic_ask)
+                    tv1.text = "Do you like the app?"
+                    tv2.text = "Let us know your experience"
+                    btnVote.isEnabled = false
+                    btnVote.alpha = 0.5f
                 } else {
                     updateUIForRating(selectedRating)
                 }
@@ -173,8 +180,9 @@ class RatingDialog(
             }
         }
 
-        // Enable button vote (không đổi background, không làm mờ)
+        // Enable button vote and restore full opacity
         btnVote.isEnabled = true
+        btnVote.alpha = 1.0f
     }
 
     private fun Window.hideNavigationBar() {

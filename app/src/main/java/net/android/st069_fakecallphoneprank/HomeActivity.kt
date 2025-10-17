@@ -150,6 +150,9 @@ class HomeActivity : AppCompatActivity() {
         val ratingBar = dialogView.findViewById<ScaleRatingBar>(R.id.ratingBar)
         val btnVote = dialogView.findViewById<View>(R.id.btnVote)
         val btnCancel = dialogView.findViewById<View>(R.id.btnCancel)
+        val imvAvtRate = dialogView.findViewById<android.widget.ImageView>(R.id.imvAvtRate)
+        val tv1 = dialogView.findViewById<android.widget.TextView>(R.id.tv1)
+        val tv2 = dialogView.findViewById<android.widget.TextView>(R.id.tv2)
 
         val dialog = AlertDialog.Builder(this)
             .setView(dialogView)
@@ -184,17 +187,69 @@ class HomeActivity : AppCompatActivity() {
             }
         }
 
-        var currentRating = 0f
+        var currentRating = 0
 
-        // Prevent re-selecting the same star
+        // Set initial state - button disabled with gray color
+        btnVote.isEnabled = false
+        btnVote.alpha = 0.5f
+
+        // Prevent re-selecting the same star and update UI
         ratingBar.setOnRatingChangeListener { ratingBarView, rating, fromUser ->
             if (fromUser) {
-                if (rating == currentRating) {
-                    // Same star clicked - reset to previous rating
-                    ratingBarView.rating = currentRating
+                val newRating = rating.toInt()
+
+                // If user clicks the same star, don't do anything
+                if (newRating == currentRating) {
                     return@setOnRatingChangeListener
                 }
-                currentRating = rating
+
+                currentRating = newRating
+
+                // Update UI based on rating
+                when (currentRating) {
+                    0 -> {
+                        imvAvtRate.setImageResource(R.drawable.ic_ask)
+                        tv1.text = getString(R.string.do_you_like_the_app)
+                        tv2.text = getString(R.string.let_us_know_your_experience)
+                        btnVote.isEnabled = false
+                        btnVote.alpha = 0.5f
+                    }
+                    1 -> {
+                        imvAvtRate.setImageResource(R.drawable.ic_1star)
+                        tv1.text = "Oh, no!"
+                        tv2.text = "Please give us some feedback"
+                        btnVote.isEnabled = true
+                        btnVote.alpha = 1.0f
+                    }
+                    2 -> {
+                        imvAvtRate.setImageResource(R.drawable.ic_2star)
+                        tv1.text = "Oh, no!"
+                        tv2.text = "Please give us some feedback"
+                        btnVote.isEnabled = true
+                        btnVote.alpha = 1.0f
+                    }
+                    3 -> {
+                        imvAvtRate.setImageResource(R.drawable.ic_3star)
+                        tv1.text = "Could be better!"
+                        tv2.text = "How can we improve?"
+                        btnVote.isEnabled = true
+                        btnVote.alpha = 1.0f
+                    }
+                    4 -> {
+                        imvAvtRate.setImageResource(R.drawable.ic_4star)
+                        tv1.text = "We love you too!"
+                        tv2.text = "Thanks for your feedback"
+                        btnVote.isEnabled = true
+                        btnVote.alpha = 1.0f
+                    }
+                    5 -> {
+                        imvAvtRate.setImageResource(R.drawable.ic_5star)
+                        tv1.text = "We love you too!"
+                        tv2.text = "Thanks for your feedback"
+                        btnVote.isEnabled = true
+                        btnVote.alpha = 1.0f
+                    }
+                }
             }
         }
 
