@@ -1,6 +1,7 @@
 package net.android.st069_fakecallphoneprank.activity
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -9,12 +10,17 @@ import net.android.st069_fakecallphoneprank.R
 import net.android.st069_fakecallphoneprank.adapters.DeviceAdapter
 import net.android.st069_fakecallphoneprank.data.model.Device
 import net.android.st069_fakecallphoneprank.databinding.ActivitySelectDeviceBinding
+import net.android.st069_fakecallphoneprank.utils.LocaleHelper
 
 class SelectDeviceActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySelectDeviceBinding
     private lateinit var deviceAdapter: DeviceAdapter
     private var selectedDevice: Device? = null
+
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(LocaleHelper.setLocale(newBase))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

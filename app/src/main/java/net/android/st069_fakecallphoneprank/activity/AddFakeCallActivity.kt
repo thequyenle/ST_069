@@ -1,6 +1,7 @@
 package net.android.st069_fakecallphoneprank.activity
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -26,6 +27,7 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import net.android.st069_fakecallphoneprank.utils.FullscreenHelper
+import net.android.st069_fakecallphoneprank.utils.LocaleHelper
 
 class AddFakeCallActivity : AppCompatActivity() {
 
@@ -66,6 +68,10 @@ class AddFakeCallActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(LocaleHelper.setLocale(newBase))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

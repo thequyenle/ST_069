@@ -2,6 +2,7 @@ package net.android.st069_fakecallphoneprank.activity
 
 import android.Manifest
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.MediaPlayer
@@ -22,6 +23,7 @@ import net.android.st069_fakecallphoneprank.R
 import net.android.st069_fakecallphoneprank.adapters.VoiceAdapter
 import net.android.st069_fakecallphoneprank.data.model.Voice
 import net.android.st069_fakecallphoneprank.databinding.ActivityChooseVoiceBinding
+import net.android.st069_fakecallphoneprank.utils.LocaleHelper
 import java.io.File
 import java.io.IOException
 
@@ -43,6 +45,10 @@ class ChooseVoiceActivity : AppCompatActivity() {
 
     private val RECORD_AUDIO_PERMISSION_CODE = 101
     private var selectedVoice: Voice? = null
+
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(LocaleHelper.setLocale(newBase))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

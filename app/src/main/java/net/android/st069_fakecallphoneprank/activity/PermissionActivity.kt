@@ -2,6 +2,7 @@ package net.android.st069_fakecallphoneprank.activity
 
 import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -16,6 +17,7 @@ import androidx.core.content.ContextCompat
 import net.android.st069_fakecallphoneprank.HomeActivity
 import net.android.st069_fakecallphoneprank.R
 import net.android.st069_fakecallphoneprank.databinding.ActivityPermissionBinding
+import net.android.st069_fakecallphoneprank.utils.LocaleHelper
 
 class PermissionActivity : AppCompatActivity() {
 
@@ -28,6 +30,10 @@ class PermissionActivity : AppCompatActivity() {
     private var isOverlayGranted = false
     private var isNotificationGranted = false
     private var isExactAlarmGranted = false
+
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(LocaleHelper.setLocale(newBase))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

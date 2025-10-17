@@ -29,6 +29,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import net.android.st069_fakecallphoneprank.R
 import net.android.st069_fakecallphoneprank.utils.ImmersiveUtils
+import net.android.st069_fakecallphoneprank.utils.LocaleHelper
 
 class setting : AppCompatActivity() {
 
@@ -79,7 +80,11 @@ class setting : AppCompatActivity() {
             }
         }
     }
-    
+
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(LocaleHelper.setLocale(newBase))
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()

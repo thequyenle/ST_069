@@ -1,6 +1,7 @@
 package net.android.st069_fakecallphoneprank.activity
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -10,10 +11,15 @@ import androidx.appcompat.app.AppCompatActivity
 import net.android.st069_fakecallphoneprank.HomeActivity
 import net.android.st069_fakecallphoneprank.databinding.ActivitySplashBinding
 import net.android.st069_fakecallphoneprank.intro.IntroActivity
+import net.android.st069_fakecallphoneprank.utils.LocaleHelper
 
 class SplashActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySplashBinding
+
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(LocaleHelper.setLocale(newBase))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         window.statusBarColor = android.graphics.Color.TRANSPARENT

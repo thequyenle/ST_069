@@ -1,15 +1,21 @@
 package net.android.st069_fakecallphoneprank.activity
 
+import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.tabs.TabLayoutMediator
 import net.android.st069_fakecallphoneprank.R
 import net.android.st069_fakecallphoneprank.adapters.HistoryPagerAdapter
 import net.android.st069_fakecallphoneprank.databinding.ActivityHistoryBinding
+import net.android.st069_fakecallphoneprank.utils.LocaleHelper
 
 class HistoryActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHistoryBinding
+
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(LocaleHelper.setLocale(newBase))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

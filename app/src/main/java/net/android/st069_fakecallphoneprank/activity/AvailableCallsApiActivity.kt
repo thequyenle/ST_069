@@ -1,5 +1,6 @@
 package net.android.st069_fakecallphoneprank.activity
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -13,6 +14,7 @@ import net.android.st069_fakecallphoneprank.data.Resource
 import net.android.st069_fakecallphoneprank.data.model.CallCategory
 import net.android.st069_fakecallphoneprank.data.model.FakeCallApi
 import net.android.st069_fakecallphoneprank.databinding.ActivityAvailableCallsApiBinding
+import net.android.st069_fakecallphoneprank.utils.LocaleHelper
 import net.android.st069_fakecallphoneprank.viewmodel.AvailableCallsViewModel
 
 class AvailableCallsApiActivity : AppCompatActivity() {
@@ -20,6 +22,10 @@ class AvailableCallsApiActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAvailableCallsApiBinding
     private val viewModel: AvailableCallsViewModel by viewModels()
     private lateinit var adapter: AvailableCallAdapter
+
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(LocaleHelper.setLocale(newBase))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
