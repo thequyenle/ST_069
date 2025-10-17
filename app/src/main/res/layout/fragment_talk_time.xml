@@ -68,7 +68,7 @@
         app:layout_constraintStart_toStartOf="@id/iv15s"
         app:layout_constraintEnd_toEndOf="@id/iv15s"
         app:layout_constraintTop_toTopOf="@id/iv15s"
-        android:text="15 second"
+        android:text="@string/_15_second"
         android:textSize="14sp"
         android:fontFamily="@font/roboto"
         android:textColor="@color/white"

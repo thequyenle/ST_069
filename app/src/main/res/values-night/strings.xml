@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="setting">Setting</string>
+    <string name="ringtone">Ringtone</string>
+    <string name="flash">Flash</string>
+    <string name="no_call_history_yet">No call history yet</string>
+    <string name="add_your_voice">Add your voice</string>
+</resources>

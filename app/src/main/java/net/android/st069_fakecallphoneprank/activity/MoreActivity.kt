@@ -11,6 +11,7 @@ import net.android.st069_fakecallphoneprank.R
 import net.android.st069_fakecallphoneprank.databinding.ActivityMoreBinding
 import net.android.st069_fakecallphoneprank.dialog.RatingDialog
 import net.android.st069_fakecallphoneprank.utils.FullscreenHelper
+import net.android.st069_fakecallphoneprank.utils.LocaleHelper
 
 class MoreActivity : AppCompatActivity() {
 
@@ -41,6 +42,10 @@ class MoreActivity : AppCompatActivity() {
     companion object {
         private const val PREFS_NAME = "FakeCallSettings"  // or any name you prefer
         private const val KEY_RATED = "is_rated"
+    }
+
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(LocaleHelper.setLocale(newBase))
     }
 
     private fun setupClickListeners() {

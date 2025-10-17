@@ -33,7 +33,7 @@
             android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Setting"
+            android:text="@string/setting"
             android:textSize="20sp"
             android:fontFamily="@font/roboto_condensed_semibold"
             android:textColor="#2F2F2F"
@@ -82,7 +82,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Phone call ring time"
+            android:text="@string/phone_call_ring_time"
             android:textSize="14sp"
             android:textColor="#727272"
             app:layout_constraintStart_toEndOf="@id/ivPhoneCallRingTime"
@@ -141,7 +141,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ringtone"
+            android:text="@string/ringtone"
             android:textSize="14sp"
             android:textColor="#727272"
             app:layout_constraintStart_toEndOf="@id/ivRingTone"
@@ -200,7 +200,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Vibration"
+            android:text="@string/vibration"
             android:textSize="14sp"
             android:textColor="#727272"
             app:layout_constraintStart_toEndOf="@id/ivVibration"
@@ -258,7 +258,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sound"
+            android:text="@string/sound"
             android:textSize="14sp"
             android:textColor="#727272"
             app:layout_constraintStart_toEndOf="@id/ivSound"
@@ -316,7 +316,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Flash"
+            android:text="@string/flash"
             android:textSize="14sp"
             android:textColor="#727272"
             app:layout_constraintStart_toEndOf="@id/ivFlash"

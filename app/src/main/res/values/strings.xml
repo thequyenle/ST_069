@@ -102,6 +102,13 @@
     <string name="rating_how_to_improve">How can we improve?</string>
     <string name="rating_love_you">We love you too!</string>
     <string name="rating_thanks">Thanks for your feedback</string>
+    <string name="setting">Setting</string>
+    <string name="ringtone">Ringtone</string>
+    <string name="vibration">Vibration</string>
+    <string name="sound">Sound</string>
+    <string name="flash">Flash</string>
+    <string name="no_call_history_yet">No call history yet</string>
+    <string name="add_your_voice">Add your voice</string>
 
 
 </resources>

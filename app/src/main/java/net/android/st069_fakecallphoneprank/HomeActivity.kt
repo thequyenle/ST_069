@@ -1,5 +1,6 @@
 package net.android.st069_fakecallphoneprank
 
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
@@ -23,6 +24,7 @@ import net.android.st069_fakecallphoneprank.activity.MoreActivity
 import net.android.st069_fakecallphoneprank.databinding.ActivityHomeBinding
 import net.android.st069_fakecallphoneprank.utils.FullscreenHelper
 import net.android.st069_fakecallphoneprank.utils.ImmersiveUtils
+import net.android.st069_fakecallphoneprank.utils.LocaleHelper
 import net.android.st069_fakecallphoneprank.viewmodel.FakeCallViewModel
 
 class HomeActivity : AppCompatActivity() {
@@ -37,6 +39,10 @@ class HomeActivity : AppCompatActivity() {
         private const val PREFS_NAME = "FakeCallSettings"
         private const val KEY_RATED = "is_rated"
         private const val KEY_BACK_PRESS_COUNT = "back_press_count"
+    }
+
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(LocaleHelper.setLocale(newBase))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
