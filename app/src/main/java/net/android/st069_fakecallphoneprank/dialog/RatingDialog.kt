@@ -106,21 +106,32 @@ class RatingDialog(
     }
 
     private fun setupListeners() {
-        // Rating bar change listener - prevent re-selecting the same star
+        // Rating bar change listener with deselect prevention
         ratingBar.setOnRatingChangeListener { ratingBarView, rating, fromUser ->
             if (fromUser) {
                 val newRating = rating.toInt()
 
-                // If user clicks the same star, don't do anything
+                // CRITICAL FIX: Prevent deselect when clicking the same star
+                // When user clicks the same star, the library tries to deselect it (rating becomes 0)
+                // We detect this and restore the previous rating immediately
+                if (newRating == 0 && selectedRating > 0) {
+                    // User clicked the same star that was already selected
+                    // Restore the previous rating to keep it selected
+                    ratingBarView.rating = selectedRating.toFloat()
+                    return@setOnRatingChangeListener
+                }
+
+                // If somehow the same rating comes through, ignore it
                 if (newRating == selectedRating) {
                     return@setOnRatingChangeListener
                 }
 
+                // Update selected rating
                 selectedRating = newRating
 
-                // Update UI without resetting the rating bar
+                // Update UI based on new rating
                 if (selectedRating == 0) {
-                    // Reset UI to initial state but don't touch the rating bar
+                    // Reset UI to initial state
                     imvAvtRate.setImageResource(R.drawable.ic_ask)
                     tv1.text = "Do you like the app?"
                     tv2.text = "Let us know your experience"
@@ -199,11 +210,11 @@ class RatingDialog(
                 // Android 9-10 (API 28-29)
                 @Suppress("DEPRECATION")
                 decorView.systemUiVisibility = (
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                )
+                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                        )
             }
         } catch (e: Exception) {
             android.util.Log.w("RatingDialog", "Could not hide navigation bar: ${e.message}")

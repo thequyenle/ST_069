@@ -176,11 +176,11 @@ class HomeActivity : AppCompatActivity() {
                     // Android 9-10 (API 28-29)
                     @Suppress("DEPRECATION")
                     window.decorView.systemUiVisibility = (
-                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                            or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                            or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                    )
+                            View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                    or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                    or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                            )
                 }
             } catch (e: Exception) {
                 android.util.Log.w("HomeActivity", "Could not hide navigation bar: ${e.message}")
@@ -193,12 +193,22 @@ class HomeActivity : AppCompatActivity() {
         btnVote.isEnabled = false
         btnVote.alpha = 0.5f
 
-        // Prevent re-selecting the same star and update UI
+        // Handle star rating changes with deselect prevention
         ratingBar.setOnRatingChangeListener { ratingBarView, rating, fromUser ->
             if (fromUser) {
                 val newRating = rating.toInt()
 
-                // If user clicks the same star, don't do anything
+                // CRITICAL FIX: Prevent deselect when clicking the same star
+                // When user clicks the same star, the library tries to deselect it (rating becomes 0)
+                // We detect this and restore the previous rating immediately
+                if (newRating == 0 && currentRating > 0) {
+                    // User clicked the same star that was already selected
+                    // Restore the previous rating to keep it selected
+                    ratingBarView.rating = currentRating.toFloat()
+                    return@setOnRatingChangeListener
+                }
+
+                // If somehow the same rating comes through, ignore it
                 if (newRating == currentRating) {
                     return@setOnRatingChangeListener
                 }
@@ -272,5 +282,4 @@ class HomeActivity : AppCompatActivity() {
 
         dialog.show()
     }
-
 }
