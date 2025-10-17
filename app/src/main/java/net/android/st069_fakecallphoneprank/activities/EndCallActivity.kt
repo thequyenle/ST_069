@@ -1,5 +1,6 @@
 package net.android.st069_fakecallphoneprank.activities
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
@@ -17,6 +18,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.request.target.CustomTarget
 import net.android.st069_fakecallphoneprank.R
 import net.android.st069_fakecallphoneprank.databinding.ActivityEndCallBinding
+import net.android.st069_fakecallphoneprank.utils.LocaleHelper
 
 class EndCallActivity : AppCompatActivity() {
 
@@ -28,6 +30,10 @@ class EndCallActivity : AppCompatActivity() {
 
     // Pre-loaded bitmaps (loaded before layout inflation)
     private var preloadedAvatarBitmap: Bitmap? = null
+
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(LocaleHelper.setLocale(newBase))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

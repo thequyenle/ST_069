@@ -42,6 +42,7 @@ import net.android.st069_fakecallphoneprank.activities.ActiveCallActivity
 import net.android.st069_fakecallphoneprank.databinding.ActivityIncomingCallOppoBinding
 import net.android.st069_fakecallphoneprank.databinding.ActivityIncomingCallPixel5Binding
 import net.android.st069_fakecallphoneprank.utils.FullscreenHelper
+import net.android.st069_fakecallphoneprank.utils.LocaleHelper
 
 class IncomingCallActivity : AppCompatActivity() {
 
@@ -82,6 +83,10 @@ class IncomingCallActivity : AppCompatActivity() {
     private var isSoundEnabled = true
     private var isFlashEnabled = false
     private var ringTime = 15
+
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(LocaleHelper.setLocale(newBase))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

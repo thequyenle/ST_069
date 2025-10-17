@@ -109,4 +109,7 @@
     <string name="flash">Blitz</string>
     <string name="no_call_history_yet">Noch kein Anrufverlauf</string>
     <string name="add_your_voice">Fügen Sie Ihre Stimme hinzu</string>
+    <string name="create_a_name">Erstellen Sie einen Namen</string>
+    <string name="kid">Kind</string>
+    <string name="general">Allgemein</string>
 </resources>

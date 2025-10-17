@@ -5,4 +5,7 @@
     <string name="flash">Flash</string>
     <string name="no_call_history_yet">No call history yet</string>
     <string name="add_your_voice">Add your voice</string>
+    <string name="create_a_name">Create a name</string>
+    <string name="kid">Kid</string>
+    <string name="general">General</string>
 </resources>

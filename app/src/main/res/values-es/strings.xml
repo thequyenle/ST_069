@@ -109,4 +109,7 @@
     <string name="flash">Flash</string>
     <string name="no_call_history_yet">Aún no hay historial de llamadas</string>
     <string name="add_your_voice">Agrega tu voz</string>
+    <string name="create_a_name">Crea un nombre</string>
+    <string name="kid">nino</string>
+    <string name="general">General</string>
 </resources>

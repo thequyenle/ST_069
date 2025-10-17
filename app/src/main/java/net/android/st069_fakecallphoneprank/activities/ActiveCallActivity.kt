@@ -1,5 +1,6 @@
 package net.android.st069_fakecallphoneprank.activities
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -24,6 +25,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import net.android.st069_fakecallphoneprank.R
 import net.android.st069_fakecallphoneprank.databinding.ActivityActiveCallBinding
+import net.android.st069_fakecallphoneprank.utils.LocaleHelper
 import net.android.st069_fakecallphoneprank.viewmodel.FakeCallViewModel
 
 class ActiveCallActivity : AppCompatActivity() {
@@ -43,6 +45,10 @@ class ActiveCallActivity : AppCompatActivity() {
 
     // Pre-loaded bitmaps (loaded before layout inflation)
     private var preloadedAvatarBitmap: Bitmap? = null
+
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(LocaleHelper.setLocale(newBase))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -109,4 +109,7 @@
     <string name="flash">फ्लैश</string>
     <string name="no_call_history_yet">अभी तक कोई कॉल इतिहास नहीं</string>
     <string name="add_your_voice">अपनी आवाज़ जोड़ें</string>
+    <string name="create_a_name">एक नाम बनाएं</string>
+    <string name="kid">बच्चा</string>
+    <string name="general">सामान्य</string>
 </resources>
