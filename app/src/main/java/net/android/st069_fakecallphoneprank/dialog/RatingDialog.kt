@@ -4,8 +4,12 @@ import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
+import android.view.View
 import android.view.Window
+import android.view.WindowInsets
+import android.view.WindowInsetsController
 import android.view.WindowManager
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatImageView
@@ -44,6 +48,9 @@ class RatingDialog(
                 WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.WRAP_CONTENT
             )
+
+            // Hide navigation bar (keep status bar visible)
+            hideNavigationBar()
         }
 
         initViews()
@@ -98,12 +105,13 @@ class RatingDialog(
 
     private fun setupListeners() {
         // Rating bar change listener - prevent re-selecting the same star
-        ratingBar.setOnRatingChangeListener { _, rating, fromUser ->
+        ratingBar.setOnRatingChangeListener { ratingBarView, rating, fromUser ->
             if (fromUser) {
                 val newRating = rating.toInt()
 
-                // If user clicks the same star, don't change rating
+                // If user clicks the same star, reset to previous rating and don't change
                 if (newRating == selectedRating) {
+                    ratingBarView.rating = selectedRating.toFloat()
                     return@setOnRatingChangeListener
                 }
 
@@ -167,6 +175,31 @@ class RatingDialog(
 
         // Enable button vote (không đổi background, không làm mờ)
         btnVote.isEnabled = true
+    }
+
+    private fun Window.hideNavigationBar() {
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                // Android 11+ (API 30+)
+                setDecorFitsSystemWindows(false)
+                insetsController?.let { controller ->
+                    // Hide only navigation bar, keep status bar visible
+                    controller.hide(WindowInsets.Type.navigationBars())
+                    controller.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                }
+            } else {
+                // Android 9-10 (API 28-29)
+                @Suppress("DEPRECATION")
+                decorView.systemUiVisibility = (
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                )
+            }
+        } catch (e: Exception) {
+            android.util.Log.w("RatingDialog", "Could not hide navigation bar: ${e.message}")
+        }
     }
 
     companion object {

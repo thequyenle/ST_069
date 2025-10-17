@@ -3,9 +3,12 @@ package net.android.st069_fakecallphoneprank.activity
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
+import android.view.WindowInsets
+import android.view.WindowInsetsController
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -294,6 +297,7 @@ class AddFakeCallActivity : AppCompatActivity() {
             dialog.dismiss()
         }
 
+
         dialog.show()
         val width = (259 * resources.displayMetrics.density).toInt()
         val height = (192 * resources.displayMetrics.density).toInt()
@@ -303,6 +307,9 @@ class AddFakeCallActivity : AppCompatActivity() {
         dialog.window?.apply {
             setDimAmount(0.5f)
             addFlags(android.view.WindowManager.LayoutParams.FLAG_DIM_BEHIND)
+
+            // Hide navigation bar for dialog
+            hideNavigationBar()
         }
     }
 
@@ -348,6 +355,9 @@ class AddFakeCallActivity : AppCompatActivity() {
         dialog.window?.apply {
             setDimAmount(0.5f)
             addFlags(android.view.WindowManager.LayoutParams.FLAG_DIM_BEHIND)
+
+            // Hide navigation bar for dialog
+            hideNavigationBar()
         }
     }
 
@@ -687,6 +697,31 @@ class AddFakeCallActivity : AppCompatActivity() {
         } catch (e: Exception) {
             android.util.Log.e("AddFakeCallActivity", "Error saving image to internal storage", e)
             null
+        }
+    }
+
+    private fun android.view.Window.hideNavigationBar() {
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                // Android 11+ (API 30+)
+                setDecorFitsSystemWindows(false)
+                insetsController?.let { controller ->
+                    // Hide only navigation bar, keep status bar visible
+                    controller.hide(WindowInsets.Type.navigationBars())
+                    controller.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                }
+            } else {
+                // Android 9-10 (API 28-29)
+                @Suppress("DEPRECATION")
+                decorView.systemUiVisibility = (
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                )
+            }
+        } catch (e: Exception) {
+            android.util.Log.w("AddFakeCallActivity", "Could not hide navigation bar: ${e.message}")
         }
     }
 }

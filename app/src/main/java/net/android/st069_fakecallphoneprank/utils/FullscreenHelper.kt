@@ -11,7 +11,7 @@ import androidx.core.view.WindowCompat
 object FullscreenHelper {
 
     /**
-     * Makes the activity fullscreen edge-to-edge and hides navigation bars
+     * Makes the activity edge-to-edge and hides only navigation bar (keeps status bar visible)
      */
     fun enableFullscreen(activity: Activity) {
         try {
@@ -20,8 +20,8 @@ object FullscreenHelper {
                 activity.window?.setDecorFitsSystemWindows(false)
 
                 activity.window?.insetsController?.let { controller ->
-                    // Hide both status bar and navigation bar
-                    controller.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
+                    // Hide only navigation bar, keep status bar visible
+                    controller.hide(WindowInsets.Type.navigationBars())
                     // Set behavior to show bars temporarily when user swipes
                     controller.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
                 }
@@ -31,14 +31,12 @@ object FullscreenHelper {
                 activity.window?.decorView?.systemUiVisibility = (
                     View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                         or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        or View.SYSTEM_UI_FLAG_FULLSCREEN
                         or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                 )
             }
 
-            // Make window fullscreen
+            // Make window edge-to-edge (draw behind system bars)
             activity.window?.let { window ->
                 WindowCompat.setDecorFitsSystemWindows(window, false)
                 // Keep screen on during activity

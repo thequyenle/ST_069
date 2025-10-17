@@ -3,8 +3,11 @@ package net.android.st069_fakecallphoneprank
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.view.WindowInsets
+import android.view.WindowInsetsController
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
@@ -30,6 +33,12 @@ class HomeActivity : AppCompatActivity() {
 
     private var backPressCount = 0
 
+    companion object {
+        private const val PREFS_NAME = "FakeCallSettings"
+        private const val KEY_RATED = "is_rated"
+        private const val KEY_BACK_PRESS_COUNT = "back_press_count"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -47,7 +56,10 @@ class HomeActivity : AppCompatActivity() {
             insets
         }
 
-        sharedPreferences = getSharedPreferences("AppPreferences", MODE_PRIVATE)
+        sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
+
+        // Load back press count from previous session
+        backPressCount = sharedPreferences.getInt(KEY_BACK_PRESS_COUNT, 0)
 
         setupObservers()
         setupClickListeners()
@@ -107,13 +119,26 @@ class HomeActivity : AppCompatActivity() {
     private fun setupBackPressHandler() {
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
+                // Check if user has already rated (in HomeActivity or MoreActivity)
+                val hasRated = sharedPreferences.getBoolean(KEY_RATED, false)
+
+                // If user has rated, always exit directly
+                if (hasRated) {
+                    finishAffinity()
+                    return
+                }
+
+                // If not rated yet, continue with back press counting
                 backPressCount++
 
+                // Save back press count to persist across app sessions
+                sharedPreferences.edit().putInt(KEY_BACK_PRESS_COUNT, backPressCount).apply()
+
                 if (backPressCount % 2 == 1) {
-                    // Odd number - exit app directly
+                    // Odd number (1st press) - exit app directly
                     finishAffinity()
                 } else {
-                    // Even number - show rating dialog
+                    // Even number (2nd press) - show rating dialog
                     showRatingDialog()
                 }
             }
@@ -133,31 +158,51 @@ class HomeActivity : AppCompatActivity() {
 
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
 
+        // Hide navigation bar for dialog
+        dialog.window?.let { window ->
+            try {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    // Android 11+ (API 30+)
+                    window.setDecorFitsSystemWindows(false)
+                    window.insetsController?.let { controller ->
+                        // Hide only navigation bar, keep status bar visible
+                        controller.hide(WindowInsets.Type.navigationBars())
+                        controller.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                    }
+                } else {
+                    // Android 9-10 (API 28-29)
+                    @Suppress("DEPRECATION")
+                    window.decorView.systemUiVisibility = (
+                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                    )
+                }
+            } catch (e: Exception) {
+                android.util.Log.w("HomeActivity", "Could not hide navigation bar: ${e.message}")
+            }
+        }
+
         var currentRating = 0f
-        var hasRated = sharedPreferences.getBoolean("has_rated", false)
 
         // Prevent re-selecting the same star
-        ratingBar.setOnRatingChangeListener { _, rating, fromUser ->
-            if (fromUser && rating == currentRating) {
-                // Same star clicked - don't change
-                return@setOnRatingChangeListener
-            }
+        ratingBar.setOnRatingChangeListener { ratingBarView, rating, fromUser ->
             if (fromUser) {
+                if (rating == currentRating) {
+                    // Same star clicked - reset to previous rating
+                    ratingBarView.rating = currentRating
+                    return@setOnRatingChangeListener
+                }
                 currentRating = rating
             }
         }
 
         btnVote.setOnClickListener {
             if (currentRating > 0) {
-                // Save that user has rated
-                sharedPreferences.edit().putBoolean("has_rated", true).apply()
+                // Save that user has rated (same key as MoreActivity)
+                sharedPreferences.edit().putBoolean(KEY_RATED, true).apply()
 
-                if (currentRating >= 4) {
-                    // Good rating - redirect to Play Store
-                    openPlayStore()
-                } else {
-                    Toast.makeText(this, getString(R.string.thank_you_feedback), Toast.LENGTH_SHORT).show()
-                }
                 dialog.dismiss()
                 finishAffinity()
             } else {
@@ -173,15 +218,4 @@ class HomeActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    private fun openPlayStore() {
-        try {
-            val uri = Uri.parse("market://details?id=$packageName")
-            val intent = Intent(Intent.ACTION_VIEW, uri)
-            startActivity(intent)
-        } catch (e: Exception) {
-            val uri = Uri.parse("https://play.google.com/store/apps/details?id=$packageName")
-            val intent = Intent(Intent.ACTION_VIEW, uri)
-            startActivity(intent)
-        }
-    }
 }
