@@ -67,7 +67,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:fontFamily="@font/roboto"
-        android:text="Call coming..."
+        android:text="@string/call_coming"
         android:textColor="#CCCCCC"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -97,7 +97,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:fontFamily="@font/roboto"
-            android:text="Decline"
+            android:text="@string/decline"
             android:textColor="@android:color/white"
             android:textSize="14sp" />
     </LinearLayout>
@@ -125,7 +125,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:fontFamily="@font/roboto"
-            android:text="Accept"
+            android:text="@string/accept"
             android:textColor="@android:color/white"
             android:textSize="14sp" />
     </LinearLayout>

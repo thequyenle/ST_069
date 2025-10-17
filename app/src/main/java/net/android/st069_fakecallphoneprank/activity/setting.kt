@@ -14,6 +14,11 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
 import android.provider.Settings
+import android.view.View
+import android.view.Window
+import android.view.WindowInsets
+import android.view.WindowInsetsController
+import android.view.WindowManager
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -50,7 +55,7 @@ class setting : AppCompatActivity() {
     private val RINGTONE_REQUEST_CODE = 101
     private val CAMERA_PERMISSION_REQUEST_CODE = 102
     private val NOTIFICATION_PERMISSION_REQUEST_CODE = 103
-    
+
     // For ringtone selection
     private val ringtonePickerLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -71,14 +76,15 @@ class setting : AppCompatActivity() {
                     sharedPreferences.edit().putString("ringtone_uri", uri.toString()).apply()
                     sharedPreferences.edit().putString("ringtone_name", title.toString()).apply()
                 } ?: run {
-                    // If uri is null, user might have selected default or silent
-                    Toast.makeText(this, "Ringtone updated", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.ringtone_updated), Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                Toast.makeText(this, "Failed to set ringtone", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.failed_to_set_ringtone), Toast.LENGTH_SHORT).show()
             }
         }
+        // Reapply immersive mode after returning from ringtone picker
+        hideSystemUI()
     }
 
     override fun attachBaseContext(newBase: Context) {
@@ -87,34 +93,84 @@ class setting : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         enableEdgeToEdge()
         setContentView(R.layout.activity_setting)
-        
+
+        // Set up full screen after setting content view
+        setupFullScreen()
+
         // Initialize shared preferences
         sharedPreferences = getSharedPreferences("FakeCallSettings", Context.MODE_PRIVATE)
-        
+
         // Initialize views
         initViews()
-        
+
         // Load saved settings
         loadSettings()
-        
+
         // Setup click listeners
         setupClickListeners()
-        
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
     }
-    
+
+    private fun setupFullScreen() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            // Android 11+ (API 30+)
+            window.setDecorFitsSystemWindows(false)
+            window.insetsController?.let { controller ->
+                controller.hide(WindowInsets.Type.navigationBars())
+                controller.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            }
+        } else {
+            // Android 9-10 (API 28-29)
+            @Suppress("DEPRECATION")
+            window.decorView.systemUiVisibility = (
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                    )
+        }
+
+        // Keep screen on (optional)
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+    }
+
+    private fun hideSystemUI() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.insetsController?.let { controller ->
+                controller.hide(WindowInsets.Type.navigationBars())
+                controller.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            }
+        } else {
+            @Suppress("DEPRECATION")
+            window.decorView.systemUiVisibility = (
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                    )
+        }
+    }
+
     override fun onResume() {
         super.onResume()
-        val root = findViewById<ConstraintLayout>(R.id.main)
-        ImmersiveUtils.applyEdgeToEdgeHideNav(this, root, padTopForStatusBar = true)
+        hideSystemUI()
     }
-    
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (hasFocus) {
+            hideSystemUI()
+        }
+    }
+
     private fun initViews() {
         btnBack = findViewById(R.id.btnBack)
         phoneCallRingTimeLayout = findViewById(R.id.phoneCallRingTime)
@@ -122,93 +178,93 @@ class setting : AppCompatActivity() {
         vibrationLayout = findViewById(R.id.vibration)
         soundLayout = findViewById(R.id.sound)
         flashLayout = findViewById(R.id.flash)
-        
+
         // Find TextViews for displaying current settings
         phoneCallRingTimeText = phoneCallRingTimeLayout.findViewById(R.id.tvPhoneCallRingTime)
         ringToneText = ringToneLayout.findViewById(R.id.tvRingtoneName)
-        
+
         // Find switches
         vibrationSwitch = vibrationLayout.findViewById(R.id.ivVibrationSwitch)
         soundSwitch = soundLayout.findViewById(R.id.ivSoundSwitch)
         flashSwitch = flashLayout.findViewById(R.id.ivFlashSwitch)
     }
-    
+
     private fun loadSettings() {
         // Load ring time
         val ringTime = sharedPreferences.getInt("ring_time", 15)
         phoneCallRingTimeText.text = "${ringTime}s"
-        
+
         // Load ringtone
         val ringtoneName = sharedPreferences.getString("ringtone_name", "MiRemix.ogg")
         ringToneText.text = ringtoneName
-        
+
         // Load switch states
         val vibrationEnabled = sharedPreferences.getBoolean("vibration_enabled", true)
         val soundEnabled = sharedPreferences.getBoolean("sound_enabled", true)
         val flashEnabled = sharedPreferences.getBoolean("flash_enabled", false)
-        
+
         // Set switch images based on states
         vibrationSwitch.setImageResource(
-            if (vibrationEnabled) R.drawable.ic_switch_setting_on 
+            if (vibrationEnabled) R.drawable.ic_switch_setting_on
             else R.drawable.ic_switch_setting_off
         )
-        
+
         soundSwitch.setImageResource(
-            if (soundEnabled) R.drawable.ic_switch_setting_on 
+            if (soundEnabled) R.drawable.ic_switch_setting_on
             else R.drawable.ic_switch_setting_off
         )
-        
+
         flashSwitch.setImageResource(
-            if (flashEnabled) R.drawable.ic_switch_setting_on 
+            if (flashEnabled) R.drawable.ic_switch_setting_on
             else R.drawable.ic_switch_setting_off
         )
     }
-    
+
     private fun setupClickListeners() {
         // Back button
         btnBack.setOnClickListener {
             finish()
         }
-        
+
         // Phone call ring time
         phoneCallRingTimeLayout.setOnClickListener {
             showRingTimeDialog()
         }
-        
+
         // Ringtone selection
         ringToneLayout.setOnClickListener {
             openRingtonePicker()
         }
-        
+
         // Vibration toggle
         vibrationLayout.setOnClickListener {
             val currentState = sharedPreferences.getBoolean("vibration_enabled", true)
             val newState = !currentState
             sharedPreferences.edit().putBoolean("vibration_enabled", newState).apply()
-            
+
             vibrationSwitch.setImageResource(
-                if (newState) R.drawable.ic_switch_setting_on 
+                if (newState) R.drawable.ic_switch_setting_on
                 else R.drawable.ic_switch_setting_off
             )
-            
+
             // Provide haptic feedback when enabling vibration
             if (newState) {
                 triggerVibration()
             }
         }
-        
+
         // Sound toggle
         soundLayout.setOnClickListener {
             val currentState = sharedPreferences.getBoolean("sound_enabled", true)
             val newState = !currentState
             sharedPreferences.edit().putBoolean("sound_enabled", newState).apply()
-            
+
             soundSwitch.setImageResource(
-                if (newState) R.drawable.ic_switch_setting_on 
+                if (newState) R.drawable.ic_switch_setting_on
                 else R.drawable.ic_switch_setting_off
             )
         }
-        
+
         // Flash toggle
         flashLayout.setOnClickListener {
             val currentState = sharedPreferences.getBoolean("flash_enabled", false)
@@ -216,7 +272,8 @@ class setting : AppCompatActivity() {
 
             // Check camera flash availability
             if (newState && !packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)) {
-                Toast.makeText(this, "Flash is not available on this device", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this,
+                    getString(R.string.flash_is_not_available_on_this_device), Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -242,7 +299,7 @@ class setting : AppCompatActivity() {
             )
         }
     }
-    
+
     private fun showRingTimeDialog() {
         val options = arrayOf("5s", "10s", "15s", "20s", "30s")
         val currentRingTime = sharedPreferences.getInt("ring_time", 15)
@@ -254,9 +311,9 @@ class setting : AppCompatActivity() {
             30 -> 4
             else -> 2 // Default to 15s
         }
-        
-        AlertDialog.Builder(this)
-            .setTitle("Select Ring Time")
+
+        val dialog = AlertDialog.Builder(this)
+            .setTitle(getString(R.string.select_ring_time))
             .setSingleChoiceItems(options, currentIndex) { dialog, which ->
                 val selectedTime = when (which) {
                     0 -> 5
@@ -266,22 +323,58 @@ class setting : AppCompatActivity() {
                     4 -> 30
                     else -> 15
                 }
-                
+
                 sharedPreferences.edit().putInt("ring_time", selectedTime).apply()
                 phoneCallRingTimeText.text = "${selectedTime}s"
                 dialog.dismiss()
             }
-            .setNegativeButton("Cancel") { dialog, _ ->
+            .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                 dialog.dismiss()
             }
-            .show()
+            .create()
+
+        // Show dialog and hide navigation bar
+        dialog.show()
+        dialog.window?.let { window ->
+            hideNavigationBarForDialog(window)
+        }
+
+        // Set listener to reapply immersive mode when dialog is dismissed
+        dialog.setOnDismissListener {
+            hideSystemUI()
+        }
     }
-    
+
+    private fun hideNavigationBarForDialog(window: Window) {
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                // Android 11+ (API 30+)
+                window.setDecorFitsSystemWindows(false)
+                window.insetsController?.let { controller ->
+                    controller.hide(WindowInsets.Type.navigationBars())
+                    controller.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                }
+            } else {
+                // Android 9-10 (API 28-29)
+                @Suppress("DEPRECATION")
+                window.decorView.systemUiVisibility = (
+                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                        )
+            }
+        } catch (e: Exception) {
+            android.util.Log.w("SettingActivity", "Could not hide navigation bar: ${e.message}")
+        }
+    }
+
     private fun openRingtonePicker() {
         try {
             val intent = Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
             intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_RINGTONE)
-            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "Select Ringtone")
+            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE,
+                getString(R.string.select_ringtone))
             intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true)
             intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, false)
 
@@ -301,7 +394,7 @@ class setting : AppCompatActivity() {
             Toast.makeText(this, "Unable to open ringtone picker", Toast.LENGTH_SHORT).show()
         }
     }
-    
+
     private fun triggerVibration() {
         try {
             val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -355,5 +448,8 @@ class setting : AppCompatActivity() {
                 }
             }
         }
+
+        // Reapply immersive mode after permission dialog
+        hideSystemUI()
     }
 }

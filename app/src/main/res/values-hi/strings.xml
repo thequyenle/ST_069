@@ -112,4 +112,13 @@
     <string name="create_a_name">एक नाम बनाएं</string>
     <string name="kid">बच्चा</string>
     <string name="general">सामान्य</string>
+    <string name="decline">अस्वीकार करें</string>
+    <string name="accept">स्वीकार करें</string>
+    <string name="call_coming">कॉल आ रही है...</string>
+    <string name="history">इतिहास</string>
+    <string name="select_ring_time">Select Ring Time</string>
+    <string name="select_ringtone">Select Ringtone</string>
+    <string name="flash_is_not_available_on_this_device">Flash is not available on this device</string>
+    <string name="failed_to_set_ringtone">Failed to set ringtone</string>
+    <string name="ringtone_updated">Ringtone updated</string>
 </resources>

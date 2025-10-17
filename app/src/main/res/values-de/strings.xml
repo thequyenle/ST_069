@@ -112,4 +112,13 @@
     <string name="create_a_name">Erstellen Sie einen Namen</string>
     <string name="kid">Kind</string>
     <string name="general">Allgemein</string>
+    <string name="decline">Ablehnen</string>
+    <string name="accept">Annehmen</string>
+    <string name="call_coming">Anruf kommt...</string>
+    <string name="history">Verlauf</string>
+    <string name="select_ring_time">Select Ring Time</string>
+    <string name="select_ringtone">Select Ringtone</string>
+    <string name="flash_is_not_available_on_this_device">Flash is not available on this device</string>
+    <string name="failed_to_set_ringtone">Failed to set ringtone</string>
+    <string name="ringtone_updated">Ringtone updated</string>
 </resources>
