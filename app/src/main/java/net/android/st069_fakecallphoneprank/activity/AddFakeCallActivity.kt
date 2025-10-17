@@ -190,16 +190,16 @@ class AddFakeCallActivity : AppCompatActivity() {
         binding.tvPhone.text = getString(R.string.phone_number)
         binding.tvPhone.setTextColor(Color.parseColor("#A0A0A0"))
 
-        binding.tvVoice.text = "Choose Voice"
+        binding.tvVoice.text = getString(R.string.choose_voice_default)
         binding.tvVoice.setTextColor(Color.parseColor("#2F2F2F"))
 
-        binding.tvDevice.text = "Select Device"
+        binding.tvDevice.text = getString(R.string.select_device_default)
         binding.tvDevice.setTextColor(Color.parseColor("#2F2F2F"))
 
-        binding.tvSetTime.text = "Set Time"
+        binding.tvSetTime.text = getString(R.string.set_time_default)
         binding.tvSetTime.setTextColor(Color.parseColor("#2F2F2F"))
 
-        binding.tvTalkTime.text = "Talk Time"
+        binding.tvTalkTime.text = getString(R.string.talk_time_default)
         binding.tvTalkTime.setTextColor(Color.parseColor("#2F2F2F"))
 
         // Reset buttons to disabled state
@@ -403,7 +403,7 @@ class AddFakeCallActivity : AppCompatActivity() {
 
     private fun updateDeviceText() {
         if (selectedDevice == null) {
-            binding.tvDevice.text = "Select Device"
+            binding.tvDevice.text = getString(R.string.select_device_default)
             binding.tvDevice.setTextColor(Color.parseColor("#2F2F2F"))
             return
         }
@@ -413,16 +413,17 @@ class AddFakeCallActivity : AppCompatActivity() {
 
     private fun updateVoiceText() {
         if (selectedVoice == null) {
-            binding.tvVoice.text = "Choose Voice"
+            binding.tvVoice.text = getString(R.string.choose_voice_default)
             binding.tvVoice.setTextColor(Color.parseColor("#2F2F2F"))
             return
         }
 
-        val text = "Voice: $selectedVoice"
+        val voiceLabel = getString(R.string.voice_name)
+        val text = "$voiceLabel $selectedVoice"
         val spannableString = SpannableString(text)
         spannableString.setSpan(
             ForegroundColorSpan(Color.parseColor("#0B89FF")),
-            0, "Voice:".length,
+            0, voiceLabel.length,
             Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
         )
         binding.tvVoice.text = spannableString
@@ -430,12 +431,12 @@ class AddFakeCallActivity : AppCompatActivity() {
 
     private fun updateSetTimeText() {
         if (selectedSetTime < 0) {
-            binding.tvSetTime.text = "Set Time"
+            binding.tvSetTime.text = getString(R.string.set_time_default)
             binding.tvSetTime.setTextColor(Color.parseColor("#2F2F2F"))
             return
         }
         val timeText = when (selectedSetTime) {
-            0 -> "Now"
+            0 -> getString(R.string.now)
             15 -> "15s"
             30 -> "30s"
             60 -> "1m"
@@ -449,7 +450,7 @@ class AddFakeCallActivity : AppCompatActivity() {
 
     private fun updateTalkTimeText() {
         if (selectedTalkTime <= 0) {
-            binding.tvTalkTime.text = "Talk Time"
+            binding.tvTalkTime.text = getString(R.string.talk_time_default)
             binding.tvTalkTime.setTextColor(Color.parseColor("#2F2F2F"))
             return
         }
