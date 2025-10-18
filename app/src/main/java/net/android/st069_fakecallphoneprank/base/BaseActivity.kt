@@ -1,5 +1,6 @@
 package net.android.st069_fakecallphoneprank.base
 
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -7,12 +8,17 @@ import android.view.WindowInsets
 import android.view.WindowInsetsController
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
+import net.android.st069_fakecallphoneprank.utils.LocaleHelper
 
 /**
  * Base Activity that provides edge-to-edge fullscreen with hidden navigation bar
  * All activities should extend this class for consistent UI behavior
  */
 abstract class BaseActivity : AppCompatActivity() {
+
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(LocaleHelper.setLocale(newBase))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
