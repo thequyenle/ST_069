@@ -3,7 +3,11 @@
     <style name="Base.Theme.ST069_FakeCallPhonePrank" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
+
+        <!-- Quan trọng: icon status bar thành màu đen -->
+        <item name="android:windowLightStatusBar">true</item>
     </style>
+
 
     <style name="Theme.ST069_FakeCallPhonePrank" parent="Base.Theme.ST069_FakeCallPhonePrank" />
 </resources>

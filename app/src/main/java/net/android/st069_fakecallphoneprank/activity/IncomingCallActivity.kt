@@ -29,6 +29,7 @@ import android.os.VibratorManager
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.view.WindowInsetsController
 import android.view.WindowManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.GlideException
@@ -161,6 +162,10 @@ class IncomingCallActivity : BaseActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        setStatusBarAppearance()
+    }
     private fun preloadAvatarBitmaps() {
         Log.d("IncomingCallActivity", "preloadAvatarBitmaps called. Avatar path: '$avatar'")
 
@@ -765,14 +770,11 @@ class IncomingCallActivity : BaseActivity() {
      * Override to set transparent status bar for call screen
      */
     override fun setStatusBarColor() {
-        try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                window.statusBarColor = android.graphics.Color.TRANSPARENT
-            }
-        } catch (e: Exception) {
-            android.util.Log.w("IncomingCallActivity", "Could not set status bar color: ${e.message}")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.statusBarColor = Color.TRANSPARENT
         }
     }
+
 
     /**
      * Override to set dark status bar appearance (light icons) for call screen
@@ -780,16 +782,21 @@ class IncomingCallActivity : BaseActivity() {
     override fun setStatusBarAppearance() {
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                // Android 11+ (API 30+) - Clear light status bar flag to show light icons
+                // Android 11+ (API 30+)
+                // Xóa flag light (đen) và bật icon trắng
                 window.insetsController?.setSystemBarsAppearance(
-                    0,
-                    android.view.WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+                    0,  // clear all
+                    WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
                 )
+            } else {
+                @Suppress("DEPRECATION")
+                window.decorView.systemUiVisibility = 0 // clear LIGHT_STATUS_BAR flag
             }
         } catch (e: Exception) {
-            android.util.Log.w("IncomingCallActivity", "Could not set status bar appearance: ${e.message}")
+            Log.w("IncomingCallActivity", "Could not set status bar appearance: ${e.message}")
         }
     }
+
 
     /**
      * Override to return 0 for legacy API (no light status bar flag = light icons)
