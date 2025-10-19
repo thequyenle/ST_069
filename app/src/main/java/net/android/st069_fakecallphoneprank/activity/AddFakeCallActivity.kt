@@ -349,10 +349,23 @@ class AddFakeCallActivity : BaseActivity() {
             60 -> "1m"
             300 -> "5m"
             600 -> "10m"
-            else -> "${selectedSetTime}s"
+            else -> formatSetTime(selectedSetTime)
         }
         binding.tvSetTime.text = timeText
         binding.tvSetTime.setTextColor(Color.BLACK)
+    }
+
+    private fun formatSetTime(seconds: Int): String {
+        val hours = seconds / 3600
+        val minutes = (seconds % 3600) / 60
+        val secs = seconds % 60
+
+        return when {
+            hours > 0 && minutes > 0 -> "${hours}h ${minutes}m"
+            hours > 0 -> "${hours}h"
+            minutes > 0 -> "${minutes}m"
+            else -> "${secs}s"
+        }
     }
 
     private fun updateTalkTimeText() {
@@ -367,7 +380,7 @@ class AddFakeCallActivity : BaseActivity() {
             60 -> "1m"
             300 -> "5m"
             600 -> "10m"
-            else -> "${selectedTalkTime}s"
+            else -> formatSetTime(selectedTalkTime)
         }
         binding.tvTalkTime.text = timeText
         binding.tvTalkTime.setTextColor(Color.BLACK)

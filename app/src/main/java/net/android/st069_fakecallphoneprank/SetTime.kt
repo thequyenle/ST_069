@@ -1,7 +1,9 @@
 package net.android.st069_fakecallphoneprank
 
 import android.app.Dialog
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -179,6 +181,34 @@ class SetTime : Fragment() {
         binding.iv10m.setImageResource(R.drawable.bg_disable)
         binding.tv10m.setTextColor(resources.getColor(R.color.text_secondary, null))
 
+        // Reset Add Time to default state
+        binding.ivAddTime.visibility = View.VISIBLE
+        binding.ivAddTime.setImageResource(R.drawable.ic_addtime)
+        binding.layoutAddTime.background = null
+        binding.layoutAddTime.elevation = 0f
+        binding.layoutAddTime.translationX = 0f
+        binding.layoutAddTime.translationY = 0f
+
+        // Reset layout size to wrap_content and marginStart to 18dp
+        val layoutParams = binding.layoutAddTime.layoutParams as androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
+        layoutParams.width = ViewGroup.LayoutParams.WRAP_CONTENT
+        layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+        layoutParams.marginStart = (18 * resources.displayMetrics.density).toInt()
+        binding.layoutAddTime.layoutParams = layoutParams
+
+        // Reset text position to original
+        binding.tvAddTime.gravity = android.view.Gravity.START or android.view.Gravity.CENTER_VERTICAL
+        val textLayoutParams = binding.tvAddTime.layoutParams as androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
+        textLayoutParams.startToStart = binding.ivAddTime.id
+        textLayoutParams.endToEnd = androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.UNSET
+        textLayoutParams.topToTop = binding.ivAddTime.id
+        textLayoutParams.bottomToBottom = binding.ivAddTime.id
+        textLayoutParams.marginStart = (20 * resources.displayMetrics.density).toInt()
+        binding.tvAddTime.layoutParams = textLayoutParams
+
+        binding.tvAddTime.text = getString(R.string.add_time)
+        binding.tvAddTime.setTextColor(android.graphics.Color.parseColor("#2F2F2F"))
+
         // Set selected state for predefined options
         when (seconds) {
             0 -> {
@@ -205,7 +235,59 @@ class SetTime : Fragment() {
                 binding.iv10m.setImageResource(R.drawable.bg_enable)
                 binding.tv10m.setTextColor(resources.getColor(android.R.color.white, null))
             }
-            // For custom times, don't highlight any predefined option
+            else -> {
+                // For custom times, highlight Add Time button
+                if (seconds > 0) {
+                    // Create rounded drawable with blue background and shadow
+                    val drawable = GradientDrawable().apply {
+                        shape = GradientDrawable.RECTANGLE
+                        setColor(android.graphics.Color.parseColor("#0B89FF"))
+                        cornerRadius = 8f * resources.displayMetrics.density // 8dp corner radius
+                    }
+
+                    // Hide the image and set background on the layout container
+                    binding.ivAddTime.visibility = View.GONE
+                    binding.layoutAddTime.background = drawable
+
+                    // Set size to 133dp x 44dp and marginStart to 22dp
+                    val layoutParams = binding.layoutAddTime.layoutParams as androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
+                    layoutParams.width = (133 * resources.displayMetrics.density).toInt()
+                    layoutParams.height = (44 * resources.displayMetrics.density).toInt()
+                    layoutParams.marginStart = (22 * resources.displayMetrics.density).toInt()
+                    binding.layoutAddTime.layoutParams = layoutParams
+
+                    // Add shadow (elevation and translation for shadow effect)
+                    binding.layoutAddTime.elevation = 6f * resources.displayMetrics.density
+                    binding.layoutAddTime.translationX = -1f * resources.displayMetrics.density
+                    binding.layoutAddTime.translationY = 1f * resources.displayMetrics.density
+
+                    // Center the text
+                    binding.tvAddTime.gravity = android.view.Gravity.CENTER
+                    val textLayoutParams = binding.tvAddTime.layoutParams as androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
+                    textLayoutParams.startToStart = binding.layoutAddTime.id
+                    textLayoutParams.endToEnd = binding.layoutAddTime.id
+                    textLayoutParams.topToTop = binding.layoutAddTime.id
+                    textLayoutParams.bottomToBottom = binding.layoutAddTime.id
+                    textLayoutParams.marginStart = 0
+                    binding.tvAddTime.layoutParams = textLayoutParams
+
+                    binding.tvAddTime.setTextColor(android.graphics.Color.parseColor("#FFFFFF"))
+                    binding.tvAddTime.text = formatTime(seconds)
+                }
+            }
+        }
+    }
+
+    private fun formatTime(seconds: Int): String {
+        val hours = seconds / 3600
+        val minutes = (seconds % 3600) / 60
+        val secs = seconds % 60
+
+        return when {
+            hours > 0 && minutes > 0 -> "${hours}h ${minutes}m"
+            hours > 0 -> "${hours}h"
+            minutes > 0 -> "${minutes}m"
+            else -> "${secs}s"
         }
     }
 
