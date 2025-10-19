@@ -22,10 +22,11 @@
             android:layout_width="11dp"
             android:layout_height="20dp"
             android:layout_marginStart="23dp"
-            android:src="@drawable/ic_back"
             android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_back"
             app:layout_constraintBottom_toBottomOf="@id/tvTitle"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvTitle"
             app:tint="#2F2F2F" />
 
         <!-- Title -->

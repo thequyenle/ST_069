@@ -6,6 +6,19 @@
     android:layout_height="309dp"
     android:background="@drawable/bg_recording_area_start">
 
+    <TextView
+        android:id="@+id/tvTapToRecord"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="tap the button to record audio"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="12dp"
+        android:textColor="#2F2F2F"
+        android:textSize="16sp"
+        android:fontFamily="@font/roboto_regular"
+        />
     <!-- Recording Timer (Initially hidden) -->
     <TextView
         android:id="@+id/tvRecordingTimer"
@@ -17,8 +30,7 @@
         android:textStyle="bold"
         android:textColor="#000000"
         android:visibility="gone"
-        android:layout_marginTop="16dp"
-        app:layout_constraintBottom_toTopOf="@id/btnStopRecord"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

@@ -1,58 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
+    android:id="@+id/cardDevice"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="4dp"
-    app:strokeWidth="2dp"
-    app:strokeColor="#E0E0E0"
-    android:backgroundTint="#FFFFFF">
+    >
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+
+    <ImageView
+        android:id="@+id/ivDevicePreview"
+        android:layout_width="156dp"
+        android:layout_height="180dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/pixel5"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+    <!-- Phone Preview Image -->
+    <TextView
+        android:id="@+id/tvDeviceName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#FFFFFF"
-        android:padding="8dp">
+        android:text="Pixel 5"
+        android:textSize="13sp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="12dp"
+        android:fontFamily="@font/roboto_extra_bold"
+        android:textColor="#FFFFFFFF"
+        app:layout_constraintTop_toTopOf="@id/ivDevicePreview"
+        app:layout_constraintStart_toStartOf="@id/ivDevicePreview"
+        />
+    <!-- Selection Checkbox -->
+    <ImageView
+        android:id="@+id/ivCheckbox"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_un_selected_devices"
+        android:scaleType="fitXY"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/ivDevicePreview"
+        android:layout_margin="16dp" />
+    <ImageView
+        android:id="@+id/watch"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_watch"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="4dp"/>
 
-
-        <ImageView
-            android:id="@+id/ivDevicePreview"
-            android:layout_width="156dp"
-            android:layout_height="180dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/devices_pixel5"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="8dp" />
-
-        <!-- Phone Preview Image -->
-        <TextView
-            android:id="@+id/tvDeviceName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Pixel 5"
-            android:textSize="13sp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="12dp"
-            android:fontFamily="@font/roboto_extra_bold"
-            android:textColor="#FFFFFFFF"
-            app:layout_constraintTop_toTopOf="@id/ivDevicePreview"
-            app:layout_constraintStart_toStartOf="@id/ivDevicePreview"
-            />
-        <!-- Selection Checkbox -->
-        <ImageView
-            android:id="@+id/ivCheckbox"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_un_selected_devices"
-            android:scaleType="fitXY"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/ivDevicePreview"
-            android:layout_margin="16dp" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-</com.google.android.material.card.MaterialCardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

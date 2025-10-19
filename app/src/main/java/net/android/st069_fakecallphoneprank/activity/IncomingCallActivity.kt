@@ -73,6 +73,7 @@ class IncomingCallActivity : BaseActivity() {
     private var voiceType: String? = null
     private var deviceType: String? = null
     private var talkTime: Int = 15
+    private var isPreviewMode: Boolean = false
 
     // Pre-loaded bitmaps (loaded before layout inflation)
     private var preloadedAvatarBitmap: Bitmap? = null
@@ -113,12 +114,13 @@ class IncomingCallActivity : BaseActivity() {
         }
 
         // Get data from intent
+        isPreviewMode = intent.getBooleanExtra("PREVIEW_MODE", false)
         fakeCallId = intent.getLongExtra("FAKE_CALL_ID", -1)
-        name = intent.getStringExtra("NAME") ?: "Unknown"
-        phoneNumber = intent.getStringExtra("PHONE_NUMBER") ?: ""
+        name = intent.getStringExtra("CALLER_NAME") ?: intent.getStringExtra("NAME") ?: "Unknown"
+        phoneNumber = intent.getStringExtra("CALLER_PHONE") ?: intent.getStringExtra("PHONE_NUMBER") ?: ""
         avatar = intent.getStringExtra("AVATAR")
         voiceType = intent.getStringExtra("VOICE_TYPE")
-        deviceType = intent.getStringExtra("DEVICE_TYPE")
+        deviceType = intent.getStringExtra("DEVICE_NAME") ?: intent.getStringExtra("DEVICE_TYPE")
         talkTime = intent.getIntExtra("TALK_TIME", 15)
 
         // DEBUG: Log the device type
@@ -137,10 +139,14 @@ class IncomingCallActivity : BaseActivity() {
 
         setupUI()
         setupInteractions()
-        startRingtone()
-        startVibration()
-        startFlash()
-        scheduleAutoEnd()
+
+        // Only start effects if not in preview mode
+        if (!isPreviewMode) {
+            startRingtone()
+            startVibration()
+            startFlash()
+            scheduleAutoEnd()
+        }
     }
 
     private fun loadSettings() {
@@ -153,14 +159,20 @@ class IncomingCallActivity : BaseActivity() {
     private fun inflateLayoutBasedOnDevice() {
         Log.d("IncomingCallActivity", "Checking device type: '$deviceType'")
 
+        // REVERSED LOGIC: Oppo device -> Pixel 5 layout, Pixel 5 device -> Oppo layout
         when (deviceType) {
             "Oppo" -> {
-                Log.d("IncomingCallActivity", "Loading OPPO layout")
+                Log.d("IncomingCallActivity", "Loading PIXEL 5 layout (reversed for Oppo)")
+                pixel5Binding = ActivityIncomingCallPixel5Binding.inflate(layoutInflater)
+                setContentView(pixel5Binding!!.root)
+            }
+            "Pixel 5" -> {
+                Log.d("IncomingCallActivity", "Loading OPPO layout (reversed for Pixel 5)")
                 oppoBinding = ActivityIncomingCallOppoBinding.inflate(layoutInflater)
                 setContentView(oppoBinding!!.root)
             }
             else -> {
-                // Default to Pixel 5 layout for all cases except explicit "Oppo"
+                // Default to Pixel 5 layout
                 Log.d("IncomingCallActivity", "Loading PIXEL 5 layout as default. Device type was: '$deviceType'")
                 pixel5Binding = ActivityIncomingCallPixel5Binding.inflate(layoutInflater)
                 setContentView(pixel5Binding!!.root)
@@ -293,16 +305,44 @@ class IncomingCallActivity : BaseActivity() {
     }
 
     private fun setupInteractions() {
+        if (isPreviewMode) {
+            // In preview mode, only setup back button
+            setupPreviewModeButtons()
+        } else {
+            // Normal mode - setup all interactions
+            when {
+                oppoBinding != null -> {
+                    // Setup Oppo swipe gesture
+                    setupOppoSwipeGesture()
+                    setupOppoButtons()
+                }
+
+                pixel5Binding != null -> {
+                    // Setup Pixel 5 button clicks
+                    setupPixel5Buttons()
+                }
+            }
+        }
+    }
+
+    private fun setupPreviewModeButtons() {
+        // Hide accept/decline buttons and only show back button
         when {
             oppoBinding != null -> {
-                // Setup Oppo swipe gesture
-                setupOppoSwipeGesture()
-                setupOppoButtons()
+                oppoBinding?.imgCallOppo?.visibility = View.GONE
+                oppoBinding?.layoutCallActions?.visibility = View.GONE
+                oppoBinding?.layoutMessage?.visibility = View.GONE
+                // Back button already exists in Oppo layout
             }
 
             pixel5Binding != null -> {
-                // Setup Pixel 5 button clicks
-                setupPixel5Buttons()
+                pixel5Binding?.btnAccept?.visibility = View.GONE
+                pixel5Binding?.btnDecline?.visibility = View.GONE
+
+                // Back button to close preview
+                pixel5Binding?.btnBack?.setOnClickListener {
+                    finish()
+                }
             }
         }
     }

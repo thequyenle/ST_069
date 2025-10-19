@@ -46,10 +46,17 @@ class SelectDeviceActivity : BaseActivity() {
         val devices = getDeviceList(currentDevice)
 
         // Setup adapter
-        deviceAdapter = DeviceAdapter(devices.toMutableList()) { device ->
-            selectedDevice = device
-            updateButtonState()
-        }
+        deviceAdapter = DeviceAdapter(
+            devices.toMutableList(),
+            onDeviceClick = { device ->
+                selectedDevice = device
+                updateButtonState()
+            },
+            onWatchClick = { device ->
+                // Preview device - open IncomingCallActivity in preview mode
+                previewDevice(device)
+            }
+        )
 
         // Setup RecyclerView with 2 columns grid
         binding.rvDevices.apply {
@@ -63,18 +70,47 @@ class SelectDeviceActivity : BaseActivity() {
         updateButtonState()
     }
 
+    private fun previewDevice(device: Device) {
+        // Show device watch preview dialog
+        showWatchPreviewDialog(device)
+    }
+
+    private fun showWatchPreviewDialog(device: Device) {
+        // Determine watch image based on device type
+        val watchImage = when (device.name) {
+            "Oppo" -> R.drawable.watch_oppo
+            "Pixel 5" -> R.drawable.watch_pixel5
+            else -> R.drawable.watch_oppo
+        }
+
+        // Create fullscreen dialog to show watch image
+        val dialog = android.app.Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen)
+        dialog.setContentView(R.layout.dialog_watch_preview)
+
+        val ivWatchPreview = dialog.findViewById<android.widget.ImageView>(R.id.ivWatchPreview)
+        val btnBack = dialog.findViewById<android.widget.ImageButton>(R.id.btnBack)
+
+        ivWatchPreview.setImageResource(watchImage)
+
+        btnBack.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
     private fun getDeviceList(currentDevice: String?): List<Device> {
         return listOf(
             Device(
                 id = 1,
                 name = "Oppo",
-                iconRes = R.drawable.ic_oppo_select_device,
+                iconRes = R.drawable.oppo,
                 isSelected = currentDevice == "Oppo"
             ),
             Device(
                 id = 2,
                 name = "Pixel 5",
-                iconRes = R.drawable.ic_pixel5_select_device,
+                iconRes = R.drawable.pixel5,
                 isSelected = currentDevice == "Pixel 5"
             )
         )

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#262020">
+    android:background="@drawable/bg_pixel">
 
     <!-- Caller Name (replaces "Private Number") -->
     <TextView

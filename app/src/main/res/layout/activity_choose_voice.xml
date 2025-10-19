@@ -21,10 +21,11 @@
             android:layout_width="11dp"
             android:layout_height="20dp"
             android:layout_marginStart="23dp"
-            android:src="@drawable/ic_back"
             android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_back"
             app:layout_constraintBottom_toBottomOf="@id/tvTitle"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvTitle"
             app:tint="#2F2F2F" />
 
         <!-- Title -->
@@ -48,14 +49,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="19dp"
-            android:text="@string/done"
-            android:textSize="16sp"
-            android:fontFamily="@font/roboto_medium"
-            android:textColor="#0B89FF"
             android:background="?attr/selectableItemBackground"
+            android:fontFamily="@font/roboto_medium"
+            android:text="@string/done"
+            android:textColor="#636363"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="@id/tvTitle"
             app:layout_constraintEnd_toEndOf="parent"
-             />
+            app:layout_constraintTop_toTopOf="@+id/tvTitle" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -67,7 +68,7 @@
         android:orientation="vertical"
         android:gravity="center"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="19dp"
+        android:layout_marginTop="258dp"
         android:background="@android:color/transparent"
         app:layout_constraintTop_toBottomOf="@id/layoutHeader"
         app:layout_constraintStart_toStartOf="parent"

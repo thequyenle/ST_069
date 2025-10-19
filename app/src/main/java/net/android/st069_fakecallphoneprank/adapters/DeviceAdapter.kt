@@ -1,19 +1,18 @@
 package net.android.st069_fakecallphoneprank.adapters
 
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.card.MaterialCardView
 import net.android.st069_fakecallphoneprank.R
 import net.android.st069_fakecallphoneprank.data.model.Device
 
 class DeviceAdapter(
     private var devices: MutableList<Device>,
-    private val onDeviceClick: (Device) -> Unit
+    private val onDeviceClick: (Device) -> Unit,
+    private val onWatchClick: (Device) -> Unit
 ) : RecyclerView.Adapter<DeviceAdapter.DeviceViewHolder>() {
 
     private var selectedPosition = -1
@@ -53,11 +52,11 @@ class DeviceAdapter(
 
     inner class DeviceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        // Cast to MaterialCardView instead of CardView
-        private val cardView: MaterialCardView = itemView as MaterialCardView
+        private val cardDevice: View = itemView.findViewById(R.id.cardDevice)
         private val ivDevicePreview: ImageView = itemView.findViewById(R.id.ivDevicePreview)
         private val tvDeviceName: TextView = itemView.findViewById(R.id.tvDeviceName)
         private val ivCheckbox: ImageView = itemView.findViewById(R.id.ivCheckbox)
+        private val ivWatch: ImageView = itemView.findViewById(R.id.watch)
 
         fun bind(device: Device, isSelected: Boolean) {
             // Set device preview image
@@ -68,31 +67,32 @@ class DeviceAdapter(
 
             // Update selection state
             if (isSelected) {
-                // Selected state
-                cardView.setCardBackgroundColor(Color.parseColor("#E3F2FD"))
-                cardView.strokeColor = Color.parseColor("#2196F3")
-                cardView.strokeWidth = 8
+                // Selected state - change background drawable
+                cardDevice.setBackgroundResource(R.drawable.bg_device_item_selected)
 
                 // Show selected checkbox
                 ivCheckbox.setImageResource(R.drawable.ic_selected_devices)
 
             } else {
-                // Unselected state
-                cardView.setCardBackgroundColor(Color.WHITE)
-                cardView.strokeColor = Color.parseColor("#E0E0E0")
-                cardView.strokeWidth = 4
+                // Unselected state - change background drawable
+                cardDevice.setBackgroundResource(R.drawable.bg_device_item)
 
                 // Show unselected checkbox
                 ivCheckbox.setImageResource(R.drawable.ic_un_selected_devices)
             }
 
-            // Click listener
+            // Click listener for selecting device
             itemView.setOnClickListener {
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
                     updateSelection(position)
                     onDeviceClick(device)
                 }
+            }
+
+            // Click listener for watch icon - preview device
+            ivWatch.setOnClickListener {
+                onWatchClick(device)
             }
         }
     }

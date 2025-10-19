@@ -24,7 +24,8 @@
             android:scaleType="fitXY"
             android:src="@drawable/ic_arrowback_addfakecall"
             app:layout_constraintBottom_toBottomOf="@id/tvTitle"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvTitle" />
 
         <TextView
             android:id="@+id/tvTitle"

@@ -76,23 +76,21 @@ class ChooseVoiceActivity : BaseActivity() {
     }
 
     private fun setupVoiceList() {
-        voiceList = mutableListOf(
-            Voice("1", "Mom", "00:02  25B", null, R.drawable.ic_music, false, false),
-            Voice("2", "Loona", "00:02  25B", null, R.drawable.ic_music, false, false),
-            Voice("3", "My friend", "00:02  25B", null, R.drawable.ic_music, false, false),
-            Voice("4", "My love", "00:02  25B", null, R.drawable.ic_music, false, false),
-            Voice("5", "Cattry", "00:02  25B", null, R.drawable.ic_music, false, false),
-            Voice("6", "Male police voice", "00:02  25B", null, R.drawable.ic_music, false, false)
-        )
+        voiceList = mutableListOf()
 
         // Load custom recordings
         loadCustomVoices()
+
+        // Update Done button state
+        updateDoneButtonState()
     }
 
     private fun loadCustomVoices() {
         val customVoicesDir = File(filesDir, "custom_voices")
         if (customVoicesDir.exists()) {
-            customVoicesDir.listFiles()?.forEach { file ->
+            // Sort files by last modified time (newest first)
+            val sortedFiles = customVoicesDir.listFiles()?.sortedByDescending { it.lastModified() }
+            sortedFiles?.forEach { file ->
                 if (file.extension == "3gp" || file.extension == "mp3") {
                     val voiceName = file.nameWithoutExtension
                     val duration = getAudioDuration(file.absolutePath)
@@ -140,10 +138,18 @@ class ChooseVoiceActivity : BaseActivity() {
     }
 
     private fun setupRecyclerView() {
-        adapter = VoiceAdapter(voiceList) { voice ->
-            // Show media playing dialog
-            showMediaPlayingDialog(voice)
-        }
+        adapter = VoiceAdapter(
+            voiceList,
+            onItemClicked = { voice ->
+                // layoutVoiceItem clicked - show media playing dialog
+                showMediaPlayingDialog(voice)
+            },
+            onRadioClicked = { voice ->
+                // RadioButton clicked - select voice
+                selectedVoice = voice
+                adapter.selectVoice(voice)
+            }
+        )
 
         binding.rvVoices.layoutManager = LinearLayoutManager(this)
         binding.rvVoices.adapter = adapter
@@ -206,6 +212,8 @@ class ChooseVoiceActivity : BaseActivity() {
                                         android.util.Log.e("ChooseVoice", "Error deleting file", e)
                                     }
                                 }
+                                // Update Done button state after deletion
+                                updateDoneButtonState()
                             }
                         }
                     })
@@ -257,6 +265,26 @@ class ChooseVoiceActivity : BaseActivity() {
         }
     }
 
+    private fun updateDoneButtonState() {
+        if (voiceList.isEmpty()) {
+            // No voices - gray color
+            binding.btnDone.setTextColor(Color.parseColor("#636363"))
+            // Update layoutAddVoice margin to 258dp
+            updateAddVoiceMargin(258)
+        } else {
+            // Has voices - blue color
+            binding.btnDone.setTextColor(Color.parseColor("#0B89FF"))
+            // Update layoutAddVoice margin to 19dp
+            updateAddVoiceMargin(19)
+        }
+    }
+
+    private fun updateAddVoiceMargin(topMarginDp: Int) {
+        val layoutParams = binding.layoutAddVoice.layoutParams as androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
+        layoutParams.topMargin = (topMarginDp * resources.displayMetrics.density).toInt()
+        binding.layoutAddVoice.layoutParams = layoutParams
+    }
+
     private fun checkPermissionAndShowRecordingDialog() {
         if (ContextCompat.checkSelfPermission(
                 this,
@@ -282,6 +310,7 @@ class ChooseVoiceActivity : BaseActivity() {
 
         val rootLayout = recordingDialog?.findViewById<androidx.constraintlayout.widget.ConstraintLayout>(R.id.rootLayout)
         val tvRecordingTimer = recordingDialog?.findViewById<TextView>(R.id.tvRecordingTimer)
+        val tvTapToRecord = recordingDialog?.findViewById<TextView>(R.id.tvTapToRecord)
         val btnPlayRecord = recordingDialog?.findViewById<ImageView>(R.id.btnPlayRecord)
         val btnStopRecord = recordingDialog?.findViewById<ImageView>(R.id.btnStopRecord)
 
@@ -289,15 +318,20 @@ class ChooseVoiceActivity : BaseActivity() {
         btnPlayRecord?.visibility = View.VISIBLE
         btnStopRecord?.visibility = View.GONE
         tvRecordingTimer?.visibility = View.GONE
+        tvTapToRecord?.visibility = View.VISIBLE
 
         // Play button - start recording
         btnPlayRecord?.setOnClickListener {
             startRecordingInDialog(rootLayout, tvRecordingTimer, btnPlayRecord, btnStopRecord)
+            binding.tvAddVoice.visibility = View.GONE
+            tvTapToRecord?.visibility = View.GONE
         }
 
         // Stop button - stop recording and immediately show name dialog
         btnStopRecord?.setOnClickListener {
             stopRecordingInDialog()
+            binding.tvAddVoice.visibility = View.VISIBLE
+            tvTapToRecord?.visibility = View.VISIBLE
         }
 
         recordingDialog?.setOnDismissListener {
@@ -336,6 +370,7 @@ class ChooseVoiceActivity : BaseActivity() {
         btnPlay: ImageView?,
         btnStop: ImageView?
     ) {
+
         if (isRecording) {
             // Toast.makeText(this, "Already recording", Toast.LENGTH_SHORT).show()
             return
@@ -368,6 +403,13 @@ class ChooseVoiceActivity : BaseActivity() {
                     btnPlay?.visibility = View.GONE
                     btnStop?.visibility = View.VISIBLE
                     tvTimer?.visibility = View.VISIBLE
+
+                    // Update tvTimer margin to 102dp
+                    tvTimer?.let {
+                        val layoutParams = it.layoutParams as androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
+                        layoutParams.bottomMargin = (102 * resources.displayMetrics.density).toInt()
+                        it.layoutParams = layoutParams
+                    }
 
                     // Start timer
                     recordingStartTime = System.currentTimeMillis()
@@ -573,7 +615,7 @@ class ChooseVoiceActivity : BaseActivity() {
             val newFile = File(customVoicesDir, "$name.3gp")
             tempFile.renameTo(newFile)
 
-            // Add to list
+            // Add to list at the beginning (index 0)
             val duration = getAudioDuration(newFile.absolutePath)
             val newVoice = Voice(
                 newFile.name,
@@ -584,8 +626,14 @@ class ChooseVoiceActivity : BaseActivity() {
                 true,
                 false
             )
-            voiceList.add(newVoice)
-            adapter.notifyItemInserted(voiceList.size - 1)
+            voiceList.add(0, newVoice)
+            adapter.notifyItemInserted(0)
+
+            // Scroll to top to show the newly added voice
+            binding.rvVoices.scrollToPosition(0)
+
+            // Update Done button color
+            updateDoneButtonState()
 
             // Toast.makeText(this, "Voice saved successfully!", Toast.LENGTH_SHORT).show()
             audioFilePath = null
@@ -617,10 +665,6 @@ class ChooseVoiceActivity : BaseActivity() {
 
         tvVoiceName?.text = voice.name
         ivMusicIcon?.setImageResource(R.drawable.ic_music)
-
-        // Select this voice
-        selectedVoice = voice
-        adapter.selectVoice(voice)
 
         // Setup media player for custom voices
         if (voice.filePath != null && File(voice.filePath).exists()) {

@@ -9,7 +9,8 @@ import net.android.st069_fakecallphoneprank.databinding.ItemVoiceBinding
 
 class VoiceAdapter(
     private val items: MutableList<Voice>,
-    private val onItemClicked: (Voice) -> Unit
+    private val onItemClicked: (Voice) -> Unit,
+    private val onRadioClicked: (Voice) -> Unit
 ) : RecyclerView.Adapter<VoiceAdapter.VoiceViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VoiceViewHolder {
@@ -25,9 +26,14 @@ class VoiceAdapter(
         val item = items[position]
         holder.bind(item)
 
-        // Item click - show media player dialog
-        holder.itemView.setOnClickListener {
+        // layoutVoiceItem click - play music
+        holder.binding.layoutVoiceItem.setOnClickListener {
             onItemClicked(item)
+        }
+
+        // RadioButton click - select voice
+        holder.binding.radioButton.setOnClickListener {
+            onRadioClicked(item)
         }
     }
 

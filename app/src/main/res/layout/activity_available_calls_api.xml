@@ -22,22 +22,22 @@
         <!-- Back Button -->
         <ImageButton
             android:id="@+id/btnBack"
-            android:layout_width="10dp"
+            android:layout_width="11dp"
             android:layout_height="20dp"
-            android:scaleType="fitXY"
-            android:layout_marginStart="17dp"
-            android:layout_marginBottom="18.5dp"
+            android:layout_marginStart="23dp"
             android:background="?attr/selectableItemBackgroundBorderless"
+            android:scaleType="fitXY"
             android:src="@drawable/ic_arrowback_addfakecall"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintBottom_toBottomOf="@+id/tvTitle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvTitle" />
 
         <!-- Title -->
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="18dp"
             android:fontFamily="@font/roboto_condensed_semibold"
             android:text="@string/available_fake_call"
             android:textColor="#2F2F2F"
