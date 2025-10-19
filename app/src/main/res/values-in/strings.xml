@@ -81,9 +81,7 @@
     <string name="please_set_talk_time">Silakan atur waktu bicara</string>
     <string name="no_scheduled_calls">Tidak ada panggilan terjadwal</string>
     <string name="fake_call_triggered">Panggilan palsu dipicu dan dipindahkan ke riwayat</string>
-    <string name="deleted_from_history">dihapus dari riwayat</string>
-    <string name="deleted">dihapus</string>
-    <string name="restored">dipulihkan</string>
+    <string name="deleted_from_history">%1$s dihapus dari riwayat</string>
     <string name="undo">BATALKAN</string>
     <string name="voice_name">Suara:</string>
     <string name="choose_voice_default">Pilih Suara</string>
@@ -109,7 +107,7 @@
     <string name="flash">Lampu Kilat</string>
     <string name="no_call_history_yet">Belum ada riwayat panggilan</string>
     <string name="add_your_voice">Tambahkan suara Anda</string>
-    <string name="create_a_name">Créez un nom</string>
+    <string name="create_a_name">Buat nama</string>
     <string name="kid">Anak</string>
     <string name="general">Umum</string>
     <string name="decline">Tolak</string>
@@ -121,14 +119,16 @@
     <string name="flash_is_not_available_on_this_device">Flash tidak tersedia di perangkat ini</string>
     <string name="failed_to_set_ringtone">Gagal mengatur nada dering</string>
     <string name="ringtone_updated">Nada dering diperbarui</string>
-    <string name="tap_the_button_to_record_audio">tap the button to record audio</string>
-    <string name="deleted_">%1$s deleted</string>
-    <string name="fake_call_scheduled_successfully">Fake call scheduled successfully!</string>
-    <string name="fake_call_updated_successfully">Fake call updated successfully!</string>
-    <string name="please_enter_a_name">Please enter a name</string>
-    <string name="please_enter_a_phone_number">Please enter a phone number</string>
-    <string name="please_choose_a_voice">Please choose a voice</string>
-    <string name="please_select_a_device">Please select a device</string>
-    <string name="talktime">TalkTime</string>
-    <string name="settime">SetTime</string>
+    <string name="tap_the_button_to_record_audio">Ketuk tombol untuk merekam audio</string>
+    <string name="deleted_">%1$s dihapus</string>
+    <string name="fake_call_scheduled_successfully">Panggilan palsu berhasil dijadwalkan!</string>
+    <string name="fake_call_updated_successfully">Panggilan palsu berhasil diperbarui!</string>
+    <string name="please_enter_a_name">Silakan masukkan nama</string>
+    <string name="please_enter_a_phone_number">Silakan masukkan nomor telepon</string>
+    <string name="please_choose_a_voice">Silakan pilih suara</string>
+    <string name="please_select_a_device">Silakan pilih perangkat</string>
+    <string name="talktime">Waktu Bicara</string>
+    <string name="settime">Atur Waktu</string>
+    <string name="deletede">%1$s dihapus</string>
+    <string name="restored">%1$s pulih</string>
 </resources>

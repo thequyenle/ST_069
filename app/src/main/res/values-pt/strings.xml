@@ -81,9 +81,7 @@
     <string name="please_set_talk_time">Por favor, defina o tempo de conversa</string>
     <string name="no_scheduled_calls">Nenhuma chamada agendada</string>
     <string name="fake_call_triggered">Chamada falsa acionada e movida para o histórico</string>
-    <string name="deleted_from_history">excluído do histórico</string>
-    <string name="deleted">excluído</string>
-    <string name="restored">restaurado</string>
+    <string name="deleted_from_history">%1$s excluído do histórico</string>
     <string name="undo">DESFAZER</string>
     <string name="voice_name">Voz:</string>
     <string name="choose_voice_default">Escolher Voz</string>
@@ -121,14 +119,16 @@
     <string name="flash_is_not_available_on_this_device">Flash não está disponível neste dispositivo</string>
     <string name="failed_to_set_ringtone">Falha ao definir toque</string>
     <string name="ringtone_updated">Toque atualizado</string>
-    <string name="tap_the_button_to_record_audio">tap the button to record audio</string>
-    <string name="deleted_">%1$s deleted</string>
-    <string name="fake_call_scheduled_successfully">Fake call scheduled successfully!</string>
-    <string name="fake_call_updated_successfully">Fake call updated successfully!</string>
-    <string name="please_enter_a_name">Please enter a name</string>
-    <string name="please_enter_a_phone_number">Please enter a phone number</string>
-    <string name="please_choose_a_voice">Please choose a voice</string>
-    <string name="please_select_a_device">Please select a device</string>
-    <string name="talktime">TalkTime</string>
-    <string name="settime">SetTime</string>
+    <string name="tap_the_button_to_record_audio">Toque no botão para gravar áudio</string>
+    <string name="deleted_">%1$s excluído</string>
+    <string name="fake_call_scheduled_successfully">Chamada falsa agendada com sucesso!</string>
+    <string name="fake_call_updated_successfully">Chamada falsa atualizada com sucesso!</string>
+    <string name="please_enter_a_name">Por favor, digite um nome</string>
+    <string name="please_enter_a_phone_number">Por favor, digite um número de telefone</string>
+    <string name="please_choose_a_voice">Por favor, escolha uma voz</string>
+    <string name="please_select_a_device">Por favor, selecione um dispositivo</string>
+    <string name="talktime">Tempo de Conversa</string>
+    <string name="settime">Definir Hora</string>
+    <string name="deletede">%1$s excluído</string>
+    <string name="restored">%1$s restaurado</string>
 </resources>

@@ -27,4 +27,8 @@
     <string name="please_select_a_device">Please select a device</string>
     <string name="talktime">TalkTime</string>
     <string name="settime">SetTime</string>
+    <string name="deleted_from_historye">%1$s deleted from history</string>
+    <string name="deletede">%1$s deleted</string>
+    <string name="restoredd">%1$s restored</string>
+    <string name="restored">restored</string>
 </resources>

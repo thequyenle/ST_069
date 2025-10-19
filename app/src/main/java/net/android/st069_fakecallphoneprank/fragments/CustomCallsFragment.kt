@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import net.android.st069_fakecallphoneprank.R
 import net.android.st069_fakecallphoneprank.activity.AddFakeCallActivity
 import net.android.st069_fakecallphoneprank.adapters.HistoryCallAdapter
 import net.android.st069_fakecallphoneprank.data.entity.FakeCall
@@ -80,16 +81,16 @@ class CustomCallsFragment : Fragment() {
                     // Show Snackbar with Undo option
                     val snackbar = Snackbar.make(
                         binding.root,
-                        "${deletedCall.name} deleted",
+                        getString(R.string.deletede, deletedCall.name),
                         Snackbar.LENGTH_LONG
                     )
 
-                    snackbar.setAction("UNDO") {
+                    snackbar.setAction(getString(R.string.undo)) {
                         // Restore item
                         adapter.restoreItem(deletedCall, position)
                         Toast.makeText(
                             requireContext(),
-                            "${deletedCall.name} restored",
+                            getString(R.string.restored, deletedCall.name),
                             Toast.LENGTH_SHORT
                         ).show()
                     }

@@ -5,7 +5,8 @@
       "Bash(findstr:*)",
       "Bash(for lang in de es fr hi pt)",
       "Bash(do echo \"=== values-$lang ===\")",
-      "Bash(done)"
+      "Bash(done)",
+      "Bash(dir \"D:\\androidProject\\ST069_FakeCallPhonePrank\\app\\src\\main\\res\" /b)"
     ],
     "deny": [],
     "ask": []

@@ -81,9 +81,7 @@
     <string name="please_set_talk_time">Please set talk time</string>
     <string name="no_scheduled_calls">There is not scheduled calls here</string>
     <string name="fake_call_triggered">Fake call triggered and moved to history</string>
-    <string name="deleted_from_history">deleted from history</string>
-    <string name="deleted">deleted</string>
-    <string name="restored">restored</string>
+    <string name="deleted_from_history">%1$s deleted from history</string>
     <string name="undo">UNDO</string>
     <string name="voice_name">Voice:</string>
     <string name="choose_voice_default">Choose Voice</string>
@@ -131,6 +129,8 @@
     <string name="please_select_a_device">Please select a device</string>
     <string name="talktime">TalkTime</string>
     <string name="settime">SetTime</string>
+    <string name="deletede">%1$s deleted</string>
+    <string name="restored">%1$s स्थापित किए गए</string>
 
 
 </resources>
