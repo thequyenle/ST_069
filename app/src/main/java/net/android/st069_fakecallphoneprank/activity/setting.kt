@@ -232,41 +232,101 @@ class setting : BaseActivity() {
     }
 
     private fun showRingTimeDialog() {
-        val options = arrayOf("5s", "10s", "15s", "20s", "30s")
         val currentRingTime = sharedPreferences.getInt("ring_time", 15)
-        val currentIndex = when (currentRingTime) {
-            5 -> 0
-            10 -> 1
-            15 -> 2
-            20 -> 3
-            30 -> 4
-            else -> 2 // Default to 15s
-        }
 
+        // Create dialog with custom layout
+        val dialogView = layoutInflater.inflate(R.layout.dialog_phone_call_ring_time, null)
         val dialog = AlertDialog.Builder(this)
-            .setTitle(getString(R.string.select_ring_time))
-            .setSingleChoiceItems(options, currentIndex) { dialog, which ->
-                val selectedTime = when (which) {
-                    0 -> 5
-                    1 -> 10
-                    2 -> 15
-                    3 -> 20
-                    4 -> 30
-                    else -> 15
-                }
-
-                sharedPreferences.edit().putInt("ring_time", selectedTime).apply()
-                phoneCallRingTimeText.text = "${selectedTime}s"
-                dialog.dismiss()
-            }
-            .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
-                dialog.dismiss()
-            }
+            .setView(dialogView)
+            .setCancelable(true)
             .create()
 
-        // Show dialog and apply fullscreen
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+        // Get radio buttons
+        val radio15s = dialogView.findViewById<androidx.constraintlayout.widget.ConstraintLayout>(R.id.radio15s)
+        val radio20s = dialogView.findViewById<androidx.constraintlayout.widget.ConstraintLayout>(R.id.radio20s)
+        val radio30s = dialogView.findViewById<androidx.constraintlayout.widget.ConstraintLayout>(R.id.radio30s)
+        val radio40s = dialogView.findViewById<androidx.constraintlayout.widget.ConstraintLayout>(R.id.radio40s)
+        val radio60s = dialogView.findViewById<androidx.constraintlayout.widget.ConstraintLayout>(R.id.radio60s)
+
+        val ivRadio15s = dialogView.findViewById<ImageView>(R.id.ivRadio15s)
+        val ivRadio20s = dialogView.findViewById<ImageView>(R.id.ivRadio20s)
+        val ivRadio30s = dialogView.findViewById<ImageView>(R.id.ivRadio30s)
+        val ivRadio40s = dialogView.findViewById<ImageView>(R.id.ivRadio40s)
+        val ivRadio60s = dialogView.findViewById<ImageView>(R.id.ivRadio60s)
+
+        val btnDone = dialogView.findViewById<TextView>(R.id.btnDone)
+
+        // Set current selection
+        updateRadioSelection(currentRingTime, ivRadio15s, ivRadio20s, ivRadio30s, ivRadio40s, ivRadio60s)
+
+        var selectedTime = currentRingTime
+
+        // Radio button click listeners
+        radio15s.setOnClickListener {
+            selectedTime = 15
+            updateRadioSelection(15, ivRadio15s, ivRadio20s, ivRadio30s, ivRadio40s, ivRadio60s)
+        }
+
+        radio20s.setOnClickListener {
+            selectedTime = 20
+            updateRadioSelection(20, ivRadio15s, ivRadio20s, ivRadio30s, ivRadio40s, ivRadio60s)
+        }
+
+        radio30s.setOnClickListener {
+            selectedTime = 30
+            updateRadioSelection(30, ivRadio15s, ivRadio20s, ivRadio30s, ivRadio40s, ivRadio60s)
+        }
+
+        radio40s.setOnClickListener {
+            selectedTime = 40
+            updateRadioSelection(40, ivRadio15s, ivRadio20s, ivRadio30s, ivRadio40s, ivRadio60s)
+        }
+
+        radio60s.setOnClickListener {
+            selectedTime = 60
+            updateRadioSelection(60, ivRadio15s, ivRadio20s, ivRadio30s, ivRadio40s, ivRadio60s)
+        }
+
+        // Done button
+        btnDone.setOnClickListener {
+            sharedPreferences.edit().putInt("ring_time", selectedTime).apply()
+            phoneCallRingTimeText.text = "${selectedTime}s"
+            dialog.dismiss()
+        }
+
         dialog.show()
         DialogHelper.applyFullscreenToDialog(dialog)
+
+        // Set dialog size: 258dp width, wrap_content height
+        val width = (258 * resources.displayMetrics.density).toInt()
+        dialog.window?.setLayout(width, android.view.ViewGroup.LayoutParams.WRAP_CONTENT)
+    }
+
+    private fun updateRadioSelection(
+        selectedTime: Int,
+        ivRadio15s: ImageView,
+        ivRadio20s: ImageView,
+        ivRadio30s: ImageView,
+        ivRadio40s: ImageView,
+        ivRadio60s: ImageView
+    ) {
+        // Reset all to unchecked
+        ivRadio15s.setImageResource(R.drawable.radio_unchecked)
+        ivRadio20s.setImageResource(R.drawable.radio_unchecked)
+        ivRadio30s.setImageResource(R.drawable.radio_unchecked)
+        ivRadio40s.setImageResource(R.drawable.radio_unchecked)
+        ivRadio60s.setImageResource(R.drawable.radio_unchecked)
+
+        // Set selected to checked
+        when (selectedTime) {
+            15 -> ivRadio15s.setImageResource(R.drawable.radio_checked)
+            20 -> ivRadio20s.setImageResource(R.drawable.radio_checked)
+            30 -> ivRadio30s.setImageResource(R.drawable.radio_checked)
+            40 -> ivRadio40s.setImageResource(R.drawable.radio_checked)
+            60 -> ivRadio60s.setImageResource(R.drawable.radio_checked)
+        }
     }
 
     private fun openRingtonePicker() {
