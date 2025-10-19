@@ -116,9 +116,9 @@
     <string name="accept">Aceitar</string>
     <string name="call_coming">Chamada entrando...</string>
     <string name="history">Histórico</string>
-    <string name="select_ring_time">Select Ring Time</string>
-    <string name="select_ringtone">Select Ringtone</string>
-    <string name="flash_is_not_available_on_this_device">Flash is not available on this device</string>
-    <string name="failed_to_set_ringtone">Failed to set ringtone</string>
-    <string name="ringtone_updated">Ringtone updated</string>
+    <string name="select_ring_time">Selecionar tempo de toque</string>
+    <string name="select_ringtone">Selecionar toque</string>
+    <string name="flash_is_not_available_on_this_device">Flash não está disponível neste dispositivo</string>
+    <string name="failed_to_set_ringtone">Falha ao definir toque</string>
+    <string name="ringtone_updated">Toque atualizado</string>
 </resources>

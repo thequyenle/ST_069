@@ -2,7 +2,10 @@
   "permissions": {
     "allow": [
       "Bash(dir \"D:\\androidProject\\ST069_FakeCallPhonePrank\\app\\src\\main\\res\")",
-      "Bash(findstr:*)"
+      "Bash(findstr:*)",
+      "Bash(for lang in de es fr hi pt)",
+      "Bash(do echo \"=== values-$lang ===\")",
+      "Bash(done)"
     ],
     "deny": [],
     "ask": []
