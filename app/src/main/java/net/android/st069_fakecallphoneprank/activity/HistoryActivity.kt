@@ -2,8 +2,7 @@ package net.android.st069_fakecallphoneprank.activity
 
 import android.content.Context
 import android.os.Bundle
-import com.google.android.material.tabs.TabLayoutMediator
-import net.android.st069_fakecallphoneprank.R
+import androidx.viewpager2.widget.ViewPager2
 import net.android.st069_fakecallphoneprank.adapters.HistoryPagerAdapter
 import net.android.st069_fakecallphoneprank.base.BaseActivity
 import net.android.st069_fakecallphoneprank.databinding.ActivityHistoryBinding
@@ -23,6 +22,7 @@ class HistoryActivity : BaseActivity() {
         setContentView(binding.root)
 
         setupViewPager()
+        setupTabs()
         setupClickListeners()
     }
 
@@ -30,13 +30,44 @@ class HistoryActivity : BaseActivity() {
         val adapter = HistoryPagerAdapter(this)
         binding.viewPager.adapter = adapter
 
-        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
-            tab.text = when (position) {
-                0 -> getString(R.string.custom)
-                1 -> getString(R.string.available)
-                else -> ""
+        // Disable user swipe
+        binding.viewPager.isUserInputEnabled = true
+
+        // Listen to page changes to update tab selection
+        binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                updateTabSelection(position)
             }
-        }.attach()
+        })
+    }
+
+    private fun setupTabs() {
+        // Custom tab
+        binding.btnCustom.setOnClickListener {
+            binding.viewPager.currentItem = 0
+        }
+
+        // Available tab
+        binding.btnAvailable.setOnClickListener {
+            binding.viewPager.currentItem = 1
+        }
+
+        // Set initial tab
+        updateTabSelection(0)
+    }
+
+    private fun updateTabSelection(position: Int) {
+        when (position) {
+            0 -> {
+                binding.btnCustom.isSelected = true
+                binding.btnAvailable.isSelected = false
+            }
+            1 -> {
+                binding.btnCustom.isSelected = false
+                binding.btnAvailable.isSelected = true
+            }
+        }
     }
 
     private fun setupClickListeners() {
