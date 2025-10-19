@@ -331,28 +331,84 @@ class setting : BaseActivity() {
 
     private fun openRingtonePicker() {
         try {
-            val intent = Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
-            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_RINGTONE)
-            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE,
-                getString(R.string.select_ringtone))
-            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true)
-            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, false)
-
-            // Set the current ringtone
-            val currentRingtoneUri = sharedPreferences.getString("ringtone_uri", null)
-            if (currentRingtoneUri != null) {
-                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, Uri.parse(currentRingtoneUri))
-            } else {
-                // Set default ringtone if no custom ringtone is set
-                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI,
-                    RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE))
-            }
-
-            ringtonePickerLauncher.launch(intent)
+            showCustomRingtoneDialog()
         } catch (e: Exception) {
             e.printStackTrace()
-           // Toast.makeText(this, "Unable to open ringtone picker", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun showCustomRingtoneDialog() {
+        // Get all ringtones
+        val ringtoneManager = RingtoneManager(this)
+        ringtoneManager.setType(RingtoneManager.TYPE_RINGTONE)
+        val cursor = ringtoneManager.cursor
+
+        val ringtones = mutableListOf<net.android.st069_fakecallphoneprank.data.model.RingtoneItem>()
+        val currentRingtoneUri = sharedPreferences.getString("ringtone_uri", null)
+
+        while (cursor.moveToNext()) {
+            val title = cursor.getString(RingtoneManager.TITLE_COLUMN_INDEX)
+            val ringtoneUri = ringtoneManager.getRingtoneUri(cursor.position)
+
+            val isSelected = currentRingtoneUri != null && ringtoneUri.toString() == currentRingtoneUri
+            ringtones.add(net.android.st069_fakecallphoneprank.data.model.RingtoneItem(title, ringtoneUri, isSelected))
+        }
+
+        // Create custom dialog
+        val dialogView = layoutInflater.inflate(R.layout.dialog_ringtone_picker, null)
+        val dialog = AlertDialog.Builder(this)
+            .setView(dialogView)
+            .setCancelable(true)
+            .create()
+
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+        val rvRingtones = dialogView.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.rvRingtones)
+        val btnCancel = dialogView.findViewById<TextView>(R.id.btnCancel)
+        val btnOk = dialogView.findViewById<TextView>(R.id.btnOk)
+
+        var selectedRingtone: net.android.st069_fakecallphoneprank.data.model.RingtoneItem? = ringtones.find { it.isSelected }
+
+        // Setup adapter
+        val adapter = net.android.st069_fakecallphoneprank.adapters.RingtoneAdapter(ringtones) { ringtone ->
+            selectedRingtone = ringtone
+        }
+
+        rvRingtones.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)
+        rvRingtones.adapter = adapter
+
+        // Cancel button
+        btnCancel.setOnClickListener {
+            adapter.stopPlayback()
+            dialog.dismiss()
+        }
+
+        // OK button
+        btnOk.setOnClickListener {
+            selectedRingtone?.let { ringtone ->
+                val ringtoneObject = RingtoneManager.getRingtone(this, ringtone.uri)
+                val title = ringtoneObject.getTitle(this)
+
+                ringToneText.text = title
+                sharedPreferences.edit().putString("ringtone_uri", ringtone.uri.toString()).apply()
+                sharedPreferences.edit().putString("ringtone_name", title).apply()
+
+                Toast.makeText(this, getString(R.string.ringtone_updated), Toast.LENGTH_SHORT).show()
+            }
+            adapter.stopPlayback()
+            dialog.dismiss()
+        }
+
+        dialog.setOnDismissListener {
+            adapter.stopPlayback()
+        }
+
+        dialog.show()
+        DialogHelper.applyFullscreenToDialog(dialog)
+
+        // Set dialog size
+        val width = (300 * resources.displayMetrics.density).toInt()
+        dialog.window?.setLayout(width, android.view.ViewGroup.LayoutParams.WRAP_CONTENT)
     }
 
     private fun triggerVibration() {

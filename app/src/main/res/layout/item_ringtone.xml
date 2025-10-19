@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layoutRingtoneItem"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingVertical="12dp"
+    android:paddingHorizontal="8dp">
+
+    <!-- Radio Button -->
+    <ImageView
+        android:id="@+id/ivRadio"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/radio_unchecked"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Ringtone Name -->
+    <TextView
+        android:id="@+id/tvRingtoneName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/roboto_regular"
+        android:text="Ringtone Name"
+        android:textColor="#2F2F2F"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btnPlay"
+        app:layout_constraintStart_toEndOf="@id/ivRadio"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Play Button -->
+    <ImageView
+        android:id="@+id/btnPlay"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_start_voice"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
