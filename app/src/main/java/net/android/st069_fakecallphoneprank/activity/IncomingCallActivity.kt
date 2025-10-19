@@ -31,20 +31,26 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.WindowInsetsController
 import android.view.WindowManager
+import androidx.activity.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.target.Target
+import kotlinx.coroutines.launch
 import net.android.st069_fakecallphoneprank.R
 import net.android.st069_fakecallphoneprank.activities.ActiveCallActivity
 import net.android.st069_fakecallphoneprank.base.BaseActivity
 import net.android.st069_fakecallphoneprank.databinding.ActivityIncomingCallOppoBinding
 import net.android.st069_fakecallphoneprank.databinding.ActivityIncomingCallPixel5Binding
 import net.android.st069_fakecallphoneprank.utils.LocaleHelper
+import net.android.st069_fakecallphoneprank.viewmodel.FakeCallViewModel
 
 class IncomingCallActivity : BaseActivity() {
+
+    private val viewModel: FakeCallViewModel by viewModels()
 
     private var oppoBinding: ActivityIncomingCallOppoBinding? = null
     private var pixel5Binding: ActivityIncomingCallPixel5Binding? = null
@@ -599,6 +605,13 @@ class IncomingCallActivity : BaseActivity() {
         stopFlash()
         cancelAutoEnd()
 
+        // Deactivate the call in database if it has a valid ID
+        if (fakeCallId != -1L) {
+            lifecycleScope.launch {
+                viewModel.deactivateFakeCall(fakeCallId)
+            }
+        }
+
         val intent = Intent(this, ActiveCallActivity::class.java).apply {
             putExtra("FAKE_CALL_ID", fakeCallId)
             putExtra("NAME", name)
@@ -616,6 +629,14 @@ class IncomingCallActivity : BaseActivity() {
         stopVibration()
         stopFlash()
         cancelAutoEnd()
+
+        // Deactivate the call in database if it has a valid ID
+        if (fakeCallId != -1L) {
+            lifecycleScope.launch {
+                viewModel.deactivateFakeCall(fakeCallId)
+            }
+        }
+
         finish()
     }
 

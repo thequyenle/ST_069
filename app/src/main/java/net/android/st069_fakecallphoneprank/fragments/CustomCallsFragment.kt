@@ -145,25 +145,21 @@ class CustomCallsFragment : Fragment() {
     }
 
     private fun triggerFakeCall(fakeCall: FakeCall) {
-        val scheduler = FakeCallScheduler(requireContext())
-
-        // Update call to trigger immediately and deactivate it
-        // This will move it from Custom (upcoming) to Available (past/history)
-        val updatedCall = fakeCall.copy(
-            setTime = 0,
-            scheduledTime = System.currentTimeMillis(),
-            isActive = false // Deactivate so it moves to history/Available tab
-        )
-
-        // Update in database to move to history
-        viewModel.update(updatedCall)
-
-        // Schedule the immediate fake call
-        scheduler.scheduleFakeCall(updatedCall)
+        // Launch IncomingCallActivity directly for immediate call
+        val intent = Intent(requireContext(), net.android.st069_fakecallphoneprank.activity.IncomingCallActivity::class.java).apply {
+            putExtra("FAKE_CALL_ID", fakeCall.id)
+            putExtra("NAME", fakeCall.name)
+            putExtra("PHONE_NUMBER", fakeCall.phoneNumber)
+            putExtra("AVATAR", fakeCall.avatar)
+            putExtra("VOICE_TYPE", fakeCall.voiceType)
+            putExtra("DEVICE_TYPE", fakeCall.deviceType)
+            putExtra("TALK_TIME", fakeCall.talkTime)
+        }
+        startActivity(intent)
 
         Toast.makeText(
             requireContext(),
-            "Fake call triggered and moved to history",
+            "Fake call triggered immediately",
             Toast.LENGTH_SHORT
         ).show()
     }

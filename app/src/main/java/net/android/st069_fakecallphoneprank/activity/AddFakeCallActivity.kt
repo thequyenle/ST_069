@@ -562,21 +562,17 @@ class AddFakeCallActivity : BaseActivity() {
     }
 
     private fun previewFakeCall() {
-        // Create a temporary FakeCall object for preview (not saved to database)
-        val previewCall = FakeCall(
-            avatar = selectedAvatar,
-            name = selectedName,
-            phoneNumber = selectedPhone,
-            voiceType = selectedVoiceFilePath ?: selectedVoice, // Use file path for playback
-            deviceType = selectedDevice,
-            setTime = 0, // Trigger immediately
-            talkTime = selectedTalkTime,
-            isActive = false // Don't save to active calls
-        )
-
-        // Trigger the fake call immediately using the scheduler
-        val scheduler = net.android.st069_fakecallphoneprank.services.FakeCallScheduler(this)
-        scheduler.scheduleFakeCall(previewCall)
+        // Launch IncomingCallActivity directly for immediate preview
+        val intent = Intent(this, IncomingCallActivity::class.java).apply {
+            putExtra("FAKE_CALL_ID", -1L) // -1 for preview (not saved in DB)
+            putExtra("NAME", selectedName)
+            putExtra("PHONE_NUMBER", selectedPhone)
+            putExtra("AVATAR", selectedAvatar)
+            putExtra("VOICE_TYPE", selectedVoiceFilePath ?: selectedVoice)
+            putExtra("DEVICE_TYPE", selectedDevice)
+            putExtra("TALK_TIME", selectedTalkTime)
+        }
+        startActivity(intent)
 
         Toast.makeText(this,
             getString(R.string.preview_fake_call_triggered_immediately), Toast.LENGTH_SHORT).show()
