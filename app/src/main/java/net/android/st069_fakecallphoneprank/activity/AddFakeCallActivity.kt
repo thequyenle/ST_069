@@ -405,7 +405,7 @@ class AddFakeCallActivity : BaseActivity() {
 
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragmentContainer, setTimeFragment)
-            .addToBackStack("SetTime")
+            .addToBackStack(getString(R.string.settime))
             .commit()
 
         supportFragmentManager.setFragmentResultListener("SET_TIME_RESULT", this) { _, bundle ->
@@ -433,7 +433,7 @@ class AddFakeCallActivity : BaseActivity() {
 
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragmentContainer, talkTimeFragment)
-            .addToBackStack("TalkTime")
+            .addToBackStack(getString(R.string.talktime))
             .commit()
 
         supportFragmentManager.setFragmentResultListener("TALK_TIME_RESULT", this) { _, bundle ->
@@ -468,27 +468,28 @@ class AddFakeCallActivity : BaseActivity() {
 
         if (!isValid) {
             if (selectedName.isEmpty()) {
-                Toast.makeText(this, "Please enter a name", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.please_enter_a_name), Toast.LENGTH_SHORT).show()
                 return false
             }
             if (selectedPhone.isEmpty()) {
-                Toast.makeText(this, "Please enter a phone number", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this,
+                    getString(R.string.please_enter_a_phone_number), Toast.LENGTH_SHORT).show()
                 return false
             }
             if (selectedVoice.isNullOrEmpty()) {
-                Toast.makeText(this, "Please choose a voice", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.please_choose_a_voice), Toast.LENGTH_SHORT).show()
                 return false
             }
             if (selectedDevice.isNullOrEmpty()) {
-                Toast.makeText(this, "Please select a device", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.please_select_a_device), Toast.LENGTH_SHORT).show()
                 return false
             }
             if (selectedSetTime < 0) {
-                Toast.makeText(this, "Please set time", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.please_set_time), Toast.LENGTH_SHORT).show()
                 return false
             }
             if (selectedTalkTime <= 0) {
-                Toast.makeText(this, "Please set talk time", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.please_set_talk_time), Toast.LENGTH_SHORT).show()
                 return false
             }
         }
@@ -550,7 +551,8 @@ class AddFakeCallActivity : BaseActivity() {
                     scheduler.cancelFakeCall(editingCallId)
                     scheduler.scheduleFakeCall(updatedCall)
 
-                    Toast.makeText(this@AddFakeCallActivity, "Fake call updated successfully!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@AddFakeCallActivity,
+                        getString(R.string.fake_call_updated_successfully), Toast.LENGTH_SHORT).show()
                     finish()
                 }
             }
@@ -569,7 +571,8 @@ class AddFakeCallActivity : BaseActivity() {
 
             viewModel.insert(fakeCall)
 
-            Toast.makeText(this, "Fake call scheduled successfully!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this,
+                getString(R.string.fake_call_scheduled_successfully), Toast.LENGTH_SHORT).show()
             finish()
         }
     }

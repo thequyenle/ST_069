@@ -121,4 +121,14 @@
     <string name="flash_is_not_available_on_this_device">Flash tidak tersedia di perangkat ini</string>
     <string name="failed_to_set_ringtone">Gagal mengatur nada dering</string>
     <string name="ringtone_updated">Nada dering diperbarui</string>
+    <string name="tap_the_button_to_record_audio">tap the button to record audio</string>
+    <string name="deleted_">%1$s deleted</string>
+    <string name="fake_call_scheduled_successfully">Fake call scheduled successfully!</string>
+    <string name="fake_call_updated_successfully">Fake call updated successfully!</string>
+    <string name="please_enter_a_name">Please enter a name</string>
+    <string name="please_enter_a_phone_number">Please enter a phone number</string>
+    <string name="please_choose_a_voice">Please choose a voice</string>
+    <string name="please_select_a_device">Please select a device</string>
+    <string name="talktime">TalkTime</string>
+    <string name="settime">SetTime</string>
 </resources>

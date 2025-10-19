@@ -186,11 +186,11 @@ class ChooseVoiceActivity : BaseActivity() {
                     // Show Snackbar with Undo option
                     val snackbar = com.google.android.material.snackbar.Snackbar.make(
                         binding.root,
-                        "${deletedVoice.name} deleted",
+                        getString(R.string.deleted_, deletedVoice.name),
                         com.google.android.material.snackbar.Snackbar.LENGTH_LONG
                     )
 
-                    snackbar.setAction("UNDO") {
+                    snackbar.setAction(getString(R.string.undo)) {
                         // Restore item
                         adapter.restoreItem(deletedVoice, position)
                         // Toast.makeText(
