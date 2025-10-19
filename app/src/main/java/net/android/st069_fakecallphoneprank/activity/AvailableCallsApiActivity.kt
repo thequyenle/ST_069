@@ -128,15 +128,8 @@ class AvailableCallsApiActivity : BaseActivity() {
     }
 
     private fun onCallItemClick(fakeCall: FakeCallApi) {
-        // Pass API call data to AddFakeCallActivity
-        val intent = Intent(this, AddFakeCallActivity::class.java).apply {
-            putExtra("API_CALL_NAME", fakeCall.name)
-            putExtra("API_CALL_PHONE", fakeCall.phone)
-            putExtra("API_CALL_AVATAR", fakeCall.getFullAvatarUrl(ApiClient.MEDIA_BASE_URL))
-            putExtra("API_CALL_VOICE", fakeCall.getFullMp3Url(ApiClient.MEDIA_BASE_URL))
-            putExtra("API_CALL_CATEGORY", fakeCall.category)
-        }
-        startActivity(intent)
+        // Do nothing when clicking on item
+        // Only the Call button should trigger the call
     }
 
     private fun onCallButtonClick(fakeCall: FakeCallApi) {

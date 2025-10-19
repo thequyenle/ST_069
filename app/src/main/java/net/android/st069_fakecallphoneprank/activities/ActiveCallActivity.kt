@@ -182,19 +182,18 @@ class ActiveCallActivity : BaseActivity() {
     }
 
     private fun setupClickListeners() {
+        // Back button - end call
+        binding.btnBack.setOnClickListener {
+            endCall()
+        }
+
         // End call button
         binding.btnEndCall.setOnClickListener {
             endCall()
         }
 
-        // Other buttons - optional functionality
-        binding.btnMute.setOnClickListener {
-            toggleMute()
-        }
-
-        binding.btnSpeaker.setOnClickListener {
-            toggleSpeaker()
-        }
+        // All other buttons are disabled (no click listeners)
+        // btnMute, btnSpeaker, btnKeypad, btnAddCall, btnCamera, btnContact
     }
 
     private fun startCallTimer() {
@@ -250,23 +249,6 @@ class ActiveCallActivity : BaseActivity() {
         } else {
             Log.d("ActiveCallActivity", "No voice type provided")
         }
-    }
-
-    private fun toggleMute() {
-        voicePlayer?.let { player ->
-            if (player.isPlaying) {
-                player.setVolume(0f, 0f)
-                binding.btnMute.alpha = 0.5f
-            } else {
-                player.setVolume(1f, 1f)
-                binding.btnMute.alpha = 1f
-            }
-        }
-    }
-
-    private fun toggleSpeaker() {
-        // Speaker toggle logic
-        binding.btnSpeaker.alpha = if (binding.btnSpeaker.alpha == 1f) 0.5f else 1f
     }
 
     private fun endCall() {
