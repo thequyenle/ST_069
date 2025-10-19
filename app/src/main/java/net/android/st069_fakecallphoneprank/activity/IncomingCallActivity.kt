@@ -773,4 +773,29 @@ class IncomingCallActivity : BaseActivity() {
             android.util.Log.w("IncomingCallActivity", "Could not set status bar color: ${e.message}")
         }
     }
+
+    /**
+     * Override to set dark status bar appearance (light icons) for call screen
+     */
+    override fun setStatusBarAppearance() {
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                // Android 11+ (API 30+) - Clear light status bar flag to show light icons
+                window.insetsController?.setSystemBarsAppearance(
+                    0,
+                    android.view.WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+                )
+            }
+        } catch (e: Exception) {
+            android.util.Log.w("IncomingCallActivity", "Could not set status bar appearance: ${e.message}")
+        }
+    }
+
+    /**
+     * Override to return 0 for legacy API (no light status bar flag = light icons)
+     */
+    @Suppress("DEPRECATION")
+    override fun getStatusBarAppearanceFlag(): Int {
+        return 0  // No flag = dark status bar with light icons
+    }
 }
