@@ -131,6 +131,8 @@
     <string name="settime">SetTime</string>
     <string name="deletede">%1$s deleted</string>
     <string name="restored">%1$s स्थापित किए गए</string>
+    <string name="storage_permission_already_granted">Storage permission already granted</string>
+    <string name="camera_recorder_permission_already_granted"><![CDATA[Camera & Recorder permission already granted]]></string>
 
 
 </resources>

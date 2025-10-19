@@ -30,17 +30,24 @@ class SplashActivity : BaseActivity() {
 
         // Check onboarding status
         val prefs = getSharedPreferences("fakecall_prefs", MODE_PRIVATE)
+        val isFirstTime = !prefs.getBoolean("language_done", false)
 
         Handler(Looper.getMainLooper()).postDelayed({
-            val intent = when {
-                !prefs.getBoolean("language_done", false) ->
-                    Intent(this, LanguageActivity::class.java)
-                !prefs.getBoolean("intro_done", false) ->
-                    Intent(this, IntroActivity::class.java)
-                !prefs.getBoolean("permission_done", false) ->
-                    Intent(this, PermissionActivity::class.java)
-                else ->
-                    Intent(this, HomeActivity::class.java)
+            val intent = if (isFirstTime) {
+                // First time: Language → Intro → Permission → Home
+                when {
+                    !prefs.getBoolean("language_done", false) ->
+                        Intent(this, LanguageActivity::class.java)
+                    !prefs.getBoolean("intro_done", false) ->
+                        Intent(this, IntroActivity::class.java)
+                    !prefs.getBoolean("permission_done", false) ->
+                        Intent(this, PermissionActivity::class.java)
+                    else ->
+                        Intent(this, HomeActivity::class.java)
+                }
+            } else {
+                // From second time onwards: Always show Tutorial then Home
+                Intent(this, IntroActivity::class.java)
             }
             startActivity(intent)
             finish()

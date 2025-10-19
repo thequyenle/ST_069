@@ -131,4 +131,6 @@
     <string name="settime">Atur Waktu</string>
     <string name="deletede">%1$s dihapus</string>
     <string name="restored">%1$s pulih</string>
+    <string name="storage_permission_already_granted">Izin penyimpanan sudah diberikan</string>
+    <string name="camera_recorder_permission_already_granted"><![CDATA[Izin Kamera & Perekam sudah diberikan]]></string>
 </resources>

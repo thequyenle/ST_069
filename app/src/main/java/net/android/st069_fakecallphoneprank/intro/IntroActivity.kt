@@ -63,10 +63,15 @@ class IntroActivity : BaseActivity() {
                     .putBoolean("intro_done", true)
                     .apply()
 
-                // Navigate to permission or home based on permission status
-                val intent = if (!prefs.getBoolean("permission_done", false)) {
+                // Check if this is first time (language was done but permission not done yet)
+                val isFirstTime = !prefs.getBoolean("permission_done", false)
+
+                // Navigate based on first time or not
+                val intent = if (isFirstTime) {
+                    // First time: Go to Permission
                     Intent(this, PermissionActivity::class.java)
                 } else {
+                    // Not first time: Go directly to Home
                     Intent(this, net.android.st069_fakecallphoneprank.HomeActivity::class.java)
                 }
                 startActivity(intent)

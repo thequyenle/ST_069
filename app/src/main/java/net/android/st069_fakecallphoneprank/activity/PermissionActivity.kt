@@ -77,7 +77,8 @@ class PermissionActivity : BaseActivity() {
         if (!isOverlayGranted) {
             requestOverlayPermission()
         } else {
-            Toast.makeText(this, "Storage permission already granted", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this,
+                getString(R.string.storage_permission_already_granted), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -86,7 +87,8 @@ class PermissionActivity : BaseActivity() {
             if (!isNotificationGranted) {
                 requestNotificationPermission()
             } else {
-                Toast.makeText(this, "Camera & Recorder permission already granted", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this,
+                    getString(R.string.camera_recorder_permission_already_granted), Toast.LENGTH_SHORT).show()
             }
         }
     }

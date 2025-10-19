@@ -131,4 +131,6 @@
     <string name="settime">समय सेट करें</string>
     <string name="deletede">%1$s  हटाया गया</string>
     <string name="restored">%1$s स्थापित किए गए</string>
+    <string name="storage_permission_already_granted">स्टोरेज अनुमति पहले से दी गई है</string>
+    <string name="camera_recorder_permission_already_granted"><![CDATA[कैमरा और रिकॉर्डर अनुमति पहले से दी गई है]]></string>
 </resources>

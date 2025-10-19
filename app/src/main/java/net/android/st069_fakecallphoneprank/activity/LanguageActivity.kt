@@ -27,10 +27,6 @@ class LanguageActivity : BaseActivity() {
         binding = ActivityLanguageBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Get current language
-        val currentLang = LocaleHelper.getLanguage(this)
-        selectedLanguageCode = currentLang
-
         // Check if user has selected a language before
         val hasSelectedLanguage = getSharedPreferences("fakecall_prefs", MODE_PRIVATE)
             .getBoolean("language_done", false)
@@ -48,6 +44,10 @@ class LanguageActivity : BaseActivity() {
 
         // Only focus and move to top if user has selected language before
         if (hasSelectedLanguage) {
+            // Get current language only if user has selected before
+            val currentLang = LocaleHelper.getLanguage(this)
+            selectedLanguageCode = currentLang
+
             val selectedIndex = allLanguages.indexOfFirst { it.code == currentLang }
             if (selectedIndex >= 0) {
                 allLanguages[selectedIndex].isSelected = true

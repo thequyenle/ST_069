@@ -31,4 +31,6 @@
     <string name="deletede">%1$s deleted</string>
     <string name="restoredd">%1$s restored</string>
     <string name="restored">restored</string>
+    <string name="storage_permission_already_granted">Storage permission already granted</string>
+    <string name="camera_recorder_permission_already_granted"><![CDATA[Camera & Recorder permission already granted]]></string>
 </resources>

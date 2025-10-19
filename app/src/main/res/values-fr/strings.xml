@@ -131,4 +131,6 @@
     <string name="settime">Définir l\'Heure</string>
     <string name="deletede">%1$s supprimé</string>
     <string name="restored">%1$s restauré</string>
+    <string name="storage_permission_already_granted">Autorisation de stockage déjà accordée</string>
+    <string name="camera_recorder_permission_already_granted"><![CDATA[Autorisation de Caméra & Enregistreur déjà accordée]]></string>
 </resources>
