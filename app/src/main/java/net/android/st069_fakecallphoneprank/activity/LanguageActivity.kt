@@ -31,21 +31,39 @@ class LanguageActivity : BaseActivity() {
         val currentLang = LocaleHelper.getLanguage(this)
         selectedLanguageCode = currentLang
 
+        // Check if user has selected a language before
+        val hasSelectedLanguage = getSharedPreferences("fakecall_prefs", MODE_PRIVATE)
+            .getBoolean("language_done", false)
+
         // Language list - exactly 7 languages from image
-        // All start as unselected (false) - user must actively select
-        languageList = mutableListOf(
+        val allLanguages = mutableListOf(
             LanguageItem("English", R.drawable.flag_english, false, "en"),
             LanguageItem("Spanish", R.drawable.flag_spanish, false, "es"),
             LanguageItem("French", R.drawable.flag_french, false, "fr"),
             LanguageItem("Hindi", R.drawable.flag_hindi, false, "hi"),
             LanguageItem("Portuguese", R.drawable.flag_portugeese, false, "pt"),
             LanguageItem("German", R.drawable.flag_german, false, "de"),
-            LanguageItem("Indonesian", R.drawable.flag_indonesian, false, "id")
+            LanguageItem("Indonesian", R.drawable.flag_indonesian, false, "in")
         )
 
-        // Don't pre-select any language - user must choose
-        // Always hide btnDone initially - user must actively select a language
-        binding.btnDone.visibility = View.GONE
+        // Only focus and move to top if user has selected language before
+        if (hasSelectedLanguage) {
+            val selectedIndex = allLanguages.indexOfFirst { it.code == currentLang }
+            if (selectedIndex >= 0) {
+                allLanguages[selectedIndex].isSelected = true
+
+                // Move selected language to top if not already at top
+                if (selectedIndex > 0) {
+                    val selectedLang = allLanguages.removeAt(selectedIndex)
+                    allLanguages.add(0, selectedLang)
+                }
+            }
+        }
+
+        languageList = allLanguages
+
+        // Show btnDone only if user has selected language before
+        binding.btnDone.visibility = if (hasSelectedLanguage) View.VISIBLE else View.GONE
 
         // Setup RecyclerView
         binding.rvLanguages.apply {
