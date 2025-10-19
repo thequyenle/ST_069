@@ -119,9 +119,11 @@ class CustomCallsFragment : Fragment() {
         // Show UPCOMING calls (not yet called)
         viewModel.upcomingCalls.observe(viewLifecycleOwner) { fakeCalls ->
             if (fakeCalls.isEmpty()) {
+                binding.ivEmpty.visibility = View.VISIBLE
                 binding.tvEmpty.visibility = View.VISIBLE
                 binding.rvCustomCalls.visibility = View.GONE
             } else {
+                binding.ivEmpty.visibility = View.GONE
                 binding.tvEmpty.visibility = View.GONE
                 binding.rvCustomCalls.visibility = View.VISIBLE
                 adapter.submitList(fakeCalls)

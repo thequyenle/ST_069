@@ -115,9 +115,11 @@ class AvailableCallsFragment : Fragment() {
         // Show PAST/TRIGGERED calls (already called) - This is the HISTORY
         viewModel.pastCalls.observe(viewLifecycleOwner) { fakeCalls ->
             if (fakeCalls.isEmpty()) {
+                binding.ivEmpty.visibility = View.VISIBLE
                 binding.tvEmpty.visibility = View.VISIBLE
                 binding.rvAvailableCalls.visibility = View.GONE
             } else {
+                binding.ivEmpty.visibility = View.GONE
                 binding.tvEmpty.visibility = View.GONE
                 binding.rvAvailableCalls.visibility = View.VISIBLE
                 adapter.submitList(fakeCalls)

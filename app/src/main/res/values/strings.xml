@@ -79,7 +79,7 @@
     <string name="please_select_device">Please select a device</string>
     <string name="please_set_time">Please set time</string>
     <string name="please_set_talk_time">Please set talk time</string>
-    <string name="no_scheduled_calls">No scheduled calls</string>
+    <string name="no_scheduled_calls">There is not scheduled calls here</string>
     <string name="fake_call_triggered">Fake call triggered and moved to history</string>
     <string name="deleted_from_history">deleted from history</string>
     <string name="deleted">deleted</string>
@@ -107,7 +107,7 @@
     <string name="vibration">Vibration</string>
     <string name="sound">Sound</string>
     <string name="flash">Flash</string>
-    <string name="no_call_history_yet">No call history yet</string>
+    <string name="no_call_history_yet">There is not calls here</string>
     <string name="add_your_voice">Add your voice</string>
     <string name="create_a_name">Create a name</string>
     <string name="kid">Kid</string>
