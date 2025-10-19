@@ -44,7 +44,6 @@ class LanguageAdapter(
             binding.tvLanguage.text = item.name
             binding.ivFlag.setImageResource(item.flagResId)
 
-
             // Set check/uncheck icon based on selection state
             val checkIcon = if (item.isSelected) {
                 R.drawable.ic_language_checked  // Blue checkmark icon
@@ -57,15 +56,11 @@ class LanguageAdapter(
             // Set selection state for background drawable
             binding.layoutLanguageItem.isSelected = item.isSelected
 
-            // Optional: Change card background color
+            // Change background based on selection - use shadow version for selected
             if (item.isSelected) {
-                binding.cardView.setCardBackgroundColor(
-                    binding.root.context.getColor(R.color.language_selected_bg)
-                )
+                binding.layoutLanguageItem.setBackgroundResource(R.drawable.frame_language_check_shadow)
             } else {
-                binding.cardView.setCardBackgroundColor(
-                    binding.root.context.getColor(android.R.color.white)
-                )
+                binding.layoutLanguageItem.setBackgroundResource(R.drawable.frame_language_uncheck)
             }
         }
     }

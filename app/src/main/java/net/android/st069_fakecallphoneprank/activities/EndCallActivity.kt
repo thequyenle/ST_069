@@ -180,4 +180,17 @@ class EndCallActivity : BaseActivity() {
 
         return output
     }
+
+    /**
+     * Override to set transparent status bar for call screen
+     */
+    override fun setStatusBarColor() {
+        try {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                window.statusBarColor = android.graphics.Color.TRANSPARENT
+            }
+        } catch (e: Exception) {
+            android.util.Log.w("EndCallActivity", "Could not set status bar color: ${e.message}")
+        }
+    }
 }

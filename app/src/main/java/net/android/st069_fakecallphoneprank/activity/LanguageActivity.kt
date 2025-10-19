@@ -32,6 +32,7 @@ class LanguageActivity : BaseActivity() {
         selectedLanguageCode = currentLang
 
         // Language list - exactly 7 languages from image
+        // All start as unselected (false) - user must actively select
         languageList = mutableListOf(
             LanguageItem("English", R.drawable.flag_english, false, "en"),
             LanguageItem("Spanish", R.drawable.flag_spanish, false, "es"),
@@ -42,14 +43,17 @@ class LanguageActivity : BaseActivity() {
             LanguageItem("Indonesian", R.drawable.flag_indonesian, false, "id")
         )
 
-        // Mark current language as selected
-        languageList.find { it.code == currentLang }?.isSelected = true
+        // Don't pre-select any language - user must choose
+        // Always hide btnDone initially - user must actively select a language
+        binding.btnDone.visibility = View.GONE
 
         // Setup RecyclerView
         binding.rvLanguages.apply {
             layoutManager = LinearLayoutManager(this@LanguageActivity)
             adapter = LanguageAdapter(languageList) { selected ->
                 selectedLanguageCode = selected.code
+                // Show btnDone when user selects a language
+                binding.btnDone.visibility = View.VISIBLE
             }
             addItemDecoration(SpaceItemDecoration(this@LanguageActivity, 16))
         }
@@ -108,15 +112,4 @@ class LanguageActivity : BaseActivity() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        showSystemUI()
-    }
-
-    private fun Activity.showSystemUI() {
-        window.statusBarColor = android.graphics.Color.TRANSPARENT
-        window.decorView.systemUiVisibility =
-            View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-    }
 }

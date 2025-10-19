@@ -5,11 +5,15 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.view.Window
 import android.widget.*
@@ -73,12 +77,12 @@ class ChooseVoiceActivity : BaseActivity() {
 
     private fun setupVoiceList() {
         voiceList = mutableListOf(
-            Voice("1", "Mom", "00:02  2Sl", null, R.drawable.ic_music, false, false),
-            Voice("2", "Loona", "00:02  2Sl", null, R.drawable.ic_music, false, false),
-            Voice("3", "My friend", "00:02  2Sl", null, R.drawable.ic_music, false, false),
-            Voice("4", "My love", "00:02  2Sl", null, R.drawable.ic_music, false, false),
-            Voice("5", "Cattry", "00:02  2Sl", null, R.drawable.ic_music, false, false),
-            Voice("6", "Male police voice", "00:02  2Sl", null, R.drawable.ic_music, false, false)
+            Voice("1", "Mom", "00:02  25B", null, R.drawable.ic_music, false, false),
+            Voice("2", "Loona", "00:02  25B", null, R.drawable.ic_music, false, false),
+            Voice("3", "My friend", "00:02  25B", null, R.drawable.ic_music, false, false),
+            Voice("4", "My love", "00:02  25B", null, R.drawable.ic_music, false, false),
+            Voice("5", "Cattry", "00:02  25B", null, R.drawable.ic_music, false, false),
+            Voice("6", "Male police voice", "00:02  25B", null, R.drawable.ic_music, false, false)
         )
 
         // Load custom recordings
@@ -110,14 +114,28 @@ class ChooseVoiceActivity : BaseActivity() {
 
     private fun getAudioDuration(filePath: String): String {
         return try {
+            val file = File(filePath)
+            val fileSize = file.length() // Size in bytes
+            val formattedSize = formatFileSize(fileSize)
+
             val mp = MediaPlayer()
             mp.setDataSource(filePath)
             mp.prepare()
             val duration = mp.duration / 1000
             mp.release()
-            String.format("%02d:%02d  %dSl", duration / 60, duration % 60, duration)
+
+            String.format("%02d:%02d  %s", duration / 60, duration % 60, formattedSize)
         } catch (e: Exception) {
-            "00:00  0Sl"
+            "00:00  0B"
+        }
+    }
+
+    private fun formatFileSize(bytes: Long): String {
+        return when {
+            bytes < 1024 -> "${bytes}B"
+            bytes < 1024 * 1024 -> String.format("%.1fKB", bytes / 1024.0)
+            bytes < 1024 * 1024 * 1024 -> String.format("%.1fMB", bytes / (1024.0 * 1024.0))
+            else -> String.format("%.1fGB", bytes / (1024.0 * 1024.0 * 1024.0))
         }
     }
 
@@ -455,8 +473,8 @@ class ChooseVoiceActivity : BaseActivity() {
     private fun showSaveRecordingDialog() {
         val dialogView = layoutInflater.inflate(R.layout.dialog_create_voice_name, null)
         val input = dialogView.findViewById<EditText>(R.id.etVoiceName)
-        val btnCancel = dialogView.findViewById<TextView>(R.id.btnCancel)  // Changed to TextView
-        val btnOk = dialogView.findViewById<TextView>(R.id.btnOk)          // Changed to TextView
+        val btnCancel = dialogView.findViewById<TextView>(R.id.btnCancel)
+        val btnOk = dialogView.findViewById<TextView>(R.id.btnOk)
 
         val dialog = AlertDialog.Builder(this)
             .setView(dialogView)
@@ -464,6 +482,31 @@ class ChooseVoiceActivity : BaseActivity() {
             .create()
 
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+        // Set initial state (empty - disabled)
+        updateOkButtonState(btnOk, false)
+
+        // Add TextWatcher to monitor input changes
+        input.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                val hasText = !s.isNullOrEmpty() && s.toString().trim().isNotEmpty()
+
+                // Update hint color based on text presence
+                if (hasText) {
+                    input.setHintTextColor(Color.parseColor("#B5B5B5"))
+                    input.setTextColor(Color.parseColor("#2F2F2F"))
+                } else {
+                    input.setHintTextColor(Color.parseColor("#B5B5B5"))
+                }
+
+                // Update OK button state
+                updateOkButtonState(btnOk, hasText)
+            }
+        })
 
         btnCancel.setOnClickListener {
             // Delete temp file
@@ -477,7 +520,6 @@ class ChooseVoiceActivity : BaseActivity() {
 
             // Validate input - dialog stays open if empty
             if (voiceName.isEmpty()) {
-                // Toast.makeText(this, "Please enter a name", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -497,6 +539,25 @@ class ChooseVoiceActivity : BaseActivity() {
             setDimAmount(0.5f)
             addFlags(android.view.WindowManager.LayoutParams.FLAG_DIM_BEHIND)
         }
+    }
+
+    private fun updateOkButtonState(btnOk: TextView, hasText: Boolean) {
+        val drawable = GradientDrawable()
+        drawable.cornerRadius = 10 * resources.displayMetrics.density // 10dp radius
+
+        if (hasText) {
+            // Enabled state - text entered
+            drawable.setColor(Color.parseColor("#0B89FF"))
+            btnOk.setTextColor(Color.parseColor("#FFFFFF"))
+            btnOk.isEnabled = true
+        } else {
+            // Disabled state - no text
+            drawable.setColor(Color.parseColor("#A5D1FB"))
+            btnOk.setTextColor(Color.parseColor("#9A9A9A"))
+            btnOk.isEnabled = false
+        }
+
+        btnOk.background = drawable
     }
 
     private fun saveCustomVoice(name: String) {

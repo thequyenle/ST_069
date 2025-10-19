@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GhostTextManager">
+    <option name="inputs">
+      <map>
+        <entry key="I want to change color status bar to #000000 except screen call.">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1760787997216" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

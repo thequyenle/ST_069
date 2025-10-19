@@ -20,7 +20,6 @@ class SplashActivity : BaseActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        window.statusBarColor = android.graphics.Color.TRANSPARENT
         super.onCreate(savedInstanceState)
 
         binding = ActivitySplashBinding.inflate(layoutInflater)

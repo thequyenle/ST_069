@@ -14,7 +14,6 @@ import com.bumptech.glide.Glide
 import kotlinx.coroutines.launch
 import net.android.st069_fakecallphoneprank.R
 import net.android.st069_fakecallphoneprank.base.BaseActivity
-import net.android.st069_fakecallphoneprank.base.DialogHelper
 import net.android.st069_fakecallphoneprank.data.entity.FakeCall
 import net.android.st069_fakecallphoneprank.databinding.ActivityAddFakeCallBinding
 import net.android.st069_fakecallphoneprank.viewmodel.FakeCallViewModel
@@ -27,6 +26,7 @@ import android.text.style.ForegroundColorSpan
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowInsetsController
+import androidx.core.widget.addTextChangedListener
 import net.android.st069_fakecallphoneprank.utils.FullscreenHelper
 import net.android.st069_fakecallphoneprank.utils.LocaleHelper
 
@@ -98,6 +98,7 @@ class AddFakeCallActivity : BaseActivity() {
         }
 
         setupClickListeners()
+        setupTextWatchers()
     }
 
     override fun onResume() {
@@ -147,14 +148,12 @@ class AddFakeCallActivity : BaseActivity() {
     private fun updateUIWithData() {
         // Set name
         if (selectedName.isNotEmpty()) {
-            binding.tvName.text = selectedName
-            binding.tvName.setTextColor(Color.BLACK)
+            binding.etName.setText(selectedName)
         }
 
         // Set phone
         if (selectedPhone.isNotEmpty()) {
-            binding.tvPhone.text = selectedPhone
-            binding.tvPhone.setTextColor(Color.BLACK)
+            binding.etPhone.setText(selectedPhone)
         }
 
         // Set avatar
@@ -184,12 +183,9 @@ class AddFakeCallActivity : BaseActivity() {
         selectedSetTime = 0
         selectedTalkTime = -1
 
-        // Reset text views to default values
-        binding.tvName.text = getString(R.string.name)
-        binding.tvName.setTextColor(Color.parseColor("#A0A0A0"))
-
-        binding.tvPhone.text = getString(R.string.phone_number)
-        binding.tvPhone.setTextColor(Color.parseColor("#A0A0A0"))
+        // Reset EditText fields
+        binding.etName.setText("")
+        binding.etPhone.setText("")
 
         binding.tvVoice.text = getString(R.string.choose_voice_default)
         binding.tvVoice.setTextColor(Color.parseColor("#2F2F2F"))
@@ -216,16 +212,6 @@ class AddFakeCallActivity : BaseActivity() {
         // Add Avatar
         binding.ivAddAvatar.setOnClickListener {
             openImagePicker()
-        }
-
-        // Add Name
-        binding.ivAddName.setOnClickListener {
-            showNameInputDialog()
-        }
-
-        // Add Phone
-        binding.ivAddPhone.setOnClickListener {
-            showPhoneInputDialog()
         }
 
         // Choose Voice
@@ -269,105 +255,23 @@ class AddFakeCallActivity : BaseActivity() {
         }
     }
 
+    private fun setupTextWatchers() {
+        // Name EditText listener
+        binding.etName.addTextChangedListener {
+            selectedName = it.toString().trim()
+            updateButtonStates()
+        }
+
+        // Phone EditText listener
+        binding.etPhone.addTextChangedListener {
+            selectedPhone = it.toString().trim()
+            updateButtonStates()
+        }
+    }
+
     private fun openImagePicker() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         imagePickerLauncher.launch(intent)
-    }
-
-    private fun showNameInputDialog() {
-        val dialogView = layoutInflater.inflate(R.layout.dialog_create_addfake_name, null)
-        val input = dialogView.findViewById<android.widget.EditText>(R.id.etVoiceName)
-        val btnCancel = dialogView.findViewById<android.widget.TextView>(R.id.btnCancel)
-        val btnOk = dialogView.findViewById<android.widget.TextView>(R.id.btnOk)
-        input.setText(selectedName)
-
-        val dialog = androidx.appcompat.app.AlertDialog.Builder(this)
-            .setView(dialogView)
-            .setCancelable(false)
-            .create()
-        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
-
-        btnCancel.setOnClickListener {
-            dialog.dismiss()
-        }
-
-        btnOk.setOnClickListener {
-            val name = input.text.toString().trim()
-            if (name.isEmpty()) {
-                Toast.makeText(this, "Please enter a name", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-            selectedName = name
-            binding.tvName.text = selectedName
-            binding.tvName.setTextColor(Color.BLACK)
-            updateButtonStates()
-            dialog.dismiss()
-        }
-
-
-        dialog.show()
-        DialogHelper.applyFullscreenToDialog(dialog)
-        val width = (259 * resources.displayMetrics.density).toInt()
-        val height = (192 * resources.displayMetrics.density).toInt()
-        dialog.window?.setLayout(width, height)
-
-        // Set dim background with custom color
-        dialog.window?.apply {
-            setDimAmount(0.5f)
-            addFlags(android.view.WindowManager.LayoutParams.FLAG_DIM_BEHIND)
-
-            // Hide navigation bar for dialog
-            hideNavigationBar()
-        }
-    }
-
-    private fun showPhoneInputDialog() {
-        val dialogView = layoutInflater.inflate(R.layout.dialog_create_addfake_phonenumber, null)
-        val input = dialogView.findViewById<android.widget.EditText>(R.id.etVoiceName)
-        val btnCancel = dialogView.findViewById<android.widget.TextView>(R.id.btnCancel)
-        val btnOk = dialogView.findViewById<android.widget.TextView>(R.id.btnOk)
-        input.setText(selectedPhone)
-        input.inputType = android.text.InputType.TYPE_CLASS_PHONE
-
-        val dialog = androidx.appcompat.app.AlertDialog.Builder(this)
-            .setView(dialogView)
-            .setCancelable(false)
-            .create()
-        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
-
-        btnCancel.setOnClickListener {
-            dialog.dismiss()
-        }
-
-        btnOk.setOnClickListener {
-            val phone = input.text.toString().trim()
-            if (phone.isEmpty()) {
-                Toast.makeText(this, "Please enter a phone number", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-            selectedPhone = phone
-            binding.tvPhone.text = selectedPhone
-            binding.tvPhone.setTextColor(Color.BLACK)
-            updateButtonStates()
-            dialog.dismiss()
-        }
-
-        dialog.show()
-        DialogHelper.applyFullscreenToDialog(dialog)
-
-        // Convert dp to pixels and set fixed dimensions
-        val width = (259 * resources.displayMetrics.density).toInt()
-        val height = (192 * resources.displayMetrics.density).toInt()
-        dialog.window?.setLayout(width, height)
-
-        // Set dim background with custom color
-        dialog.window?.apply {
-            setDimAmount(0.5f)
-            addFlags(android.view.WindowManager.LayoutParams.FLAG_DIM_BEHIND)
-
-            // Hide navigation bar for dialog
-            hideNavigationBar()
-        }
     }
 
     private fun showVoiceSelectionDialog() {
@@ -710,28 +614,4 @@ class AddFakeCallActivity : BaseActivity() {
         }
     }
 
-    private fun android.view.Window.hideNavigationBar() {
-        try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                // Android 11+ (API 30+)
-                setDecorFitsSystemWindows(false)
-                insetsController?.let { controller ->
-                    // Hide only navigation bar, keep status bar visible
-                    controller.hide(WindowInsets.Type.navigationBars())
-                    controller.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-                }
-            } else {
-                // Android 9-10 (API 28-29)
-                @Suppress("DEPRECATION")
-                decorView.systemUiVisibility = (
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                )
-            }
-        } catch (e: Exception) {
-            android.util.Log.w("AddFakeCallActivity", "Could not hide navigation bar: ${e.message}")
-        }
-    }
 }

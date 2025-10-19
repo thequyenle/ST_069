@@ -760,4 +760,17 @@ class IncomingCallActivity : BaseActivity() {
         super.onBackPressed()
         declineCall()
     }
+
+    /**
+     * Override to set transparent status bar for call screen
+     */
+    override fun setStatusBarColor() {
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                window.statusBarColor = android.graphics.Color.TRANSPARENT
+            }
+        } catch (e: Exception) {
+            android.util.Log.w("IncomingCallActivity", "Could not set status bar color: ${e.message}")
+        }
+    }
 }

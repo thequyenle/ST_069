@@ -42,10 +42,14 @@ abstract class BaseActivity : AppCompatActivity() {
 
     /**
      * Apply edge-to-edge fullscreen with hidden navigation bar
-     * Status bar remains visible
+     * Status bar remains visible with black color (#000000) by default
+     * Call screens can override setStatusBarColor() to use transparent
      */
     private fun applyFullscreenEdgeToEdge() {
         try {
+            // Set status bar color FIRST (before making edge-to-edge)
+            setStatusBarColor()
+
             // Make window edge-to-edge (draw behind system bars)
             WindowCompat.setDecorFitsSystemWindows(window, false)
 
@@ -79,6 +83,20 @@ abstract class BaseActivity : AppCompatActivity() {
             }
         } catch (e: Exception) {
             android.util.Log.w("BaseActivity", "Could not hide navigation bar: ${e.message}")
+        }
+    }
+
+    /**
+     * Set status bar color to black (#000000)
+     * This method can be overridden by child activities to use different colors
+     */
+    protected open fun setStatusBarColor() {
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                window.statusBarColor = android.graphics.Color.parseColor("#000000")
+            }
+        } catch (e: Exception) {
+            android.util.Log.w("BaseActivity", "Could not set status bar color: ${e.message}")
         }
     }
 }
