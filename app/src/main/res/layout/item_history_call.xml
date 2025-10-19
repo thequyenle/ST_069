@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="16dp"
-    android:layout_marginBottom="12dp"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="2dp"
-    android:background="@android:color/white">
+    android:background="#FFFFFF">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_height="wrap_content"
-        android:padding="12dp">
+      >
 
         <ImageView
             android:id="@+id/ivAvatar"
@@ -28,13 +28,13 @@
             android:id="@+id/tvName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
+            android:layout_marginStart="22dp"
             android:fontFamily="@font/roboto"
             android:text="Grainne bbvvvvv"
-            android:textColor="#000000"
+            android:textColor="#2F2F2F"
             android:textSize="16sp"
-            android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@id/btnEdit"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@id/ivAvatar"
             app:layout_constraintTop_toTopOf="@id/ivAvatar" />
 
@@ -45,35 +45,38 @@
             android:layout_marginTop="4dp"
             android:fontFamily="@font/roboto"
             android:text="0897467483"
-            android:textColor="#666666"
-            android:textSize="14sp"
+            android:textColor="#2F2F2F"
+            android:textSize="16sp"
             app:layout_constraintEnd_toStartOf="@id/btnEdit"
             app:layout_constraintStart_toStartOf="@id/tvName"
             app:layout_constraintTop_toBottomOf="@id/tvName" />
 
         <ImageButton
             android:id="@+id/btnEdit"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_pen"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/btnCall"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:tint="#2196F3" />
 
         <ImageButton
             android:id="@+id/btnCall"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:scaleType="fitXY"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_call_green"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginEnd="24.5dp"
+            app:layout_constraintEnd_toStartOf="@id/btnEdit"
             app:tint="#4CAF50" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>
