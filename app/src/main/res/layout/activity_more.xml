@@ -79,10 +79,7 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#E0E0E0" />
+
 
             <!-- Rate Us -->
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -112,10 +109,7 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#E0E0E0" />
+
 
             <!-- Share App -->
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -142,10 +136,7 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#E0E0E0" />
+
 
             <!-- Privacy Policy -->
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -171,10 +162,7 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#E0E0E0" />
+
 
 
         </LinearLayout>
