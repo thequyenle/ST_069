@@ -302,6 +302,15 @@ class AddFakeCallActivity : BaseActivity() {
         if (result.resultCode == Activity.RESULT_OK) {
             result.data?.let { data ->
                 selectedDevice = data.getStringExtra("SELECTED_DEVICE")
+
+                // Save selected device to SharedPreferences for AvailableCallsApi
+                selectedDevice?.let { device ->
+                    getSharedPreferences("AddFakeCallPrefs", Context.MODE_PRIVATE)
+                        .edit()
+                        .putString("last_selected_device", device)
+                        .apply()
+                }
+
                 updateDeviceText()
                 updateButtonStates()
             }

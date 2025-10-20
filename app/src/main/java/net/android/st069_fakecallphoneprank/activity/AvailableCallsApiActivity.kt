@@ -133,6 +133,10 @@ class AvailableCallsApiActivity : BaseActivity() {
     }
 
     private fun onCallButtonClick(fakeCall: FakeCallApi) {
+        // Get saved device type from SharedPreferences (from last AddFakeCall)
+        val prefs = getSharedPreferences("AddFakeCallPrefs", Context.MODE_PRIVATE)
+        val savedDeviceType = prefs.getString("last_selected_device", "Pixel 5") ?: "Pixel 5"
+
         // Trigger immediate incoming call with this data
         val intent = Intent(this, net.android.st069_fakecallphoneprank.activity.IncomingCallActivity::class.java).apply {
             putExtra("FAKE_CALL_ID", -1L) // -1 for API calls (not saved in DB)
@@ -140,7 +144,7 @@ class AvailableCallsApiActivity : BaseActivity() {
             putExtra("PHONE_NUMBER", fakeCall.phone)
             putExtra("AVATAR", fakeCall.getFullAvatarUrl(ApiClient.MEDIA_BASE_URL))
             putExtra("VOICE_TYPE", fakeCall.getFullMp3Url(ApiClient.MEDIA_BASE_URL))
-            putExtra("DEVICE_TYPE", "Pixel 5") // Default to Pixel 5
+            putExtra("DEVICE_TYPE", savedDeviceType) // Use saved device from AddFakeCall
             putExtra("TALK_TIME", 30) // Default 30 seconds
         }
         startActivity(intent)
