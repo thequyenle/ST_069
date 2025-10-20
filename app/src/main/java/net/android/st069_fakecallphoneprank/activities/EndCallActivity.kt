@@ -145,12 +145,14 @@ class EndCallActivity : BaseActivity() {
                     Log.d("EndCallActivity", "Background set from local file with #B3000000 tint!")
                 } else {
                     binding.ivBackgroundEndCall.setImageResource(R.drawable.bg_call_pixel5)
+                    binding.ivBackgroundEndCall.setColorFilter(Color.parseColor("#B3000000"), PorterDuff.Mode.SRC_ATOP)
                 }
             }
         } else {
             // No avatar - use defaults
             binding.ivAvatar.setImageResource(R.drawable.ic_addavatar)
             binding.ivBackgroundEndCall.setImageResource(R.drawable.bg_call_pixel5)
+            binding.ivBackgroundEndCall.setColorFilter(Color.parseColor("#B3000000"), PorterDuff.Mode.SRC_ATOP)
         }
     }
 

@@ -169,12 +169,14 @@ class ActiveCallActivity : BaseActivity() {
                     Log.d("ActiveCallActivity", "Background set from local file with #E3000000 tint!")
                 } else {
                     binding.ivBackgroundActiveCall.setImageResource(R.drawable.bg_call_pixel5)
+                    binding.ivBackgroundActiveCall.setColorFilter(Color.parseColor("#B3000000"), PorterDuff.Mode.SRC_ATOP)
                 }
             }
         } else {
             // No avatar - use defaults
             binding.ivAvatar.setImageResource(R.drawable.ic_addavatar)
             binding.ivBackgroundActiveCall.setImageResource(R.drawable.bg_call_pixel5)
+            binding.ivBackgroundActiveCall.setColorFilter(Color.parseColor("#B3000000"), PorterDuff.Mode.SRC_ATOP)
         }
 
         // Initialize timer display
